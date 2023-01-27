@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "firebase": "firebase emulators:start --only firestore --import seed-data"
   },
   "private": true,
   "dependencies": {
