@@ -3,6 +3,7 @@ export interface IMember {
   firstName: string;
   lastName: string;
   active: boolean;
+  totalAttendance: number;
   readonly firstLastName: string;
   readonly lastFirstName: string;
   readonly activeText: string;
@@ -16,6 +17,7 @@ export class Member implements IMember {
   firstName: string = '';
   lastName: string = '';
   active: boolean = false;
+  totalAttendance: number = 0;
   get firstLastName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
