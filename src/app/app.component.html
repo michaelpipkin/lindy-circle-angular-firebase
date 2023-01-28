@@ -1,15 +1,22 @@
-<main>
-  <div>
-    <button mat-raised-button color="accent" type="button" [disabled]="true" (click)="importData()">Import Data</button>
-  </div>
-
-  <div>
-    <ul>
-      <li *ngFor="let member of (members$ | async)">
-        {{member.lastFirstName}} [{{member.id}}] -- {{member.activeText}}
-      </li>
-    </ul>
-  </div>
-
+<mat-sidenav-container fullscreen>
+  <mat-sidenav #start (click)="start.close()">
+    <mat-nav-list>
+      <a mat-list-item routerLink="members">
+        <mat-icon>groups</mat-icon>
+        <span>Members</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-toolbar color="primary">
+    <div class="toolbar-tools">
+      <button mat-icon-button (click)="start.open('mouse')">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span id="title">The Lindy Circle</span>
+    </div>
+  </mat-toolbar>
   <router-outlet></router-outlet>
-</main>
+  <button mat-raised-button color="accent" type="button" [disabled]="true" (click)="onImportClick()">
+    Import Data
+  </button>
+</mat-sidenav-container>

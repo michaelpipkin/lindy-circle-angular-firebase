@@ -1,0 +1,10 @@
+<div>
+    <mat-checkbox color="accent" checked="true" (change)="onCheckedChanged($event)">Active only</mat-checkbox>
+    <mat-list role="list">
+        <mat-list-item *ngFor="let member of (filteredMembers$ | async)">
+            <span matListItemTitle>{{member.lastFirstName}}</span>
+            <span matListItemLine>Id:{{member.id}}</span>
+            <span matListItemLine>{{member.activeText}}</span>
+        </mat-list-item>
+    </mat-list>
+</div>
