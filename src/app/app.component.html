@@ -1,13 +1,12 @@
 <main>
   <div>
-    <button mat-raised-button color="accent" type="button" (click)="importData()">Import Data</button>
+    <button mat-raised-button color="accent" type="button" [disabled]="true" (click)="importData()">Import Data</button>
   </div>
 
   <div>
     <ul>
       <li *ngFor="let member of (members$ | async)">
-        {{member.firstName}} {{member.lastName}} ({{member.lastFirstName}}) [{{member.id}}] || Active:
-        {{member.active}}
+        {{member.lastFirstName}} [{{member.id}}] -- {{member.activeText}}
       </li>
     </ul>
   </div>

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Member } from '@models/member';
-import { map, Observable, tap } from 'rxjs';
+import { MembersService } from '@services/members.service';
+import { Observable } from 'rxjs';
 import {
   MEMBERS,
   PRACTICES,
@@ -19,29 +20,11 @@ export class AppComponent {
   title = 'The Lindy Circle';
   members$: Observable<Member[]>;
 
-  constructor(private db: AngularFirestore) {
-    const test: Partial<Member> = {
-      id: '0',
-      firstName: 'Test',
-      lastName: 'Member',
-      active: true,
-    };
-    console.log(test);
-    this.members$ = db
-      .collection('members')
-      .get()
-      .pipe(
-        map((res) => {
-          return <Member[]>res.docs.map(
-            (snapshot: { id: string; data: () => any }) => {
-              return {
-                id: snapshot.id,
-                ...(<Member>snapshot.data()),
-              };
-            }
-          );
-        })
-      );
+  constructor(
+    private db: AngularFirestore,
+    private membersService: MembersService
+  ) {
+    this.members$ = membersService.getMembers();
   }
 
   async importData(): Promise<void> {

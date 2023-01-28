@@ -5,17 +5,24 @@ export interface IMember {
   active: boolean;
   readonly firstLastName: string;
   readonly lastFirstName: string;
+  readonly activeText: string;
 }
 
 export class Member implements IMember {
-  id: string;
-  firstName: string;
-  lastName: string;
-  active: boolean;
+  constructor(init?: Partial<Member>) {
+    Object.assign(this, init);
+  }
+  id: string = '';
+  firstName: string = '';
+  lastName: string = '';
+  active: boolean = false;
   get firstLastName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
   get lastFirstName(): string {
     return `${this.lastName}, ${this.firstName}`;
+  }
+  get activeText(): string {
+    return this.active ? 'Active' : 'Inactive';
   }
 }
