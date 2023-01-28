@@ -7,6 +7,9 @@ export interface IAttendance {
 }
 
 export class Attendance implements IAttendance {
+  constructor(init?: Partial<Attendance>) {
+    Object.assign(this, init);
+  }
   id: string;
   memberId: string;
   paymentType: number;

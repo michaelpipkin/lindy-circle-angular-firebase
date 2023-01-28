@@ -9,10 +9,10 @@
     <mat-checkbox color="accent" [(ngModel)]="activeOnly" (change)="filterMembers()">Active only</mat-checkbox>
 
     <mat-list role="list">
-        <mat-list-item *ngFor="let member of (filteredMembers$ | async)">
+        <mat-list-item *ngFor="let member of (filteredMembers$ | async)" class="mb-3">
             <span matListItemTitle>{{member.lastFirstName}}</span>
             <span matListItemLine>Id:{{member.id}}</span>
-            <span matListItemLine>{{member.activeText}}</span>
+            <span matListItemLine>{{member.activeText}} | Attendances: {{member.totalAttendance}}</span>
         </mat-list-item>
     </mat-list>
 </div>
