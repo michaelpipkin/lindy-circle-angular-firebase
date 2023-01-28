@@ -11,7 +11,7 @@ export class MembersService {
 
   getMembers = (activeOnly: boolean = false): Observable<Member[]> =>
     this.db
-      .collection('members', (ref) =>
+      .collection<Member>('members', (ref) =>
         ref
           .where('active', 'in', [true, activeOnly])
           .orderBy('lastName')

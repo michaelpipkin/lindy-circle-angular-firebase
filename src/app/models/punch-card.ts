@@ -3,6 +3,7 @@ export interface IPunchCard {
   purchaseMemberId: string;
   purchaseDate: Date;
   purchaseAmount: number;
+  punchesRemaining: number;
 }
 
 export class PunchCard implements IPunchCard {
@@ -10,4 +11,5 @@ export class PunchCard implements IPunchCard {
   purchaseMemberId: string;
   purchaseDate: Date;
   purchaseAmount: number;
+  punchesRemaining: number;
 }
