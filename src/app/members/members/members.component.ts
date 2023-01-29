@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Member } from '@models/member';
 import { MembersService } from '@services/members.service';
+import { SortingService } from '@services/sorting.service';
 import { map, Observable } from 'rxjs';
 
 @Component({
@@ -14,8 +14,14 @@ export class MembersComponent implements OnInit {
   filteredMembers$: Observable<Member[]>;
   activeOnly: boolean = true;
   nameFilter: string = '';
+  sortField: string = 'lastName';
+  sortAsc: boolean = true;
+  columnsToDisplay = ['firstName', 'lastName', 'activeText'];
 
-  constructor(private membersService: MembersService) {}
+  constructor(
+    private membersService: MembersService,
+    private sorter: SortingService
+  ) {}
 
   ngOnInit(): void {
     this.members$ = this.membersService.getMembers();
@@ -24,19 +30,29 @@ export class MembersComponent implements OnInit {
 
   filterMembers(): void {
     this.filteredMembers$ = this.members$.pipe(
-      map((members) =>
-        members.filter(
-          (member) =>
-            (member.active || member.active == this.activeOnly) &&
-            (member.firstName
-              .toLowerCase()
-              .includes(this.nameFilter.toLowerCase()) ||
-              member.lastName
+      map((members) => {
+        return this.sorter.sort(
+          members.filter(
+            (member) =>
+              (member.active || member.active == this.activeOnly) &&
+              (member.firstName
                 .toLowerCase()
-                .includes(this.nameFilter.toLowerCase()))
-        )
-      )
+                .includes(this.nameFilter.toLowerCase()) ||
+                member.lastName
+                  .toLowerCase()
+                  .includes(this.nameFilter.toLowerCase()))
+          ),
+          this.sortField,
+          this.sortAsc
+        );
+      })
     );
+  }
+
+  sortMembers(e): void {
+    this.sortField = e.active;
+    this.sortAsc = e.direction == 'asc';
+    this.filterMembers();
   }
 
   clearSearch(): void {

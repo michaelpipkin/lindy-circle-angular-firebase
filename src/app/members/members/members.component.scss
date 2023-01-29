@@ -1,0 +1,19 @@
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  text-align: center;
+  margin-right: 15px;
+}
+
+.table-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cell-right {
+  text-align: right;
+}
