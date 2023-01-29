@@ -30,4 +30,6 @@ export class MembersService {
           );
         })
       );
+
+  addMember(newMember: Partial<Member>) {}
 }

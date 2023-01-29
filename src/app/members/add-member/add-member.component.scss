@@ -1,0 +1,13 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.add-member {
+  margin-top: 20px;
+}
+
+.add-member form {
+  display: flex;
+  flex-direction: column;
+}
