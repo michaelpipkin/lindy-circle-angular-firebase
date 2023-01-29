@@ -15,7 +15,7 @@
         </mat-form-field>
         <mat-checkbox color="accent" [(ngModel)]="activeOnly" (change)="filterMembers()">Active only</mat-checkbox>
     </div>
-    <div class="table-container">
+    <div>
         <table mat-table matSort [dataSource]="filteredMembers$ | async" (matSortChange)="sortMembers($event)">
             <ng-container matColumnDef="firstName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
@@ -28,6 +28,10 @@
             <ng-container matColumnDef="activeText">
                 <th mat-header-cell *matHeaderCellDef>Status</th>
                 <td mat-cell *matCellDef="let member">{{member.activeText}}</td>
+            </ng-container>
+            <ng-container matColumnDef="totalAttendance">
+                <th mat-header-cell class="cell-right" *matHeaderCellDef mat-sort-header>Attendances</th>
+                <td mat-cell class="cell-right" *matCellDef="let member">{{member.totalAttendance}}</td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
             <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>

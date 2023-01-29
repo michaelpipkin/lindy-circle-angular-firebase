@@ -1,3 +1,8 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
 .header {
   display: flex;
   justify-content: center;
@@ -9,11 +14,10 @@
   margin-right: 15px;
 }
 
-.table-container {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
 .cell-right {
   text-align: right;
+}
+
+.mat-mdc-row:hover {
+  background-color: lightgray !important;
 }

@@ -16,7 +16,7 @@ export class MembersComponent implements OnInit {
   nameFilter: string = '';
   sortField: string = 'lastName';
   sortAsc: boolean = true;
-  columnsToDisplay = ['firstName', 'lastName', 'activeText'];
+  columnsToDisplay = ['firstName', 'lastName', 'activeText', 'totalAttendance'];
 
   constructor(
     private membersService: MembersService,
@@ -24,7 +24,7 @@ export class MembersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.members$ = this.membersService.getMembers();
+    this.members$ = this.membersService.getMembersWithAttendances();
     this.filterMembers();
   }
 
@@ -49,7 +49,7 @@ export class MembersComponent implements OnInit {
     );
   }
 
-  sortMembers(e): void {
+  sortMembers(e: { active: string; direction: string }): void {
     this.sortField = e.active;
     this.sortAsc = e.direction == 'asc';
     this.filterMembers();

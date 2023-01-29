@@ -22,9 +22,10 @@ import {
   USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
 } from '@angular/fire/compat/functions';
 import { AddMemberComponent } from './members/add-member/add-member.component';
+import { MemberDetailsComponent } from './members/member-details/member-details.component';
 
 @NgModule({
-  declarations: [AppComponent, MembersComponent, PracticesComponent, AddMemberComponent],
+  declarations: [AppComponent, MembersComponent, PracticesComponent, AddMemberComponent, MemberDetailsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
