@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Edit Member</h1>
+<mat-dialog-content [formGroup]="editMemberForm">
+    <mat-form-field>
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName">
+        <mat-error *ngIf="editMemberForm.controls.firstName.touched && editMemberForm.controls.firstName.invalid">
+            First name is required
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName">
+        <mat-error *ngIf="editMemberForm.controls.lastName.touched && editMemberForm.controls.lastName.invalid">
+            Last name is required
+        </mat-error>
+    </mat-form-field>
+    <mat-slide-toggle color="accent" formControlName="active">Active</mat-slide-toggle>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="close()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="!editMemberForm.valid" (click)="onSubmit()">Save</button>
+</mat-dialog-actions>

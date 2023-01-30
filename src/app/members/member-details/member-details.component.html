@@ -1,1 +1,32 @@
-<p>member-details works!</p>
+<div *ngIf="member$ | async; let member">
+    <div class="breadcrumb">
+        <button mat-button color="primary" routerLink="members">Back to members list</button>
+    </div>
+    <div class="header">
+        <h2 class="title">Member Details</h2>
+        <button class="me-2" mat-mini-fab color="accent" (click)="editMember(member)">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-mini-fab color="warn" (click)="deleteMember(member)">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-3">
+                Name:
+            </div>
+            <div class="col">
+                {{member.firstLastName}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                Status:
+            </div>
+            <div class="col">
+                {{member.activeText}}
+            </div>
+        </div>
+    </div>
+</div>

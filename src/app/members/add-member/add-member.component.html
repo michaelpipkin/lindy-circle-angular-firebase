@@ -15,8 +15,11 @@
                 Last name is required
             </mat-error>
         </mat-form-field>
-        <button mat-raised-button color="accent" [disabled]="!newMemberForm.valid" (click)="onSubmit()">
-            Add Member
-        </button>
+        <div class="buttons">
+            <button mat-raised-button color="accent" routerLink="members">Cancel</button>
+            <button mat-raised-button color="primary" [disabled]="!newMemberForm.valid" (click)="onSubmit()">
+                Add Member
+            </button>
+        </div>
     </form>
 </div>

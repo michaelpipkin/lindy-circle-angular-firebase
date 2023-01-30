@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Member } from '@models/member';
 import { MembersService } from '@services/members.service';
 import { SortingService } from '@services/sorting.service';
@@ -20,7 +21,8 @@ export class MembersComponent implements OnInit {
 
   constructor(
     private membersService: MembersService,
-    private sorter: SortingService
+    private sorter: SortingService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -58,5 +60,9 @@ export class MembersComponent implements OnInit {
   clearSearch(): void {
     this.nameFilter = '';
     this.filterMembers();
+  }
+
+  onRowClick(member: Member) {
+    this.router.navigate(['member-details', member.id]);
   }
 }

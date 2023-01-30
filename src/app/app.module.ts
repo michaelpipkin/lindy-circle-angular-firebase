@@ -23,9 +23,10 @@ import {
 } from '@angular/fire/compat/functions';
 import { AddMemberComponent } from './members/add-member/add-member.component';
 import { MemberDetailsComponent } from './members/member-details/member-details.component';
+import { EditMemberComponent } from './members/edit-member/edit-member.component';
 
 @NgModule({
-  declarations: [AppComponent, MembersComponent, PracticesComponent, AddMemberComponent, MemberDetailsComponent],
+  declarations: [AppComponent, MembersComponent, PracticesComponent, AddMemberComponent, MemberDetailsComponent, EditMemberComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

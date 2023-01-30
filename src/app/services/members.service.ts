@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Attendance } from '@models/attendance';
 import { Member } from '@models/member';
-import { concatMap, from, map, Observable } from 'rxjs';
+import { concatMap, from, map, Observable, Observer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -70,12 +70,27 @@ export class MembersService {
         })
       );
 
-  getMemberDetails = (memberId: string): Observable<any> =>
-    this.db.doc<Member>(`members/${memberId}`).get();
+  getMemberDetails = (memberId: string): Observable<Member> =>
+    this.db
+      .doc<Member>(`members/${memberId}`)
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        map((member) => {
+          return new Member({
+            ...member,
+          });
+        })
+      );
 
   addMember = (newMember: Partial<Member>): Observable<any> =>
     from(this.db.collection('members').add(newMember));
 
-  updateMember = (member: Partial<Member>): Observable<any> =>
-    from(this.db.doc(`members/${member.id}`).set(member));
+  updateMember = (
+    memberId: string,
+    changes: Partial<Member>
+  ): Observable<any> =>
+    from(this.db.doc(`members/${memberId}`).update(changes));
+
+  deleteMember = (memberId: string) =>
+    from(this.db.doc(`members/${memberId}`).delete());
 }
