@@ -7,8 +7,16 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
+import { AddMemberComponent } from './members/add-member/add-member.component';
+import { EditMemberComponent } from './members/edit-member/edit-member.component';
+import { MemberDetailsComponent } from './members/member-details/member-details.component';
 import { MembersComponent } from './members/members/members.component';
 import { PracticesComponent } from './practices/practices/practices.component';
+import { GenericDialogComponent } from './shared/generic-dialog/generic-dialog.component';
+import {
+  MAT_DIALOG_DEFAULT_OPTIONS,
+  MatDialogConfig,
+} from '@angular/material/dialog';
 import {
   AngularFireAuthModule,
   USE_EMULATOR as USE_AUTH_EMULATOR,
@@ -21,12 +29,17 @@ import {
   AngularFireFunctionsModule,
   USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
 } from '@angular/fire/compat/functions';
-import { AddMemberComponent } from './members/add-member/add-member.component';
-import { MemberDetailsComponent } from './members/member-details/member-details.component';
-import { EditMemberComponent } from './members/edit-member/edit-member.component';
 
 @NgModule({
-  declarations: [AppComponent, MembersComponent, PracticesComponent, AddMemberComponent, MemberDetailsComponent, EditMemberComponent],
+  declarations: [
+    AppComponent,
+    MembersComponent,
+    PracticesComponent,
+    AddMemberComponent,
+    MemberDetailsComponent,
+    EditMemberComponent,
+    GenericDialogComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -40,6 +53,14 @@ import { EditMemberComponent } from './members/edit-member/edit-member.component
     AngularFireFunctionsModule,
   ],
   providers: [
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        disableClose: true,
+        autoFocus: true,
+        width: '280px',
+      } as MatDialogConfig,
+    },
     {
       provide: USE_FIRESTORE_EMULATOR,
       useValue: environment.useEmulators ? ['localhost', 8080] : undefined,

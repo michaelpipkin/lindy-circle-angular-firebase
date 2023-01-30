@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{dialogOptions.title}}</h1>
+<mat-dialog-content>
+    <p>
+        {{dialogOptions.content}}
+    </p>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button [color]="dialogOptions.falseButtonColor"
+        (click)="onFalseClick()">{{dialogOptions.falseButtonText}}</button>
+    <button mat-raised-button [color]="dialogOptions.trueButtonColor"
+        (click)="onTrueClick()">{{dialogOptions.trueButtonText}}</button>
+</mat-dialog-actions>

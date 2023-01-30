@@ -1,5 +1,5 @@
 <div>
-    <div class="header">
+    <div class="header mt-2">
         <h2 class="title">Members</h2>
         <button mat-mini-fab color="accent" routerLink="/add-member">
             <mat-icon>add</mat-icon>
@@ -39,6 +39,10 @@
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
             <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="onRowClick(myRowData)"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" [colSpan]="columnsToDisplay.length">No members found matching "{{nameFilter}}".
+                </td>
+            </tr>
         </table>
     </div>
 </div>

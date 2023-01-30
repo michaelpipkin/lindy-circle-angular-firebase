@@ -18,17 +18,14 @@ export class MembersService {
           .orderBy('lastName')
           .orderBy('firstName')
       )
-      .get()
+      .valueChanges({ idField: 'id' })
       .pipe(
-        map((res) => {
-          return <Member[]>res.docs.map(
-            (snapshot: { id: string; data: () => any }) => {
-              return new Member({
-                id: snapshot.id,
-                ...snapshot.data(),
-              });
-            }
-          );
+        map((members) => {
+          return <Member[]>members.map((member) => {
+            return new Member({
+              ...member,
+            });
+          });
         })
       );
 
@@ -51,20 +48,17 @@ export class MembersService {
                 .orderBy('lastName')
                 .orderBy('firstName')
             )
-            .get()
+            .valueChanges({ idField: 'id' })
             .pipe(
               map((members) => {
-                return <Member[]>members.docs.map(
-                  (snapshot: { id: string; data: () => any }) => {
-                    return new Member({
-                      id: snapshot.id,
-                      totalAttendance: attendances.filter(
-                        (f) => f.memberId == snapshot.id
-                      ).length,
-                      ...snapshot.data(),
-                    });
-                  }
-                );
+                return <Member[]>members.map((member) => {
+                  return new Member({
+                    ...member,
+                    totalAttendance: attendances.filter(
+                      (f) => f.memberId == member.id
+                    ).length,
+                  });
+                });
               })
             );
         })

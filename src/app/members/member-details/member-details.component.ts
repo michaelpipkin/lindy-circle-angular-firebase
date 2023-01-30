@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DialogOptions } from '@models/dialog-options';
 import { Member } from '@models/member';
 import { MembersService } from '@services/members.service';
-import { Observable } from 'rxjs';
+import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.component';
+import { catchError, Observable, pipe, tap, throwError } from 'rxjs';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
 
 @Component({
@@ -18,6 +21,7 @@ export class MemberDetailsComponent implements OnInit {
   constructor(
     private membersService: MembersService,
     private route: ActivatedRoute,
+    private router: Router,
     private dialog: MatDialog
   ) {}
 
@@ -27,15 +31,41 @@ export class MemberDetailsComponent implements OnInit {
   }
 
   editMember(member: Member) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '280px';
+    const dialogConfig: MatDialogConfig = {};
 
     dialogConfig.data = member;
 
     this.dialog.open(EditMemberComponent, dialogConfig);
   }
 
-  deleteMember(member: Member) {}
+  deleteMember(member: Member) {
+    const dialogConfig: MatDialogConfig = {};
+
+    dialogConfig.data = new DialogOptions({
+      title: 'WARNING!',
+      content: `This action cannot be undone. Are you sure you want to delete ${member.firstLastName}?`,
+      trueButtonColor: 'warn',
+      trueButtonText: 'Delete',
+    });
+
+    this.dialog
+      .open(GenericDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.membersService
+            .deleteMember(member.id)
+            .pipe(
+              tap(() => {
+                this.router.navigate(['members']);
+              }),
+              catchError((err: Error) => {
+                alert('Could not delete member.');
+                return throwError(() => new Error(err.message));
+              })
+            )
+            .subscribe();
+        }
+      });
+  }
 }
