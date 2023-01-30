@@ -4,7 +4,9 @@ import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogOptions } from '@models/dialog-options';
 import { Member } from '@models/member';
+import { Practice } from '@models/practice';
 import { MembersService } from '@services/members.service';
+import { PracticesService } from '@services/practices.service';
 import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.component';
 import { catchError, Observable, pipe, tap, throwError } from 'rxjs';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
@@ -17,9 +19,16 @@ import { EditMemberComponent } from '../edit-member/edit-member.component';
 export class MemberDetailsComponent implements OnInit {
   memberId: string;
   member$: Observable<Member>;
+  practices$: Observable<Practice[]>;
+  practiceColumnsToDisplay = [
+    'practiceNumber',
+    'practiceDate',
+    'practiceTopic',
+  ];
 
   constructor(
     private membersService: MembersService,
+    private practicesService: PracticesService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog
@@ -28,6 +37,9 @@ export class MemberDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.memberId = this.route.snapshot.params['id'];
     this.member$ = this.membersService.getMemberDetails(this.memberId);
+    this.practices$ = this.practicesService.getPracticesForMember(
+      this.memberId
+    );
   }
 
   editMember(member: Member) {
