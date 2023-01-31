@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Member } from '@models/member';
-import { MembersService } from '@services/members.service';
+import { MemberService } from '@services/member.service';
 import { catchError, tap, throwError } from 'rxjs';
 
 @Component({
@@ -18,7 +18,7 @@ export class AddMemberComponent {
 
   constructor(
     private fb: FormBuilder,
-    private membersService: MembersService,
+    private membersService: MemberService,
     private router: Router
   ) {}
 

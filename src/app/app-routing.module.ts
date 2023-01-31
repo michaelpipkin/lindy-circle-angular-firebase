@@ -7,7 +7,10 @@ import { MembersComponent } from './members/members/members.component';
 const routes: Routes = [
   { path: 'members', component: MembersComponent },
   { path: 'add-member', component: AddMemberComponent },
-  { path: 'member-details/:id', component: MemberDetailsComponent },
+  {
+    path: 'member-details/:id',
+    component: MemberDetailsComponent,
+  },
   { path: '**', component: MembersComponent },
 ];
 

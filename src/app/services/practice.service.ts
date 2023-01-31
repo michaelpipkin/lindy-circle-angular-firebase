@@ -6,7 +6,7 @@ import { concatMap, map, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class PracticesService {
+export class PracticeService {
   constructor(private db: AngularFirestore) {}
 
   getPracticesForMember = (memberId: string): Observable<Practice[]> =>
@@ -16,9 +16,9 @@ export class PracticesService {
       )
       .get()
       .pipe(
-        concatMap((res) => {
-          const practiceRefs = res.docs.map((ref) => {
-            return ref.ref.parent.parent.id;
+        concatMap((attendances) => {
+          const practiceRefs = attendances.docs.map((attendance) => {
+            return attendance.ref.parent.parent.id;
           });
           return this.db
             .collection<Practice>('practices', (ref) =>

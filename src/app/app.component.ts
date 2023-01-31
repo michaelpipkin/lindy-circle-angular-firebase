@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Member } from '@models/member';
 import { importData } from '@services/db-utils';
-import { MembersService } from '@services/members.service';
+import { MemberService } from '@services/member.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private db: AngularFirestore,
-    private membersService: MembersService
+    private membersService: MemberService
   ) {}
 
   ngOnInit(): void {

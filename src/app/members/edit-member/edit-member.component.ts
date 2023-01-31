@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Member } from '@models/member';
-import { MembersService } from '@services/members.service';
+import { MemberService } from '@services/member.service';
 
 @Component({
   selector: 'app-edit-member',
@@ -16,7 +16,7 @@ export class EditMemberComponent {
   constructor(
     private dialogRef: MatDialogRef<EditMemberComponent>,
     private fb: FormBuilder,
-    private membersService: MembersService,
+    private memberService: MemberService,
     @Inject(MAT_DIALOG_DATA) member: Member
   ) {
     this.member = member;
@@ -33,7 +33,7 @@ export class EditMemberComponent {
 
   onSubmit(): void {
     const changes = this.editMemberForm.value;
-    this.membersService.updateMember(this.member.id, changes).subscribe(() => {
+    this.memberService.updateMember(this.member.id, changes).subscribe(() => {
       this.dialogRef.close(true);
     });
   }

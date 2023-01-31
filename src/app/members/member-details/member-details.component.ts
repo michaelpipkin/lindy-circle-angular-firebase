@@ -5,8 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogOptions } from '@models/dialog-options';
 import { Member } from '@models/member';
 import { Practice } from '@models/practice';
-import { MembersService } from '@services/members.service';
-import { PracticesService } from '@services/practices.service';
+import { MemberService } from '@services/member.service';
+import { PracticeService } from '@services/practice.service';
 import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.component';
 import { catchError, Observable, pipe, tap, throwError } from 'rxjs';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
@@ -27,19 +27,23 @@ export class MemberDetailsComponent implements OnInit {
   ];
 
   constructor(
-    private membersService: MembersService,
-    private practicesService: PracticesService,
+    private memberService: MemberService,
+    private practiceService: PracticeService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.memberId = this.route.snapshot.params['id'];
-    this.member$ = this.membersService.getMemberDetails(this.memberId);
-    this.practices$ = this.practicesService.getPracticesForMember(
-      this.memberId
+    this.memberId = this.route.snapshot.paramMap.get('id');
+    this.member$ = this.memberService.getMemberDetails(this.memberId).pipe(
+      tap((member) => {
+        if (member == null) {
+          this.router.navigate(['members']);
+        }
+      })
     );
+    this.practices$ = this.practiceService.getPracticesForMember(this.memberId);
   }
 
   editMember(member: Member) {
@@ -65,7 +69,7 @@ export class MemberDetailsComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.membersService
+          this.memberService
             .deleteMember(member.id)
             .pipe(
               tap(() => {

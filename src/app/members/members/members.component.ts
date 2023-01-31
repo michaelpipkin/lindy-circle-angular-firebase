@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Member } from '@models/member';
-import { MembersService } from '@services/members.service';
+import { MemberService } from '@services/member.service';
 import { SortingService } from '@services/sorting.service';
 import { map, Observable } from 'rxjs';
 
@@ -20,13 +20,13 @@ export class MembersComponent implements OnInit {
   columnsToDisplay = ['firstName', 'lastName', 'activeText', 'totalAttendance'];
 
   constructor(
-    private membersService: MembersService,
+    private memberService: MemberService,
     private sorter: SortingService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.members$ = this.membersService.getMembersWithAttendances();
+    this.members$ = this.memberService.getMembersWithAttendances();
     this.filterMembers();
   }
 

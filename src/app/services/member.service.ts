@@ -7,7 +7,7 @@ import { concatMap, from, map, Observable, Observer } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class MembersService {
+export class MemberService {
   constructor(private db: AngularFirestore) {}
 
   getMembers = (activeOnly: boolean = false): Observable<Member[]> =>
@@ -64,15 +64,22 @@ export class MembersService {
         })
       );
 
-  getMemberDetails = (memberId: string): Observable<Member> =>
+  getMemberDetails = (memberId: string): Observable<Member | null> =>
     this.db
-      .doc<Member>(`members/${memberId}`)
+      .doc(`members/${memberId}`)
       .valueChanges({ idField: 'id' })
       .pipe(
         map((member) => {
-          return new Member({
-            ...member,
-          });
+          if (
+            !member.hasOwnProperty('firstName') ||
+            !member.hasOwnProperty('lastName')
+          ) {
+            return null;
+          } else {
+            return new Member({
+              ...member,
+            });
+          }
         })
       );
 
