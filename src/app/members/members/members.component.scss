@@ -22,3 +22,12 @@
   background-color: lightgray !important;
   cursor: pointer;
 }
+
+.table-clear-float {
+  clear: both;
+}
+
+.scrollable-table {
+  overflow-y: auto;
+  height: 800px;
+}

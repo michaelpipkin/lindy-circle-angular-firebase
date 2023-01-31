@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Member } from '@models/member';
 import { MemberService } from '@services/member.service';
 import { SortingService } from '@services/sorting.service';
-import { map, Observable } from 'rxjs';
+import { LoadingService } from '@shared/loading/loading.service';
+import { map, Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-members',
@@ -21,11 +22,13 @@ export class MembersComponent implements OnInit {
 
   constructor(
     private memberService: MemberService,
+    private loadingService: LoadingService,
     private sorter: SortingService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.loadingService.loadingOn();
     this.members$ = this.memberService.getMembersWithAttendances();
     this.filterMembers();
   }
@@ -47,7 +50,8 @@ export class MembersComponent implements OnInit {
           this.sortField,
           this.sortAsc
         );
-      })
+      }),
+      tap(() => this.loadingService.loadingOff())
     );
   }
 
@@ -63,6 +67,6 @@ export class MembersComponent implements OnInit {
   }
 
   onRowClick(member: Member) {
-    this.router.navigate(['member-details', member.id]);
+    this.router.navigate(['members', member.id]);
   }
 }

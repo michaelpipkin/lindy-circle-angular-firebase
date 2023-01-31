@@ -15,7 +15,7 @@
         </mat-form-field>
         <mat-checkbox color="accent" [(ngModel)]="activeOnly" (change)="filterMembers()">Active only</mat-checkbox>
     </div>
-    <div>
+    <div class="scrollable-table">
         <table mat-table matSort [dataSource]="filteredMembers$ | async" (matSortChange)="sortMembers($event)">
             <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef>Id</th>

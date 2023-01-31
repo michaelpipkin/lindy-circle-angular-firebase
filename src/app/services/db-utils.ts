@@ -4,7 +4,6 @@ import {
   PRACTICES,
   findAttendancesForPractice,
   findPunchCardsForCurrentMember,
-  findPunchesByPunchCard,
 } from 'src/seed-data';
 
 export async function importData(db: AngularFirestore): Promise<void> {
@@ -29,22 +28,22 @@ export async function importData(db: AngularFirestore): Promise<void> {
       const newPunchCard = { ...punchCard };
       delete newPunchCard.currentMemberId;
       delete newPunchCard.purchaseDate;
-      newPunchCard.purchaseDate = this.parseDate(punchCard['purchaseDate']);
+      newPunchCard.purchaseDate = parseDate(punchCard['purchaseDate']);
       console.log(`Adding punch card ${punchCard['punchCardId']}`);
       const punchCardRef = await memberPunchCards.add(newPunchCard);
       localPunchCards.push({
         ...newPunchCard,
         id: punchCardRef.id,
       });
-      const punchCardPunches = punchCardRef.collection('punches');
-      const punches = findPunchesByPunchCard(punchCard['punchCardId']);
-      // add punches for punch card
-      for (const punch of punches) {
-        const newPunch = {};
-        newPunch['attendanceId'] = punch['attendanceId'];
-        console.log('Adding punch');
-        await punchCardPunches.add(newPunch);
-      }
+      // const punchCardPunches = punchCardRef.collection('punches');
+      // const punches = findPunchesByAttendance(punchCard['punchCardId']);
+      // // add punches for punch card
+      // for (const punch of punches) {
+      //   const newPunch = {};
+      //   newPunch['attendanceId'] = punch['attendanceId'];
+      //   console.log('Adding punch');
+      //   await punchCardPunches.add(newPunch);
+      // }
     }
   }
   // update purchase member id on punch cards
@@ -71,7 +70,7 @@ export async function importData(db: AngularFirestore): Promise<void> {
     const newPractice = { ...practice };
     delete newPractice.practiceId;
     delete newPractice.practiceDate;
-    newPractice.practiceDate = this.parseDate(practice['practiceDate']);
+    newPractice.practiceDate = parseDate(practice['practiceDate']);
     const practiceRef = await practicesCollection.add(newPractice);
     localPractices.push({
       ...practice,
@@ -92,38 +91,35 @@ export async function importData(db: AngularFirestore): Promise<void> {
       });
     }
   }
-  // update member id for attendances
+  // update member id and punch card id for attendances
   db.collectionGroup('attendances')
     .get()
     .subscribe((attendances) => {
-      console.log('Updating attendance member ids...');
+      console.log('Updating attendance member ids and punch card ids...');
       attendances.forEach(async (attendanceDoc) => {
         const attendance = attendanceDoc.data();
         const member = localMembers.find(
           (f) => f.memberId == attendance['memberId']
         );
-        const newAttendance = {
-          memberId: member.id,
-          paymentAmount: attendance['paymentAmount'],
-          paymentType: attendance['paymentType'],
-        };
-        await db.doc(attendanceDoc.ref).set(newAttendance);
-      });
-    });
-  // update attendance id for punches
-  db.collectionGroup('punches')
-    .get()
-    .subscribe((punches) => {
-      console.log('Updating punch attendance ids...');
-      punches.forEach(async (punchDoc) => {
-        const punch = punchDoc.data();
-        const attendance = localAttendances.find(
-          (f) => f.attendanceId == punch['attendanceId']
+        const punchCard = localPunchCards.find(
+          (f) => f.punchCardId == attendance['punchCardId']
         );
-        const newPunch = {
-          attendanceId: attendance.id,
-        };
-        await db.doc(punchDoc.ref).set(newPunch);
+        if (punchCard == undefined) {
+          const newAttendance = {
+            memberId: member.id,
+            paymentAmount: attendance['paymentAmount'],
+            paymentType: attendance['paymentType'],
+          };
+          await db.doc(attendanceDoc.ref).set(newAttendance);
+        } else {
+          const newAttendance = {
+            memberId: member.id,
+            paymentAmount: attendance['paymentAmount'],
+            paymentType: attendance['paymentType'],
+            punchCardId: punchCard.id,
+          };
+          await db.doc(attendanceDoc.ref).set(newAttendance);
+        }
       });
     });
   // remove memberId field from members
@@ -138,7 +134,7 @@ export async function importData(db: AngularFirestore): Promise<void> {
   console.log('Finished!');
 }
 
-export function parseDate(dateString: string): Date {
+function parseDate(dateString: string): Date {
   let parts: unknown[] = dateString.split('-');
   return new Date(
     parts[0] as number,

@@ -6,11 +6,11 @@ import { MembersComponent } from './members/members/members.component';
 
 const routes: Routes = [
   { path: 'members', component: MembersComponent },
-  { path: 'add-member', component: AddMemberComponent },
   {
-    path: 'member-details/:id',
+    path: 'members/:id',
     component: MemberDetailsComponent,
   },
+  { path: 'add-member', component: AddMemberComponent },
   { path: '**', component: MembersComponent },
 ];
 

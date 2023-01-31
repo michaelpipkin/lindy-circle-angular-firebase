@@ -29,6 +29,8 @@ import {
   AngularFireFunctionsModule,
   USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
 } from '@angular/fire/compat/functions';
+import { LoadingComponent } from './shared/loading/loading.component';
+import { MessagesComponent } from './shared/messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import {
     MemberDetailsComponent,
     EditMemberComponent,
     GenericDialogComponent,
+    LoadingComponent,
+    MessagesComponent,
   ],
   imports: [
     BrowserModule,
