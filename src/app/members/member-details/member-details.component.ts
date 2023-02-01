@@ -4,11 +4,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogOptions } from '@models/dialog-options';
 import { Member } from '@models/member';
 import { Practice } from '@models/practice';
+import { PunchCard } from '@models/punch-card';
 import { MemberService } from '@services/member.service';
 import { PracticeService } from '@services/practice.service';
+import { PunchCardService } from '@services/punch-card.service';
 import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
-import { catchError, Observable, pipe, tap, throwError } from 'rxjs';
+import {
+  catchError,
+  forkJoin,
+  Observable,
+  of,
+  tap,
+  throwError
+  } from 'rxjs';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
 
 @Component({
@@ -20,15 +29,29 @@ export class MemberDetailsComponent implements OnInit {
   memberId: string;
   member$: Observable<Member>;
   practices$: Observable<Practice[]>;
+  punchCards$: Observable<PunchCard[]>;
+  memberLoaded: boolean = false;
+  practicesLoaded: boolean = false;
+  practiceCount: number = 0;
+  punchCardsLoaded: boolean = false;
+  punchCardCount: number = 0;
+  punchesRemaining: number = 0;
+  totalPurchaseAmount: number = 0;
   practiceColumnsToDisplay = [
     'practiceNumber',
     'practiceDate',
     'practiceTopic',
   ];
+  punchCardColumnsToDisplay = [
+    'purchaseDate',
+    'purchaseAmount',
+    'punchesRemaining',
+  ];
 
   constructor(
     private memberService: MemberService,
     private practiceService: PracticeService,
+    private punchCardService: PunchCardService,
     private loadingService: LoadingService,
     private route: ActivatedRoute,
     private router: Router,
@@ -43,20 +66,53 @@ export class MemberDetailsComponent implements OnInit {
         if (member == null) {
           this.router.navigateByUrl('/members');
         }
+        this.memberLoaded = true;
+        this.turnOffLoader();
       })
     );
     this.practices$ = this.practiceService
       .getPracticesForMember(this.memberId)
-      .pipe(tap(() => this.loadingService.loadingOff()));
+      .pipe(
+        tap((practices) => {
+          this.practicesLoaded = true;
+          this.practiceCount = practices.length;
+          this.turnOffLoader();
+        })
+      );
+    this.punchCards$ = this.punchCardService
+      .getPunchCardsForMember(this.memberId)
+      .pipe(
+        tap((punchCards) => {
+          this.punchCardsLoaded = true;
+          this.punchCardCount = punchCards.length;
+          this.punchesRemaining = punchCards.reduce(
+            (runningTotal, punchCard) =>
+              runningTotal + punchCard.punchesRemaining,
+            0
+          );
+          this.totalPurchaseAmount = punchCards.reduce(
+            (runningTotal, punchCard) =>
+              runningTotal + punchCard.purchaseAmount,
+            0
+          );
+          this.turnOffLoader();
+        })
+      );
   }
 
-  editMember(member: Member) {
+  turnOffLoader() {
+    if (this.memberLoaded && this.practicesLoaded && this.punchCardsLoaded) {
+      this.loadingService.loadingOff();
+    }
+  }
+
+  editMember(member: Member): void {
     const dialogConfig: MatDialogConfig = {};
     dialogConfig.data = member;
     this.dialog.open(EditMemberComponent, dialogConfig);
   }
 
-  deleteMember(member: Member) {
+  deleteMember(member: Member): void {
     const dialogConfig: MatDialogConfig = {};
     dialogConfig.data = new DialogOptions({
       title: 'WARNING!',

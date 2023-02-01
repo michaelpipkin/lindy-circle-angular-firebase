@@ -3,30 +3,6 @@
   justify-content: center;
 }
 
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.title {
-  text-align: center;
-  margin-right: 15px;
-}
-
-.cell-right {
-  text-align: right;
-}
-
-.mat-mdc-row:hover {
-  background-color: lightgray !important;
-  cursor: pointer;
-}
-
-.table-clear-float {
-  clear: both;
-}
-
 .scrollable-table {
   overflow-y: auto;
   height: 800px;

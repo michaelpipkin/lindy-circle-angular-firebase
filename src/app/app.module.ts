@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { LoginComponent } from './auth/login/login.component';
 import { MaterialModule } from './material.module';
 import { AddMemberComponent } from './members/add-member/add-member.component';
 import { EditMemberComponent } from './members/edit-member/edit-member.component';
@@ -13,6 +14,8 @@ import { MemberDetailsComponent } from './members/member-details/member-details.
 import { MembersComponent } from './members/members/members.component';
 import { PracticesComponent } from './practices/practices/practices.component';
 import { GenericDialogComponent } from './shared/generic-dialog/generic-dialog.component';
+import { LoadingComponent } from './shared/loading/loading.component';
+import { MessagesComponent } from './shared/messages/messages.component';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS,
   MatDialogConfig,
@@ -29,8 +32,6 @@ import {
   AngularFireFunctionsModule,
   USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
 } from '@angular/fire/compat/functions';
-import { LoadingComponent } from './shared/loading/loading.component';
-import { MessagesComponent } from './shared/messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { MessagesComponent } from './shared/messages/messages.component';
     GenericDialogComponent,
     LoadingComponent,
     MessagesComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,14 +71,16 @@ import { MessagesComponent } from './shared/messages/messages.component';
       provide: USE_FIRESTORE_EMULATOR,
       useValue: environment.useEmulators ? ['localhost', 8080] : undefined,
     },
-    // {
-    //   provide: USE_AUTH_EMULATOR,
-    //   useValue: environment.useEmulators ? ['localhost', 9099] : undefined,
-    // },
-    // {
-    //   provide: USE_FUNCTIONS_EMULATOR,
-    //   useValue: environment.useEmulators ? ['localhost', 5001] : undefined,
-    // },
+    {
+      provide: USE_AUTH_EMULATOR,
+      useValue: environment.useEmulators
+        ? ['http://localhost:9099']
+        : undefined,
+    },
+    {
+      provide: USE_FUNCTIONS_EMULATOR,
+      useValue: environment.useEmulators ? ['localhost', 5001] : undefined,
+    },
   ],
   bootstrap: [AppComponent],
 })

@@ -17,7 +17,7 @@ export class PracticeService {
       .get()
       .pipe(
         concatMap((attendances) => {
-          const practiceRefs = attendances.docs.map((attendance) => {
+          const practiceRefs = <string[]>attendances.docs.map((attendance) => {
             return attendance.ref.parent.parent.id;
           });
           return this.db

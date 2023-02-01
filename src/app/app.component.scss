@@ -3,9 +3,23 @@
   width: 100%;
 }
 
+a span span {
+  display: flex;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
 .mat-icon {
-  height: 19px;
   padding-right: 10px;
+}
+
+a span {
+  display: inline-block;
+  line-height: 24px;
+  vertical-align: top;
+  margin-left: 6px;
+  padding-top: 2px;
 }
 
 #title {
