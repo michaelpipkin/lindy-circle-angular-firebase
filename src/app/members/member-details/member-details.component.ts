@@ -141,4 +141,8 @@ export class MemberDetailsComponent implements OnInit {
         }
       });
   }
+
+  onPracticeRowClick(practice: Practice) {}
+
+  onPunchCardRowClick(punchCard: PunchCard) {}
 }

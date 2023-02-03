@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Member } from '@models/member';
 import { MemberService } from '@services/member.service';
 import { SortingService } from '@services/sorting.service';
+import { UserService } from '@services/user.service';
 import { LoadingService } from '@shared/loading/loading.service';
 import { map, Observable, tap } from 'rxjs';
 
@@ -23,6 +24,7 @@ export class MembersComponent implements OnInit {
   constructor(
     private memberService: MemberService,
     private loadingService: LoadingService,
+    public user: UserService,
     private sorter: SortingService,
     private router: Router
   ) {}
@@ -67,6 +69,14 @@ export class MembersComponent implements OnInit {
   }
 
   onRowClick(member: Member) {
-    this.router.navigate(['members', member.id]);
+    this.user.roles$
+      .pipe(
+        tap((roles) => {
+          if (roles.admin) {
+            this.router.navigate(['members', member.id]);
+          }
+        })
+      )
+      .subscribe();
   }
 }

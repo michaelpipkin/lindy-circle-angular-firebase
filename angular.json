@@ -39,6 +39,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["dialog-polyfill"],
             "outputPath": "dist/lindy-circle-angular-firebase",
             "index": "src/index.html",
             "main": "src/main.ts",

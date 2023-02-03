@@ -1,9 +1,39 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav #start (click)="start.close()">
-    <mat-nav-list>
+    <mat-nav-list *ngIf="user.isLoggedIn$ | async">
       <a mat-list-item routerLink="members">
         <mat-icon>groups</mat-icon>
         <span>Members</span>
+      </a>
+      <a mat-list-item routerLink="/">
+        <mat-icon>accessibility_new</mat-icon>
+        <span>Practices</span>
+      </a>
+      <ng-container *ngIf="(user.roles$ | async) let roles">
+        <ng-container *ngIf="roles.admin">
+          <a mat-list-item routerLink="/">
+            <mat-icon>loyalty</mat-icon>
+            <span>Punch Cards</span>
+          </a>
+          <a mat-list-item routerLink="/">
+            <mat-icon>perm_contact_calendar</mat-icon>
+            <span>Attendance</span>
+          </a>
+        </ng-container>
+      </ng-container>
+      <a mat-list-item routerLink="/">
+        <mat-icon>account_circle</mat-icon>
+        <span>Profile</span>
+      </a>
+      <a mat-list-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Log Out</span>
+      </a>
+    </mat-nav-list>
+    <mat-nav-list *ngIf="!(user.isLoggedIn$ | async)">
+      <a mat-list-item routerLink="/">
+        <mat-icon>account_circle</mat-icon>
+        <span>Register</span>
       </a>
       <a mat-list-item routerLink="login">
         <mat-icon>login</mat-icon>

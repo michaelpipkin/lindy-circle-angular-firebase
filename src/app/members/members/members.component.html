@@ -1,9 +1,11 @@
 <div>
     <div class="header mt-2">
         <h2 class="title">Members</h2>
-        <button mat-mini-fab color="accent" routerLink="/add-member">
-            <mat-icon>add</mat-icon>
-        </button>
+        <ng-container *ngIf="(user.roles$ | async) let roles">
+            <button mat-mini-fab *ngIf="roles.admin" color="accent" routerLink="/add-member">
+                <mat-icon>add</mat-icon>
+            </button>
+        </ng-container>
     </div>
     <div class="header">
         <mat-form-field>
