@@ -8,7 +8,7 @@ service cloud.firestore {
     function isAdmin() {
       return isAuthenticated() &&
       'admin' in request.auth.token &&
-      request.auth.token.roles.admin;
+      request.auth.token.admin;
     }
 
     function isNonEmptyString(fieldName) {

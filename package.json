@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "firebase": "firebase emulators:start --only firestore,auth --import seed-data"
+    "firebase": "firebase emulators:start --only firestore,auth --import seed-data",
+    "export": "firebase emulators:export seed-data"
   },
   "private": true,
   "dependencies": {

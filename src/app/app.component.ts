@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     this.user.logout();
-    this.router.navigateByUrl('/login');
   }
 
   onImportClick() {
