@@ -10,14 +10,7 @@ import { PracticeService } from '@services/practice.service';
 import { PunchCardService } from '@services/punch-card.service';
 import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
-import {
-  catchError,
-  forkJoin,
-  Observable,
-  of,
-  tap,
-  throwError
-  } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
 
 @Component({
@@ -35,8 +28,6 @@ export class MemberDetailsComponent implements OnInit {
   practiceCount: number = 0;
   punchCardsLoaded: boolean = false;
   punchCardCount: number = 0;
-  punchesRemaining: number = 0;
-  totalPurchaseAmount: number = 0;
   practiceColumnsToDisplay = [
     'practiceNumber',
     'practiceDate',
@@ -85,16 +76,6 @@ export class MemberDetailsComponent implements OnInit {
         tap((punchCards) => {
           this.punchCardsLoaded = true;
           this.punchCardCount = punchCards.length;
-          this.punchesRemaining = punchCards.reduce(
-            (runningTotal, punchCard) =>
-              runningTotal + punchCard.punchesRemaining,
-            0
-          );
-          this.totalPurchaseAmount = punchCards.reduce(
-            (runningTotal, punchCard) =>
-              runningTotal + punchCard.purchaseAmount,
-            0
-          );
           this.turnOffLoader();
         })
       );

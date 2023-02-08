@@ -4,7 +4,10 @@ export interface IMember {
   lastName: string;
   active: boolean;
   totalAttendance: number;
+  attendancePaymentTotal: number;
+  punchCardPurchaseTotal: number;
   punchesRemaining: number;
+  totalPaid: number;
   readonly firstLastName: string;
   readonly lastFirstName: string;
   readonly activeText: string;
@@ -19,7 +22,10 @@ export class Member implements IMember {
   lastName: string;
   active: boolean;
   totalAttendance: number;
+  attendancePaymentTotal: number;
+  punchCardPurchaseTotal: number;
   punchesRemaining: number;
+  totalPaid: number;
   get firstLastName(): string {
     return `${this.firstName} ${this.lastName}`;
   }

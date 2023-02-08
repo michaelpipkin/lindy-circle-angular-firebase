@@ -1,4 +1,5 @@
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { PunchCard } from '@models/punch-card';
 import {
   MEMBERS,
   PRACTICES,
@@ -35,15 +36,6 @@ export async function importData(db: AngularFirestore): Promise<void> {
         ...newPunchCard,
         id: punchCardRef.id,
       });
-      // const punchCardPunches = punchCardRef.collection('punches');
-      // const punches = findPunchesByAttendance(punchCard['punchCardId']);
-      // // add punches for punch card
-      // for (const punch of punches) {
-      //   const newPunch = {};
-      //   newPunch['attendanceId'] = punch['attendanceId'];
-      //   console.log('Adding punch');
-      //   await punchCardPunches.add(newPunch);
-      // }
     }
   }
   // update purchase member id on punch cards
@@ -57,9 +49,10 @@ export async function importData(db: AngularFirestore): Promise<void> {
           (f) => f.memberId == punchCard['purchaseMemberId']
         );
         const newPunchCard = {
+          purchaseMemberId: purchaseMember.id,
           purchaseDate: punchCard['purchaseDate'],
           purchaseAmount: punchCard['purchaseAmount'],
-          purchaseMemberId: purchaseMember.id,
+          punchesRemaining: punchCard['punchesRemaining'],
         };
         await db.doc(punchCardDoc.ref).set(newPunchCard);
       });

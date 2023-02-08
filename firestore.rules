@@ -22,7 +22,7 @@ service cloud.firestore {
     }
 
     match /{document=**} {
-      allow read: if isAuthenticated();
+      allow read, write: if isAuthenticated();
     }
 
     match /members/{memberId} {

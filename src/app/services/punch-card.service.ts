@@ -12,31 +12,17 @@ export class PunchCardService {
 
   getPunchCardsForMember = (memberId: string): Observable<PunchCard[]> =>
     this.db
-      .collectionGroup('attendances', (ref) =>
-        ref.where('memberId', '==', memberId).where('paymentType', '==', 2)
+      .collection<PunchCard>(`members/${memberId}/punch-cards`, (ref) =>
+        ref.orderBy('purchaseDate')
       )
-      .get()
+      .valueChanges({ idField: 'id' })
       .pipe(
-        concatMap((attendances) => {
-          const punchesUsed = <string[]>attendances.docs.map((attendance) => {
-            return attendance.data()['punchCardId'];
+        map((punchCards) => {
+          return <PunchCard[]>punchCards.map((punchCard) => {
+            return new PunchCard({
+              ...punchCard,
+            });
           });
-          return this.db
-            .collection<PunchCard>(`members/${memberId}/punch-cards`, (ref) =>
-              ref.orderBy('purchaseDate')
-            )
-            .valueChanges({ idField: 'id' })
-            .pipe(
-              map((punchCards) => {
-                return <PunchCard[]>punchCards.map((punchCard) => {
-                  return new PunchCard({
-                    ...punchCard,
-                    punchesRemaining:
-                      5 - punchesUsed.filter((f) => f == punchCard.id).length,
-                  });
-                });
-              })
-            );
         })
       );
 }

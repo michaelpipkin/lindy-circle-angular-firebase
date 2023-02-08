@@ -1,97 +1,105 @@
-<div>
-    <div *ngIf="member$ | async; let member">
-        <div class="breadcrumb">
-            <button mat-button color="primary" routerLink="/members">Back to members list</button>
-        </div>
-        <div class="header">
-            <h2 class="title">Member Details</h2>
-            <button class="me-2" mat-mini-fab color="accent" (click)="editMember(member)">
-                <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-mini-fab color="warn" [disabled]="practiceCount > 0 || punchCardCount > 0"
-                (click)="deleteMember(member)">
-                <mat-icon>delete</mat-icon>
-            </button>
-        </div>
-        <div class="info mt-2">
-            <span class="infoLabel">Name:</span>
-            <span>{{member.firstLastName}}</span>
-            <br />
-            <span class="infoLabel">Status:</span>
-            <span>{{member.activeText}}</span>
-            <br />
-            <span class="infoLabel">Attended:</span>
-            <span>{{practiceCount}}</span>
-            <br />
-            <span class="infoLabel">Punches Left:</span>
-            <span>{{punchesRemaining}}</span>
+<ng-container *ngIf="member$ | async; let member">
+    <div>
+        <div>
+            <div class="breadcrumb">
+                <button mat-button color="primary" routerLink="/members">Back to members list</button>
+            </div>
+            <div class="header">
+                <h2 class="title">Member Details</h2>
+                <button class="me-2" mat-mini-fab color="accent" (click)="editMember(member)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" [disabled]="practiceCount > 0 || punchCardCount > 0"
+                    (click)="deleteMember(member)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+            <div class="info mt-2">
+                <span class="infoLabel">Name:</span>
+                <span>{{member.firstLastName}}</span>
+                <br />
+                <span class="infoLabel">Status:</span>
+                <span>{{member.activeText}}</span>
+                <br />
+                <span class="infoLabel">Attended:</span>
+                <span>{{member.totalAttendance}}</span>
+                <br />
+                <span class="infoLabel">Punches Left:</span>
+                <span>{{member.punchesRemaining}}</span>
+                <br />
+                <span class="infoLabel">Total Paid:</span>
+                <span>{{member.totalPaid | currency}}</span>
+            </div>
         </div>
     </div>
-</div>
-<div class="section-break mt-3"></div>
-<div class="pb-5 me-4">
-    <h5>Practice Attendances</h5>
-    <div class="scrollable-table">
-        <table class="sub-table" mat-table [dataSource]="practices$ | async">
-            <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef>Id</th>
-                <td mat-cell *matCellDef="let practice">{{practice.id}}</td>
-            </ng-container>
-            <ng-container matColumnDef="practiceNumber">
-                <th mat-header-cell *matHeaderCellDef>#</th>
-                <td mat-cell *matCellDef="let practice">{{practice.practiceNumber}}</td>
-            </ng-container>
-            <ng-container matColumnDef="practiceDate">
-                <th mat-header-cell *matHeaderCellDef>Date</th>
-                <td mat-cell *matCellDef="let practice">{{practice.practiceDate.toDate() | date}}</td>
-            </ng-container>
-            <ng-container matColumnDef="practiceTopic">
-                <th mat-header-cell *matHeaderCellDef>Topic</th>
-                <td class="topic" mat-cell *matCellDef="let practice">{{practice.practiceTopic}}</td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="practiceColumnsToDisplay; sticky: true"></tr>
-            <tr mat-row *matRowDef="let myRowData; columns: practiceColumnsToDisplay"
-                (click)="onPracticeRowClick(myRowData)">
-            </tr>
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" [colSpan]="practiceColumnsToDisplay.length">No attendances found.
-                </td>
-            </tr>
-        </table>
+    <div class="section-break mt-3"></div>
+    <div class="pb-5 me-4">
+        <h5>Practice Attendances</h5>
+        <div class="scrollable-table">
+            <table class="sub-table" mat-table [dataSource]="practices$ | async">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef>Id</th>
+                    <td mat-cell *matCellDef="let practice">{{practice.id}}</td>
+                </ng-container>
+                <ng-container matColumnDef="practiceNumber">
+                    <th mat-header-cell *matHeaderCellDef>#</th>
+                    <td mat-cell *matCellDef="let practice">{{practice.practiceNumber}}</td>
+                </ng-container>
+                <ng-container matColumnDef="practiceDate">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let practice">{{practice.practiceDate.toDate() | date}}</td>
+                </ng-container>
+                <ng-container matColumnDef="practiceTopic">
+                    <th mat-header-cell *matHeaderCellDef>Topic</th>
+                    <td class="topic" mat-cell *matCellDef="let practice">{{practice.practiceTopic}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="practiceColumnsToDisplay; sticky: true"></tr>
+                <tr mat-row *matRowDef="let myRowData; columns: practiceColumnsToDisplay"
+                    (click)="onPracticeRowClick(myRowData)">
+                </tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [colSpan]="practiceColumnsToDisplay.length">No attendances found.
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-</div>
-<div class="pb-5">
-    <h5>Punch Cards</h5>
-    <div class="scrollable-table">
-        <table class="sub-table" mat-table [dataSource]="punchCards$ | async">
-            <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef>Id</th>
-                <td mat-cell *matCellDef="let punchCard">{{punchCard.id}}</td>
-            </ng-container>
-            <ng-container matColumnDef="purchaseDate">
-                <th mat-header-cell *matHeaderCellDef>Purchase Date</th>
-                <td mat-cell *matCellDef="let punchCard">{{punchCard.purchaseDate.toDate() | date}}</td>
-                <td mat-footer-cell *matFooterCellDef class="cell-right">Totals:</td>
-            </ng-container>
-            <ng-container matColumnDef="purchaseAmount">
-                <th mat-header-cell *matHeaderCellDef class="cell-right">Amount</th>
-                <td mat-cell *matCellDef="let punchCard" class="cell-right">{{punchCard.purchaseAmount | currency}}</td>
-                <td mat-footer-cell *matFooterCellDef class="cell-right">{{totalPurchaseAmount | currency}}</td>
-            </ng-container>
-            <ng-container matColumnDef="punchesRemaining">
-                <th mat-header-cell *matHeaderCellDef class="cell-right">Punches Left</th>
-                <td mat-cell *matCellDef="let punchCard" class="cell-right">{{punchCard.punchesRemaining}}</td>
-                <td mat-footer-cell *matFooterCellDef class="cell-right">{{punchesRemaining}}</td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="punchCardColumnsToDisplay; sticky: true"></tr>
-            <tr mat-row *matRowDef="let myRowData; columns: punchCardColumnsToDisplay"
-                (click)="onPunchCardRowClick(myRowData)">
-            </tr>
-            <tr mat-footer-row *matFooterRowDef="punchCardColumnsToDisplay"></tr>
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" [colSpan]="punchCardColumnsToDisplay.length">No punch cards found.
-                </td>
-            </tr>
-        </table>
+    <div class="pb-5">
+        <h5>Punch Cards</h5>
+        <div class="scrollable-table">
+            <table class="sub-table" mat-table [dataSource]="punchCards$ | async">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef>Id</th>
+                    <td mat-cell *matCellDef="let punchCard">{{punchCard.id}}</td>
+                </ng-container>
+                <ng-container matColumnDef="purchaseDate">
+                    <th mat-header-cell *matHeaderCellDef>Purchase Date</th>
+                    <td mat-cell *matCellDef="let punchCard">{{punchCard.purchaseDate.toDate() | date}}</td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">Totals:</td>
+                </ng-container>
+                <ng-container matColumnDef="purchaseAmount">
+                    <th mat-header-cell *matHeaderCellDef class="cell-right">Amount</th>
+                    <td mat-cell *matCellDef="let punchCard" class="cell-right">{{punchCard.purchaseAmount | currency}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{member.punchCardPurchaseTotal |
+                        currency}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="punchesRemaining">
+                    <th mat-header-cell *matHeaderCellDef class="cell-right">Punches Left</th>
+                    <td mat-cell *matCellDef="let punchCard" class="cell-right">{{punchCard.punchesRemaining}}</td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{member.punchesRemaining}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="punchCardColumnsToDisplay; sticky: true"></tr>
+                <tr mat-row *matRowDef="let myRowData; columns: punchCardColumnsToDisplay"
+                    (click)="onPunchCardRowClick(myRowData)">
+                </tr>
+                <tr mat-footer-row *matFooterRowDef="punchCardColumnsToDisplay"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [colSpan]="punchCardColumnsToDisplay.length">No punch cards found.
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-</div>
+</ng-container>

@@ -39,6 +39,14 @@
                 <th mat-header-cell class="cell-right" *matHeaderCellDef mat-sort-header>Attendances</th>
                 <td mat-cell class="cell-right" *matCellDef="let member">{{member.totalAttendance}}</td>
             </ng-container>
+            <ng-container matColumnDef="punchesRemaining">
+                <th mat-header-cell class="cell-right" *matHeaderCellDef mat-sort-header>Punches Left</th>
+                <td mat-cell class="cell-right" *matCellDef="let member">{{member.punchesRemaining}}</td>
+            </ng-container>
+            <ng-container matColumnDef="totalPaid">
+                <th mat-header-cell class="cell-right" *matHeaderCellDef mat-sort-header>Total Paid</th>
+                <td mat-cell class="cell-right" *matCellDef="let member">{{member.totalPaid | currency}}</td>
+            </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
             <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="onRowClick(myRowData)"></tr>
             <tr class="mat-row" *matNoDataRow>
