@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Member } from '@models/member';
 import { MemberService } from '@services/member.service';
 import { catchError, tap, throwError } from 'rxjs';
@@ -17,9 +17,9 @@ export class AddMemberComponent {
   });
 
   constructor(
+    private dialogRef: MatDialogRef<AddMemberComponent>,
     private fb: FormBuilder,
-    private membersService: MemberService,
-    private router: Router
+    private membersService: MemberService
   ) {}
 
   onSubmit(): void {
@@ -28,12 +28,17 @@ export class AddMemberComponent {
       firstName: val.firstName,
       lastName: val.lastName,
       active: true,
+      totalAttendance: 0,
+      attendancePaymentTotal: 0,
+      punchCardPurchaseTotal: 0,
+      punchesRemaining: 0,
+      totalPaid: 0,
     };
     this.membersService
       .addMember(newMember)
       .pipe(
         tap(() => {
-          this.router.navigate(['members']);
+          this.dialogRef.close(true);
         }),
         catchError((err: Error) => {
           alert('There was a problem adding the member.');
@@ -41,5 +46,9 @@ export class AddMemberComponent {
         })
       )
       .subscribe();
+  }
+
+  close(): void {
+    this.dialogRef.close(false);
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Member } from '@models/member';
 import { MemberService } from '@services/member.service';
@@ -6,6 +7,7 @@ import { SortingService } from '@services/sorting.service';
 import { UserService } from '@services/user.service';
 import { LoadingService } from '@shared/loading/loading.service';
 import { map, Observable, tap } from 'rxjs';
+import { AddMemberComponent } from '../add-member/add-member.component';
 
 @Component({
   selector: 'app-members',
@@ -15,17 +17,17 @@ import { map, Observable, tap } from 'rxjs';
 export class MembersComponent implements OnInit {
   members$: Observable<Member[]>;
   filteredMembers$: Observable<Member[]>;
+  tableTooltip: string = '';
   activeOnly: boolean = true;
   nameFilter: string = '';
   sortField: string = 'lastName';
   sortAsc: boolean = true;
-  columnsToDisplay = [
+  columnsToDisplay: string[] = [
     'firstName',
     'lastName',
     'activeText',
     'totalAttendance',
     'punchesRemaining',
-    'totalPaid',
   ];
 
   constructor(
@@ -33,7 +35,8 @@ export class MembersComponent implements OnInit {
     private loadingService: LoadingService,
     public user: UserService,
     private sorter: SortingService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -44,10 +47,10 @@ export class MembersComponent implements OnInit {
 
   filterMembers(): void {
     this.filteredMembers$ = this.members$.pipe(
-      map((members) => {
-        return this.sorter.sort(
+      map((members: Member[]) => {
+        const filteredMembers: Member[] = this.sorter.sort(
           members.filter(
-            (member) =>
+            (member: Member) =>
               (member.active || member.active == this.activeOnly) &&
               (member.firstName
                 .toLowerCase()
@@ -59,6 +62,10 @@ export class MembersComponent implements OnInit {
           this.sortField,
           this.sortAsc
         );
+        this.tableTooltip = `${filteredMembers.length} ${
+          this.activeOnly ? ' active' : ''
+        } members`;
+        return filteredMembers;
       }),
       tap(() => this.loadingService.loadingOff())
     );
@@ -85,5 +92,9 @@ export class MembersComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  addMember(): void {
+    this.dialog.open(AddMemberComponent);
   }
 }

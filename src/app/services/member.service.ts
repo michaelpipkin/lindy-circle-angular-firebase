@@ -20,8 +20,8 @@ export class MemberService {
       )
       .valueChanges({ idField: 'id' })
       .pipe(
-        map((members) => {
-          return <Member[]>members.map((member) => {
+        map((members: Member[]) => {
+          return <Member[]>members.map((member: Member) => {
             return new Member({
               ...member,
             });
@@ -49,8 +49,8 @@ export class MemberService {
             )
             .valueChanges({ idField: 'id' })
             .pipe(
-              map((members) => {
-                return <Member[]>members.map((member) => {
+              map((members: Member[]) => {
+                return <Member[]>members.map((member: Member) => {
                   return new Member({
                     ...member,
                     totalAttendance: attendances.filter(
@@ -69,7 +69,7 @@ export class MemberService {
       .doc(`members/${memberId}`)
       .valueChanges({ idField: 'id' })
       .pipe(
-        map((member) => {
+        map((member: Member) => {
           if (
             member.hasOwnProperty('firstName') &&
             member.hasOwnProperty('lastName') &&

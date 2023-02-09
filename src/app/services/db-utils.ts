@@ -1,5 +1,6 @@
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { PunchCard } from '@models/punch-card';
+import { map, tap } from 'rxjs';
 import {
   MEMBERS,
   PRACTICES,
@@ -116,15 +117,22 @@ export async function importData(db: AngularFirestore): Promise<void> {
       });
     });
   // remove memberId field from members
-  membersCollection.get().subscribe((members) => {
-    console.log('Remove memberId field from members...');
-    members.forEach(async (memberDoc) => {
-      let member = memberDoc.data();
-      delete member['memberId'];
-      await db.doc(memberDoc.ref).set(member);
-    });
-  });
-  console.log('Finished!');
+  membersCollection
+    .get()
+    .pipe(
+      map((members) => {
+        console.log('Remove memberId field from members...');
+        members.forEach((memberDoc) => {
+          let member = memberDoc.data();
+          delete member['memberId'];
+          db.doc(memberDoc.ref).set(member);
+        });
+      }),
+      tap(() => {
+        console.log('Finished removing memberId field!');
+      })
+    )
+    .subscribe();
 }
 
 function parseDate(dateString: string): Date {

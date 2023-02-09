@@ -26,7 +26,7 @@ export class PracticeService {
             )
             .valueChanges({ idField: 'id' })
             .pipe(
-              map((practices) => {
+              map((practices: Practice[]) => {
                 return <Practice[]>practices
                   .filter((f) => practiceRefs.includes(f.id))
                   .map((practice) => {
@@ -36,6 +36,20 @@ export class PracticeService {
                   });
               })
             );
+        })
+      );
+
+  getPractices = () =>
+    this.db
+      .collection('practices')
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        map((practices: Practice[]) => {
+          return <Practice[]>practices.map((practice: Practice) => {
+            return new Practice({
+              ...practice,
+            });
+          });
         })
       );
 }

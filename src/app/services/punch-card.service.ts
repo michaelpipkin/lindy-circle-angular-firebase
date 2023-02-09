@@ -17,7 +17,7 @@ export class PunchCardService {
       )
       .valueChanges({ idField: 'id' })
       .pipe(
-        map((punchCards) => {
+        map((punchCards: PunchCard[]) => {
           return <PunchCard[]>punchCards.map((punchCard) => {
             return new PunchCard({
               ...punchCard,

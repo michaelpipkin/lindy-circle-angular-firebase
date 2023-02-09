@@ -8,6 +8,8 @@ export interface IPractice {
   practiceCost: number;
   miscExpense: number;
   miscRevenue: number;
+  attendanceCount: number;
+  admissionRevenue: number;
 }
 
 export class Practice implements IPractice {
@@ -21,4 +23,6 @@ export class Practice implements IPractice {
   practiceCost: number;
   miscExpense: number;
   miscRevenue: number;
+  attendanceCount: number;
+  admissionRevenue: number;
 }

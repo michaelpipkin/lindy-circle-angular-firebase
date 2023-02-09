@@ -28,11 +28,6 @@ const routes: Routes = [
     ...canActivate(adminOnly),
   },
   {
-    path: 'add-member',
-    component: AddMemberComponent,
-    ...canActivate(adminOnly),
-  },
-  {
     path: 'login',
     component: LoginComponent,
     ...canActivate(loggedIn),
