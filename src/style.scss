@@ -47,7 +47,8 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-mat-error {
+mat-error,
+mat-hint {
   font-size: 0.8rem;
 }
 
@@ -62,6 +63,10 @@ mat-error {
 
 .mat-mdc-footer-cell {
   font-weight: 600;
+}
+
+.mat-mdc-form-field-infix {
+  max-width: 85px;
 }
 
 .sub-table tr {

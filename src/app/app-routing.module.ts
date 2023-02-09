@@ -4,6 +4,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { AddMemberComponent } from './members/add-member/add-member.component';
 import { MemberDetailsComponent } from './members/member-details/member-details.component';
 import { MembersComponent } from './members/members/members.component';
+import { PracticesComponent } from './practices/practices/practices.component';
 import {
   canActivate,
   hasCustomClaim,
@@ -26,6 +27,11 @@ const routes: Routes = [
     path: 'members/:id',
     component: MemberDetailsComponent,
     ...canActivate(adminOnly),
+  },
+  {
+    path: 'practices',
+    component: PracticesComponent,
+    ...canActivate(redirectToLogin),
   },
   {
     path: 'login',

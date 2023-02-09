@@ -48,20 +48,23 @@ export class MembersComponent implements OnInit {
   filterMembers(): void {
     this.filteredMembers$ = this.members$.pipe(
       map((members: Member[]) => {
-        const filteredMembers: Member[] = this.sorter.sort(
-          members.filter(
-            (member: Member) =>
-              (member.active || member.active == this.activeOnly) &&
-              (member.firstName
+        let filteredMembers: Member[] = members.filter(
+          (member: Member) =>
+            (member.active || member.active == this.activeOnly) &&
+            (member.firstName
+              .toLowerCase()
+              .includes(this.nameFilter.toLowerCase()) ||
+              member.lastName
                 .toLowerCase()
-                .includes(this.nameFilter.toLowerCase()) ||
-                member.lastName
-                  .toLowerCase()
-                  .includes(this.nameFilter.toLowerCase()))
-          ),
-          this.sortField,
-          this.sortAsc
+                .includes(this.nameFilter.toLowerCase()))
         );
+        if (filteredMembers.length > 0) {
+          filteredMembers = this.sorter.sort(
+            filteredMembers,
+            this.sortField,
+            this.sortAsc
+          );
+        }
         this.tableTooltip = `${filteredMembers.length} ${
           this.activeOnly ? ' active' : ''
         } members`;
@@ -79,6 +82,7 @@ export class MembersComponent implements OnInit {
 
   clearSearch(): void {
     this.nameFilter = '';
+    this.loadingService.loadingOn();
     this.filterMembers();
   }
 

@@ -18,8 +18,8 @@ export class PracticesComponent implements OnInit {
   practices$: Observable<Practice[]>;
   filteredPractices$: Observable<Practice[]>;
   tableTooltip: string = '';
-  startDate: Timestamp;
-  endDate: Timestamp;
+  startDate: Date | null;
+  endDate: Date | null;
   sortField: string = 'practiceNumber';
   sortAsc: boolean = false;
   columnsToDisplay: string[] = [
@@ -47,15 +47,18 @@ export class PracticesComponent implements OnInit {
   filterPractices(): void {
     this.filteredPractices$ = this.practices$.pipe(
       map((practices: Practice[]) => {
-        const filteredPractices: Practice[] = this.sorter.sort(
-          practices.filter(
-            (practice: Practice) =>
-              practice.practiceDate >= (this.startDate ?? 0) &&
-              practice.practiceDate <= (this.endDate ?? new Date())
-          ),
-          this.sortField,
-          this.sortAsc
+        let filteredPractices: Practice[] = practices.filter(
+          (practice: Practice) =>
+            practice.practiceDate.toDate() >= (this.startDate ?? 0) &&
+            practice.practiceDate.toDate() <= (this.endDate ?? new Date())
         );
+        if (filteredPractices.length > 0) {
+          filteredPractices = this.sorter.sort(
+            filteredPractices,
+            this.sortField,
+            this.sortAsc
+          );
+        }
         this.tableTooltip = `${filteredPractices.length} practices`;
         return filteredPractices;
       }),
@@ -79,6 +82,18 @@ export class PracticesComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  clearStartDate(): void {
+    this.startDate = null;
+    this.loadingService.loadingOn();
+    this.filterPractices();
+  }
+
+  clearEndDate(): void {
+    this.endDate = null;
+    this.loadingService.loadingOn();
+    this.filterPractices();
   }
 
   addPractice(): void {
