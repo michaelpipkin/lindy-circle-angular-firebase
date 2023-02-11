@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Practice } from '@models/practice';
-import { concatMap, map, Observable } from 'rxjs';
+import { concatMap, from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -52,4 +52,16 @@ export class PracticeService {
           });
         })
       );
+
+  addPractice = (newPractice: Partial<Practice>): Observable<any> =>
+    from(this.db.collection('practices').add(newPractice));
+
+  updatePractice = (
+    practiceId: string,
+    changes: Partial<Practice>
+  ): Observable<any> =>
+    from(this.db.doc(`practices/${practiceId}`).update(changes));
+
+  deletePractice = (practiceId: string) =>
+    from(this.db.doc(`practices/${practiceId}`).delete());
 }

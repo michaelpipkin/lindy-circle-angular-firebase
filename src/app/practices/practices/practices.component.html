@@ -8,7 +8,7 @@
         </ng-container>
     </div>
     <div class="header">
-        <mat-form-field appearance="fill" class="me-2">
+        <mat-form-field appearance="fill" class="datepicker me-2">
             <mat-label>Start date</mat-label>
             <input matInput [(ngModel)]="startDate" [matDatepicker]="startDatepicker" (dateInput)="filterPractices()"
                 (dateChange)="filterPractices()">
@@ -19,7 +19,7 @@
             </button>
             <mat-datepicker #startDatepicker></mat-datepicker>
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" class="datepicker">
             <mat-label>End date</mat-label>
             <input matInput [(ngModel)]="endDate" [matDatepicker]="endDatePicker" (dateInput)="filterPractices()"
                 (dateChange)="filterPractices()">
@@ -48,7 +48,7 @@
                 <td class="topic" mat-cell *matCellDef="let practice">{{practice.practiceTopic}}</td>
             </ng-container>
             <ng-container matColumnDef="attendanceCount">
-                <th mat-header-cell *matHeaderCellDef>Attendees</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Attendees</th>
                 <td mat-cell *matCellDef="let practice">{{practice.attendanceCount}}</td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>

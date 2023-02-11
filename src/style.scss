@@ -52,8 +52,13 @@ mat-hint {
   font-size: 0.8rem;
 }
 
-.cell-right {
-  text-align: right !important;
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mat-form-field {
+  display: block;
 }
 
 .mat-mdc-row:hover {
@@ -65,8 +70,12 @@ mat-hint {
   font-weight: 600;
 }
 
-.mat-mdc-form-field-infix {
+.datepicker .mat-mdc-form-field-infix {
   max-width: 85px;
+}
+
+.cell-right {
+  text-align: right !important;
 }
 
 .sub-table tr {
