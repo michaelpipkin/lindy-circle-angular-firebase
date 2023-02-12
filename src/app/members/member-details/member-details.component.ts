@@ -25,9 +25,7 @@ export class MemberDetailsComponent implements OnInit {
   punchCards$: Observable<PunchCard[]>;
   memberLoaded: boolean = false;
   practicesLoaded: boolean = false;
-  practiceCount: number = 0;
   punchCardsLoaded: boolean = false;
-  punchCardCount: number = 0;
   practiceColumnsToDisplay = [
     'practiceNumber',
     'practiceDate',
@@ -43,14 +41,12 @@ export class MemberDetailsComponent implements OnInit {
     private memberService: MemberService,
     private practiceService: PracticeService,
     private punchCardService: PunchCardService,
-    private loadingService: LoadingService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.loadingService.loadingOn();
     this.memberId = this.route.snapshot.paramMap.get('id');
     this.member$ = this.memberService.getMemberDetails(this.memberId).pipe(
       tap((member) => {
@@ -58,33 +54,22 @@ export class MemberDetailsComponent implements OnInit {
           this.router.navigateByUrl('/members');
         }
         this.memberLoaded = true;
-        this.turnOffLoader();
       })
     );
     this.practices$ = this.practiceService
       .getPracticesForMember(this.memberId)
       .pipe(
-        tap((practices) => {
+        tap(() => {
           this.practicesLoaded = true;
-          this.practiceCount = practices.length;
-          this.turnOffLoader();
         })
       );
     this.punchCards$ = this.punchCardService
       .getPunchCardsForMember(this.memberId)
       .pipe(
-        tap((punchCards) => {
+        tap(() => {
           this.punchCardsLoaded = true;
-          this.punchCardCount = punchCards.length;
-          this.turnOffLoader();
         })
       );
-  }
-
-  turnOffLoader() {
-    if (this.memberLoaded && this.practicesLoaded && this.punchCardsLoaded) {
-      this.loadingService.loadingOff();
-    }
   }
 
   editMember(member: Member): void {
@@ -107,18 +92,7 @@ export class MemberDetailsComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.memberService
-            .deleteMember(member.id)
-            .pipe(
-              tap(() => {
-                this.router.navigate(['members']);
-              }),
-              catchError((err: Error) => {
-                alert('Could not delete member.');
-                return throwError(() => new Error(err.message));
-              })
-            )
-            .subscribe();
+          this.memberService.deleteMember(member.id).subscribe();
         }
       });
   }

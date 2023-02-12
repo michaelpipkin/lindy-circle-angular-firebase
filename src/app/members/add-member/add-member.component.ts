@@ -3,12 +3,14 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Member } from '@models/member';
 import { MemberService } from '@services/member.service';
+import { LoadingService } from '@shared/loading/loading.service';
 import { catchError, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-add-member',
   templateUrl: './add-member.component.html',
   styleUrls: ['./add-member.component.scss'],
+  providers: [LoadingService],
 })
 export class AddMemberComponent {
   newMemberForm = this.fb.group({
@@ -39,10 +41,6 @@ export class AddMemberComponent {
       .pipe(
         tap(() => {
           this.dialogRef.close(true);
-        }),
-        catchError((err: Error) => {
-          alert('There was a problem adding the member.');
-          return throwError(() => new Error(err.message));
         })
       )
       .subscribe();

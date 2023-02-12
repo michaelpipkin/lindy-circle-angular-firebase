@@ -3,6 +3,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoadingService } from '@shared/loading/loading.service';
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,10 +13,10 @@ import { AddMemberComponent } from './members/add-member/add-member.component';
 import { EditMemberComponent } from './members/edit-member/edit-member.component';
 import { MemberDetailsComponent } from './members/member-details/member-details.component';
 import { MembersComponent } from './members/members/members.component';
+import { AddPracticeComponent } from './practices/add-practice/add-practice.component';
 import { PracticesComponent } from './practices/practices/practices.component';
 import { GenericDialogComponent } from './shared/generic-dialog/generic-dialog.component';
 import { LoadingComponent } from './shared/loading/loading.component';
-import { MessagesComponent } from './shared/messages/messages.component';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS,
   MatDialogConfig,
@@ -32,7 +33,6 @@ import {
   AngularFireFunctionsModule,
   USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
 } from '@angular/fire/compat/functions';
-import { AddPracticeComponent } from './practices/add-practice/add-practice.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,6 @@ import { AddPracticeComponent } from './practices/add-practice/add-practice.comp
     EditMemberComponent,
     GenericDialogComponent,
     LoadingComponent,
-    MessagesComponent,
     LoginComponent,
     AddPracticeComponent,
   ],
@@ -83,6 +82,7 @@ import { AddPracticeComponent } from './practices/add-practice/add-practice.comp
       provide: USE_FUNCTIONS_EMULATOR,
       useValue: environment.useEmulators ? ['localhost', 5001] : undefined,
     },
+    LoadingService,
   ],
   bootstrap: [AppComponent],
 })

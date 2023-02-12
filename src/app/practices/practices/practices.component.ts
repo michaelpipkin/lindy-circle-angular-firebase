@@ -6,13 +6,14 @@ import { PracticeService } from '@services/practice.service';
 import { SortingService } from '@services/sorting.service';
 import { UserService } from '@services/user.service';
 import { LoadingService } from '@shared/loading/loading.service';
-import { Timestamp } from 'firebase/firestore';
 import { map, Observable, tap } from 'rxjs';
+import { AddPracticeComponent } from '../add-practice/add-practice.component';
 
 @Component({
   selector: 'app-practices',
   templateUrl: './practices.component.html',
   styleUrls: ['./practices.component.scss'],
+  providers: [LoadingService],
 })
 export class PracticesComponent implements OnInit {
   practices$: Observable<Practice[]>;
@@ -31,7 +32,6 @@ export class PracticesComponent implements OnInit {
 
   constructor(
     private practiceService: PracticeService,
-    private loadingService: LoadingService,
     public user: UserService,
     private sorter: SortingService,
     private router: Router,
@@ -39,7 +39,6 @@ export class PracticesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadingService.loadingOn();
     this.practices$ = this.practiceService.getPractices();
     this.filterPractices();
   }
@@ -61,8 +60,7 @@ export class PracticesComponent implements OnInit {
         }
         this.tableTooltip = `${filteredPractices.length} practices`;
         return filteredPractices;
-      }),
-      tap(() => this.loadingService.loadingOff())
+      })
     );
   }
 
@@ -86,17 +84,17 @@ export class PracticesComponent implements OnInit {
 
   clearStartDate(): void {
     this.startDate = null;
-    this.loadingService.loadingOn();
     this.filterPractices();
   }
 
   clearEndDate(): void {
     this.endDate = null;
-    this.loadingService.loadingOn();
     this.filterPractices();
   }
 
   addPractice(): void {
-    //this.dialog.open(AddPracticeComponent);
+    this.dialog.open(AddPracticeComponent, {
+      width: '500px',
+    });
   }
 }

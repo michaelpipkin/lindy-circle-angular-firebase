@@ -32,15 +32,14 @@ export class MembersComponent implements OnInit {
 
   constructor(
     private memberService: MemberService,
-    private loadingService: LoadingService,
     public user: UserService,
     private sorter: SortingService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private loading: LoadingService
   ) {}
 
   ngOnInit(): void {
-    this.loadingService.loadingOn();
     this.members$ = this.memberService.getMembers();
     this.filterMembers();
   }
@@ -69,8 +68,7 @@ export class MembersComponent implements OnInit {
           this.activeOnly ? ' active' : ''
         } members`;
         return filteredMembers;
-      }),
-      tap(() => this.loadingService.loadingOff())
+      })
     );
   }
 
@@ -82,7 +80,6 @@ export class MembersComponent implements OnInit {
 
   clearSearch(): void {
     this.nameFilter = '';
-    this.loadingService.loadingOn();
     this.filterMembers();
   }
 

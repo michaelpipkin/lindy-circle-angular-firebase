@@ -3,11 +3,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Member } from '@models/member';
 import { MemberService } from '@services/member.service';
+import { LoadingService } from '@shared/loading/loading.service';
 
 @Component({
   selector: 'app-edit-member',
   templateUrl: './edit-member.component.html',
   styleUrls: ['./edit-member.component.scss'],
+  providers: [LoadingService],
 })
 export class EditMemberComponent {
   editMemberForm: FormGroup;

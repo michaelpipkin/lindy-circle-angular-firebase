@@ -1,16 +1,33 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Attendance } from '@models/attendance';
 import { Member } from '@models/member';
-import { concatMap, from, map, Observable } from 'rxjs';
+import { LoadingService } from '@shared/loading/loading.service';
+import {
+  catchError,
+  concatMap,
+  from,
+  map,
+  Observable,
+  tap,
+  throwError,
+} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MemberService {
-  constructor(private db: AngularFirestore) {}
+  constructor(
+    private db: AngularFirestore,
+    private router: Router,
+    private loading: LoadingService,
+    private snackBar: MatSnackBar
+  ) {}
 
   getMembers(activeOnly: boolean = false): Observable<Member[]> {
+    this.loading.loadingOn();
     return this.db
       .collection<Member>('members', (ref) =>
         ref
@@ -26,7 +43,8 @@ export class MemberService {
               ...member,
             });
           });
-        })
+        }),
+        tap(() => this.loading.loadingOff())
       );
   }
 
@@ -65,6 +83,7 @@ export class MemberService {
   }
 
   getMemberDetails(memberId: string): Observable<Member | null> {
+    this.loading.loadingOn();
     return this.db
       .doc(`members/${memberId}`)
       .valueChanges({ idField: 'id' })
@@ -94,6 +113,24 @@ export class MemberService {
   ): Observable<any> =>
     from(this.db.doc(`members/${memberId}`).update(changes));
 
-  deleteMember = (memberId: string) =>
-    from(this.db.doc(`members/${memberId}`).delete());
+  deleteMember(memberId: string) {
+    this.loading.loadingOn();
+    return from(this.db.doc(`members/${memberId}`).delete()).pipe(
+      tap(() => {
+        this.loading.loadingOff();
+        this.router.navigateByUrl('/members');
+      }),
+      catchError((err: Error) => {
+        this.snackBar.open(
+          'Something went wrong - could not delete member.',
+          'Close',
+          {
+            verticalPosition: 'top',
+          }
+        );
+        this.loading.loadingOff();
+        return throwError(() => new Error(err.message));
+      })
+    );
+  }
 }

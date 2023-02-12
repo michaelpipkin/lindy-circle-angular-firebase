@@ -9,7 +9,8 @@
                 <button class="me-2" mat-mini-fab color="accent" (click)="editMember(member)">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-mini-fab color="warn" [disabled]="practiceCount > 0 || punchCardCount > 0"
+                <button mat-mini-fab color="warn"
+                    [disabled]="member.totalAttendance > 0 || member.punchCardPurchaseTotal > 0"
                     (click)="deleteMember(member)">
                     <mat-icon>delete</mat-icon>
                 </button>

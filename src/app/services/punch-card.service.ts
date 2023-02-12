@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Attendance } from '@models/attendance';
 import { PunchCard } from '@models/punch-card';
-import { concatMap, map, Observable } from 'rxjs';
+import { LoadingService } from '@shared/loading/loading.service';
+import { map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PunchCardService {
-  constructor(private db: AngularFirestore) {}
+  constructor(private db: AngularFirestore, private loading: LoadingService) {}
 
-  getPunchCardsForMember = (memberId: string): Observable<PunchCard[]> =>
-    this.db
+  getPunchCardsForMember(memberId: string): Observable<PunchCard[]> {
+    return this.db
       .collection<PunchCard>(`members/${memberId}/punch-cards`, (ref) =>
         ref.orderBy('purchaseDate')
       )
@@ -23,6 +23,8 @@ export class PunchCardService {
               ...punchCard,
             });
           });
-        })
+        }),
+        tap(() => this.loading.loadingOff())
       );
+  }
 }

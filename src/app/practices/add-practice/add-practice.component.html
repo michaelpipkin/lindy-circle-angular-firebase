@@ -1,1 +1,54 @@
 <h1 mat-dialog-title>Add New Practice</h1>
+<mat-dialog-content [formGroup]="newPracticeForm">
+    <mat-form-field appearance="fill" class="datepicker">
+        <mat-label>Practice date</mat-label>
+        <input matInput formControlName="practiceDate" [matDatepicker]="practiceDatePicker">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="practiceDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #practiceDatePicker></mat-datepicker>
+        <mat-error
+            *ngIf="newPracticeForm.controls.practiceDate.touched && newPracticeForm.controls.practiceDate.invalid">
+            Practice date is required
+        </mat-error>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill" class="practice-topic">
+        <mat-label>Practice Topic</mat-label>
+        <input matInput formControlName="practiceTopic">
+        <mat-error
+            *ngIf="newPracticeForm.controls.practiceTopic.touched && newPracticeForm.controls.practiceTopic.invalid">
+            Practice topic is required
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2">
+        <mat-label>Practice Cost</mat-label>
+        <input matInput formControlName="practiceCost" type="number" class="number-right">
+        <span matTextPrefix="$&nbsp;"></span>
+        <mat-error
+            *ngIf="newPracticeForm.controls.practiceCost.touched && newPracticeForm.controls.practiceCost.invalid">
+            Practice cost is required
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2">
+        <mat-label>Misc Expense</mat-label>
+        <input matInput formControlName="miscExpense" type="number" class="number-right">
+        <span matTextPrefix="$&nbsp;"></span>
+        <mat-error *ngIf="newPracticeForm.controls.miscExpense.touched && newPracticeForm.controls.miscExpense.invalid">
+            Misc expense is required
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always" class="number-field">
+        <mat-label>Misc Revenue</mat-label>
+        <input matInput formControlName="miscRevenue" type="number" class="number-right">
+        <span matTextPrefix="$&nbsp;"></span>
+        <mat-error *ngIf="newPracticeForm.controls.miscRevenue.touched && newPracticeForm.controls.miscRevenue.invalid">
+            Misc eevenue is required
+        </mat-error>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="close()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="!newPracticeForm.valid || !saveEnabled" (click)="onSubmit()">
+        Save
+    </button>
+</mat-dialog-actions>

@@ -52,9 +52,9 @@ mat-hint {
   font-size: 0.8rem;
 }
 
-mat-dialog-actions {
-  display: flex;
-  justify-content: flex-end;
+.mat-mdc-dialog-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
 }
 
 .mat-form-field {
@@ -74,8 +74,25 @@ mat-dialog-actions {
   max-width: 85px;
 }
 
+.number-field .mat-mdc-form-field-infix {
+  max-width: 110px;
+}
+
+.practice-topic .mat-mdc-form-field-infix {
+  width: 400px;
+}
+
 .cell-right {
   text-align: right !important;
+}
+
+.number-right {
+  text-align: right !important;
+}
+
+input.number-right::-webkit-outer-spin-button,
+input.number-right::-webkit-inner-spin-button {
+  display: none;
 }
 
 .sub-table tr {
