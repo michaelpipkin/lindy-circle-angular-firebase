@@ -11,7 +11,6 @@ import { catchError, tap, throwError } from 'rxjs';
   selector: 'app-edit-member',
   templateUrl: './edit-member.component.html',
   styleUrls: ['./edit-member.component.scss'],
-  providers: [LoadingService],
 })
 export class EditMemberComponent {
   editMemberForm: FormGroup;

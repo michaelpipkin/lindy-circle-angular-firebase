@@ -11,7 +11,6 @@ import { catchError, tap, throwError } from 'rxjs';
   selector: 'app-add-member',
   templateUrl: './add-member.component.html',
   styleUrls: ['./add-member.component.scss'],
-  providers: [LoadingService],
 })
 export class AddMemberComponent {
   newMemberForm = this.fb.group({

@@ -16,20 +16,28 @@
                 </button>
             </div>
             <div class="info mt-2">
-                <span class="infoLabel">Name:</span>
-                <span>{{member.firstLastName}}</span>
-                <br />
-                <span class="infoLabel">Status:</span>
-                <span>{{member.activeText}}</span>
-                <br />
-                <span class="infoLabel">Attended:</span>
-                <span>{{member.totalAttendance}}</span>
-                <br />
-                <span class="infoLabel">Punches Left:</span>
-                <span>{{member.punchesRemaining}}</span>
-                <br />
-                <span class="infoLabel">Total Paid:</span>
-                <span>{{member.totalPaid | currency}}</span>
+                <ul>
+                    <li>
+                        <span class="infoLabel">Name:</span>
+                        <span>{{member.firstLastName}}</span>
+                    </li>
+                    <li>
+                        <span class="infoLabel">Status:</span>
+                        <span>{{member.activeText}}</span>
+                    </li>
+                    <li>
+                        <span class="infoLabel">Attended:</span>
+                        <span>{{member.totalAttendance}}</span>
+                    </li>
+                    <li>
+                        <span class="infoLabel">Punches Left:</span>
+                        <span>{{member.punchesRemaining}}</span>
+                    </li>
+                    <li>
+                        <span class="infoLabel">Total Paid:</span>
+                        <span>{{member.totalPaid | currency}}</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

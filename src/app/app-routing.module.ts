@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { MemberDetailsComponent } from './members/member-details/member-details.component';
 import { MembersComponent } from './members/members/members.component';
+import { PracticeDetailsComponent } from './practices/practice-details/practice-details.component';
 import { PracticesComponent } from './practices/practices/practices.component';
 import {
   canActivate,
@@ -31,6 +32,11 @@ const routes: Routes = [
     path: 'practices',
     component: PracticesComponent,
     ...canActivate(redirectToLogin),
+  },
+  {
+    path: 'practices/:id',
+    component: PracticeDetailsComponent,
+    ...canActivate(adminOnly),
   },
   {
     path: 'login',

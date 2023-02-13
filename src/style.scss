@@ -52,6 +52,7 @@ mat-hint {
   font-size: 0.8rem;
 }
 
+mat-dialog-actions,
 .mat-mdc-dialog-actions {
   display: flex !important;
   justify-content: flex-end !important;
@@ -125,6 +126,14 @@ input.number-right::-webkit-inner-spin-button {
   display: inline-block;
   justify-content: center;
   align-items: flex-start;
+}
+
+.info ul {
+  list-style: none;
+}
+
+.info ul li span {
+  vertical-align: middle;
 }
 
 .table-clear-float {

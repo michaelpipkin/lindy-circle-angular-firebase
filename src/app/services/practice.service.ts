@@ -9,7 +9,7 @@ import { catchError, concatMap, from, map, Observable } from 'rxjs';
 export class PracticeService {
   constructor(private db: AngularFirestore) {}
 
-  getPractices() {
+  getPractices(): Observable<Practice[]> {
     return this.db
       .collection('practices')
       .valueChanges({ idField: 'id' })
@@ -20,6 +20,26 @@ export class PracticeService {
               ...practice,
             });
           });
+        })
+      );
+  }
+
+  getPracticeDetails(practiceId: string): Observable<Practice | null> {
+    return this.db
+      .doc(`practices/${practiceId}`)
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        map((practice: Practice) => {
+          if (
+            practice.hasOwnProperty('practiceNumber') &&
+            practice.hasOwnProperty('practiceDate')
+          ) {
+            return new Practice({
+              ...practice,
+            });
+          } else {
+            return null;
+          }
         })
       );
   }

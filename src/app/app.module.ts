@@ -34,6 +34,7 @@ import {
   USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
 } from '@angular/fire/compat/functions';
 import { PracticeDetailsComponent } from './practices/practice-details/practice-details.component';
+import { EditPracticeComponent } from './practices/edit-practice/edit-practice.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { PracticeDetailsComponent } from './practices/practice-details/practice-
     LoginComponent,
     AddPracticeComponent,
     PracticeDetailsComponent,
+    EditPracticeComponent,
   ],
   imports: [
     BrowserModule,

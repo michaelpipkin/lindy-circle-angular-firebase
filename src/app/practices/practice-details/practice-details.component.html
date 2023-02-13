@@ -1,1 +1,60 @@
-<p>practice-details works!</p>
+<ng-container *ngIf="practice$ | async; let practice">
+    <div>
+        <div class="breadcrumb">
+            <button mat-button color="primary" routerLink="/practices">Back to practices list</button>
+        </div>
+        <div class="header">
+            <h2 class="title">Practice Details</h2>
+            <button class="me-2" mat-mini-fab color="accent" (click)="editPractice(practice)">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-mini-fab color="warn" [disabled]="practice.attendanceCount > 0"
+                (click)="deletePractice(practice)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+        <div class="info mt-2">
+            <ul>
+                <li>
+                    <span class="infoLabel">Number:</span>
+                    <span>{{practice.practiceNumber}}</span>
+                </li>
+                <li>
+                    <span class="infoLabel">Date:</span>
+                    <span>{{practice.practiceDate.toDate() | date}}</span>
+                </li>
+                <li>
+                    <span class="infoLabel">Topic:</span>
+                    <span class="topic">{{practice.practiceTopic}}</span>
+                </li>
+                <li>
+                    <span class="infoLabel">Cost:</span>
+                    <span>{{practice.practiceCost | currency}}</span>
+                </li>
+                <li>
+                    <span class="infoLabel">Misc Expense:</span>
+                    <span>{{practice.miscExpense | currency}}</span>
+                </li>
+                <li>
+                    <span class="infoLabel">Misc Revenue:</span>
+                    <span>{{practice.miscRevenue | currency}}</span>
+                </li>
+                <li>
+                    <span class="infoLabel">Attendees:</span>
+                    <span>{{practice.attendanceCount}}</span>
+                </li>
+                <li>
+                    <span class="infoLabel">Admission Revenue:</span>
+                    <span>{{practice.admissionRevenue | currency}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="section-break mt-3"></div>
+    <div class="pb-5">
+        <h5>Attendees</h5>
+        <div class="scrollable-table">
+            <!-- Table -->
+        </div>
+    </div>
+</ng-container>

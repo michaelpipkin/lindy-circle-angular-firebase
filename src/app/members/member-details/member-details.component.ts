@@ -130,7 +130,9 @@ export class MemberDetailsComponent implements OnInit {
       });
   }
 
-  onPracticeRowClick(practice: Practice) {}
+  onPracticeRowClick(practice: Practice) {
+    this.router.navigate(['practices', practice.id]);
+  }
 
   onPunchCardRowClick(punchCard: PunchCard) {}
 }

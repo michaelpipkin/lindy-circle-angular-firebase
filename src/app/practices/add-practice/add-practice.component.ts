@@ -13,7 +13,6 @@ import { catchError, tap, throwError } from 'rxjs';
   selector: 'app-add-practice',
   templateUrl: './add-practice.component.html',
   styleUrls: ['./add-practice.component.scss'],
-  providers: [LoadingService],
 })
 export class AddPracticeComponent {
   newPracticeForm = this.fb.group({
