@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Attendance } from '@models/attendance';
 import { DialogOptions } from '@models/dialog-options';
 import { Practice } from '@models/practice';
+import { AttendanceService } from '@services/attendance.service';
 import { PracticeService } from '@services/practice.service';
 import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
@@ -26,7 +27,7 @@ export class PracticeDetailsComponent implements OnInit {
 
   constructor(
     private practiceService: PracticeService,
-    //private attendanceService: AttendanceService,
+    private attendanceService: AttendanceService,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -45,6 +46,13 @@ export class PracticeDetailsComponent implements OnInit {
             this.router.navigateByUrl('/practices');
           }
           this.practiceLoaded = true;
+          this.turnLoaderOff();
+        })
+      );
+    this.attendances$ = this.attendanceService
+      .getAttendancesForPractice(this.practiceId)
+      .pipe(
+        tap(() => {
           this.attendeesLoaded = true;
           this.turnLoaderOff();
         })
