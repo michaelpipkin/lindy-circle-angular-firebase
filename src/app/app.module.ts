@@ -33,6 +33,7 @@ import {
   AngularFireFunctionsModule,
   USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
 } from '@angular/fire/compat/functions';
+import { PracticeDetailsComponent } from './practices/practice-details/practice-details.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import {
     LoadingComponent,
     LoginComponent,
     AddPracticeComponent,
+    PracticeDetailsComponent,
   ],
   imports: [
     BrowserModule,

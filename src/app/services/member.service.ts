@@ -85,6 +85,37 @@ export class MemberService {
       );
   }
 
+  getAttendeesForPractice(practiceId: string): Observable<Member[]> {
+    return this.db
+      .collectionGroup('attendances', (ref) =>
+        ref.where('practiceId', '==', practiceId)
+      )
+      .get()
+      .pipe(
+        concatMap((attendances) => {
+          const memberRefs = <string[]>attendances.docs.map((attendance) => {
+            return attendance.ref.parent.parent.id;
+          });
+          return this.db
+            .collection<Member>('members', (ref) =>
+              ref.orderBy('lastName').orderBy('firstName')
+            )
+            .valueChanges({ idField: 'id' })
+            .pipe(
+              map((members: Member[]) => {
+                return <Member[]>members
+                  .filter((f) => memberRefs.includes(f.id))
+                  .map((member) => {
+                    return new Member({
+                      ...member,
+                    });
+                  });
+              })
+            );
+        })
+      );
+  }
+
   addMember(newMember: Partial<Member>): Observable<any> {
     return from(this.db.collection('members').add(newMember));
   }
