@@ -1,9 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Member } from '@models/member';
 import { MemberService } from '@services/member.service';
 import { LoadingService } from '@shared/loading/loading.service';
+import { catchError, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-edit-member',
@@ -19,6 +21,8 @@ export class EditMemberComponent {
     private dialogRef: MatDialogRef<EditMemberComponent>,
     private fb: FormBuilder,
     private memberService: MemberService,
+    private loading: LoadingService,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) member: Member
   ) {
     this.member = member;
@@ -35,8 +39,25 @@ export class EditMemberComponent {
 
   onSubmit(): void {
     const changes = this.editMemberForm.value;
-    this.memberService.updateMember(this.member.id, changes).subscribe(() => {
-      this.dialogRef.close(true);
-    });
+    this.memberService
+      .updateMember(this.member.id, changes)
+      .pipe(
+        tap(() => {
+          this.loading.loadingOff();
+          this.dialogRef.close(true);
+        }),
+        catchError((err: Error) => {
+          this.snackBar.open(
+            'Something went wrong - could not update member.',
+            'Close',
+            {
+              verticalPosition: 'top',
+            }
+          );
+          this.loading.loadingOff();
+          return throwError(() => new Error(err.message));
+        })
+      )
+      .subscribe();
   }
 }

@@ -40,7 +40,10 @@ export class MembersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.members$ = this.memberService.getMembers();
+    this.loading.loadingOn();
+    this.members$ = this.memberService
+      .getMembers()
+      .pipe(tap(() => this.loading.loadingOff()));
     this.filterMembers();
   }
 

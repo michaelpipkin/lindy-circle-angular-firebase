@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Practice } from '@models/practice';
 import { DefaultsStore } from '@services/defaults.store';
 import { PracticeService } from '@services/practice.service';
@@ -28,7 +29,9 @@ export class AddPracticeComponent {
     private dialogRef: MatDialogRef<AddPracticeComponent>,
     private fb: FormBuilder,
     private practiceService: PracticeService,
-    private defaults: DefaultsStore
+    private defaults: DefaultsStore,
+    private loading: LoadingService,
+    private snackBar: MatSnackBar
   ) {
     this.newPracticeForm.patchValue({
       practiceCost: this.defaults.getDefaultPracticeCost(),
@@ -36,6 +39,7 @@ export class AddPracticeComponent {
   }
 
   onSubmit(): void {
+    this.newPracticeForm.disable();
     const val = this.newPracticeForm.value;
     const newPractice: Partial<Practice> = {
       practiceDate: firestore.Timestamp.fromDate(val.practiceDate),
@@ -49,6 +53,15 @@ export class AddPracticeComponent {
       .pipe(
         tap(() => {
           this.dialogRef.close(true);
+        }),
+        catchError((err: Error) => {
+          this.snackBar.open(
+            'Something went wrong - could not add practice.',
+            'Close',
+            { verticalPosition: 'top' }
+          );
+          this.newPracticeForm.enable();
+          return throwError(() => new Error(err.message));
         })
       )
       .subscribe();

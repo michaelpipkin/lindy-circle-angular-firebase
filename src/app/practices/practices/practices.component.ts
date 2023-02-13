@@ -13,7 +13,6 @@ import { AddPracticeComponent } from '../add-practice/add-practice.component';
   selector: 'app-practices',
   templateUrl: './practices.component.html',
   styleUrls: ['./practices.component.scss'],
-  providers: [LoadingService],
 })
 export class PracticesComponent implements OnInit {
   practices$: Observable<Practice[]>;
@@ -35,11 +34,15 @@ export class PracticesComponent implements OnInit {
     public user: UserService,
     private sorter: SortingService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private loading: LoadingService
   ) {}
 
   ngOnInit(): void {
-    this.practices$ = this.practiceService.getPractices();
+    this.loading.loadingOn();
+    this.practices$ = this.practiceService
+      .getPractices()
+      .pipe(tap(() => this.loading.loadingOff()));
     this.filterPractices();
   }
 

@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { PunchCard } from '@models/punch-card';
-import { LoadingService } from '@shared/loading/loading.service';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PunchCardService {
-  constructor(private db: AngularFirestore, private loading: LoadingService) {}
+  constructor(private db: AngularFirestore) {}
 
   getPunchCardsForMember(memberId: string): Observable<PunchCard[]> {
     return this.db
@@ -23,8 +22,7 @@ export class PunchCardService {
               ...punchCard,
             });
           });
-        }),
-        tap(() => this.loading.loadingOff())
+        })
       );
   }
 }

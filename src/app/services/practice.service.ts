@@ -1,30 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Practice } from '@models/practice';
-import { LoadingService } from '@shared/loading/loading.service';
-import {
-  catchError,
-  concatMap,
-  from,
-  map,
-  Observable,
-  tap,
-  throwError,
-} from 'rxjs';
+import { catchError, concatMap, from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PracticeService {
-  constructor(
-    private db: AngularFirestore,
-    private loading: LoadingService,
-    private snackBar: MatSnackBar
-  ) {}
+  constructor(private db: AngularFirestore) {}
 
   getPractices() {
-    this.loading.loadingOn();
     return this.db
       .collection('practices')
       .valueChanges({ idField: 'id' })
@@ -35,8 +20,7 @@ export class PracticeService {
               ...practice,
             });
           });
-        }),
-        tap(() => this.loading.loadingOff())
+        })
       );
   }
 
@@ -72,7 +56,6 @@ export class PracticeService {
   }
 
   addPractice(practice: Partial<Practice>): Observable<any> {
-    this.loading.loadingOn();
     return this.db
       .collection('practices', (ref) =>
         ref.orderBy('practiceNumber', 'desc').limit(1)
@@ -89,26 +72,18 @@ export class PracticeService {
             practiceNumber: practiceNumber,
           };
           return await this.db.collection('practices').add(newPractice);
-        }),
-        catchError((err: Error) => {
-          this.snackBar.open(
-            'Something went wrong - could not add practice.',
-            'Close',
-            { verticalPosition: 'top' }
-          );
-          this.loading.loadingOff();
-          return throwError(() => new Error(err.message));
-        }),
-        tap(() => this.loading.loadingOff())
+        })
       );
   }
 
-  updatePractice = (
+  updatePractice(
     practiceId: string,
     changes: Partial<Practice>
-  ): Observable<any> =>
-    from(this.db.doc(`practices/${practiceId}`).update(changes));
+  ): Observable<any> {
+    return from(this.db.doc(`practices/${practiceId}`).update(changes));
+  }
 
-  deletePractice = (practiceId: string) =>
-    from(this.db.doc(`practices/${practiceId}`).delete());
+  deletePractice(practiceId: string): Observable<any> {
+    return from(this.db.doc(`practices/${practiceId}`).delete());
+  }
 }

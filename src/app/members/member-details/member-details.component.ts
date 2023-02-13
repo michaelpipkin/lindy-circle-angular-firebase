@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogOptions } from '@models/dialog-options';
 import { Member } from '@models/member';
@@ -43,10 +44,13 @@ export class MemberDetailsComponent implements OnInit {
     private punchCardService: PunchCardService,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private loading: LoadingService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
+    this.loading.loadingOn();
     this.memberId = this.route.snapshot.paramMap.get('id');
     this.member$ = this.memberService.getMemberDetails(this.memberId).pipe(
       tap((member) => {
@@ -54,6 +58,7 @@ export class MemberDetailsComponent implements OnInit {
           this.router.navigateByUrl('/members');
         }
         this.memberLoaded = true;
+        this.turnLoaderOff();
       })
     );
     this.practices$ = this.practiceService
@@ -61,6 +66,7 @@ export class MemberDetailsComponent implements OnInit {
       .pipe(
         tap(() => {
           this.practicesLoaded = true;
+          this.turnLoaderOff();
         })
       );
     this.punchCards$ = this.punchCardService
@@ -68,8 +74,15 @@ export class MemberDetailsComponent implements OnInit {
       .pipe(
         tap(() => {
           this.punchCardsLoaded = true;
+          this.turnLoaderOff();
         })
       );
+  }
+
+  turnLoaderOff(): void {
+    if (this.memberLoaded && this.practicesLoaded && this.punchCardsLoaded) {
+      this.loading.loadingOff();
+    }
   }
 
   editMember(member: Member): void {
@@ -92,7 +105,27 @@ export class MemberDetailsComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.memberService.deleteMember(member.id).subscribe();
+          this.loading.loadingOn();
+          this.memberService
+            .deleteMember(member.id)
+            .pipe(
+              tap(() => {
+                this.loading.loadingOff();
+                this.router.navigateByUrl('/members');
+              }),
+              catchError((err: Error) => {
+                this.snackBar.open(
+                  'Something went wrong - could not delete member.',
+                  'Close',
+                  {
+                    verticalPosition: 'top',
+                  }
+                );
+                this.loading.loadingOff();
+                return throwError(() => new Error(err.message));
+              })
+            )
+            .subscribe();
         }
       });
   }
