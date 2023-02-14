@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Member } from '@models/member';
 import { PunchCard } from '@models/punch-card';
-import { map, Observable } from 'rxjs';
+import { concatMap, from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +25,70 @@ export class PunchCardService {
           });
         })
       );
+  }
+
+  addPunchCard(punchCard: Partial<PunchCard>): Observable<any> {
+    const batch = this.db.firestore.batch();
+    punchCard.id = this.db.createId();
+    const punchCardRef = this.db.doc(
+      `members/${punchCard.purchaseMemberId}/punch-cards/${punchCard.id}`
+    ).ref;
+    const memberRef = this.db.doc(`members/${punchCard.purchaseMemberId}`).ref;
+    return this.db
+      .doc(`members/${punchCard.purchaseMemberId}`)
+      .get()
+      .pipe(
+        concatMap((res) => {
+          const member = res.data();
+          batch.set(punchCardRef, punchCard);
+          batch.update(memberRef, {
+            punchesRemaining: member['punchesRemaining'] + 5,
+            punchCardPurchaseTotal:
+              member['punchCardPurchaseTotal'] + punchCard.purchaseAmount,
+            totalPaid: member['totalPaid'] + punchCard.purchaseAmount,
+          });
+          return batch.commit();
+        })
+      );
+  }
+
+  deletePunchCard(memberId: string, punchCard: PunchCard): Observable<any> {
+    const batch = this.db.firestore.batch();
+    const punchCardRef = this.db.doc(
+      `members/${memberId}/punch-cards/${punchCard.id}`
+    ).ref;
+    const memberRef = this.db.doc(`members/${memberId}`).ref;
+    return this.db
+      .doc(`members/${memberId}`)
+      .get()
+      .pipe(
+        concatMap((res) => {
+          const member = res.data();
+          batch.delete(punchCardRef);
+          batch.update(memberRef, {
+            punchesRemaining: member['punchesRemaining'] - 5,
+            punchCardPurchaseTotal:
+              member['punchCardPurchaseTotal'] - punchCard.purchaseAmount,
+            totalPaid: member['totalPaid'] - punchCard.purchaseAmount,
+          });
+          return batch.commit();
+        })
+      );
+  }
+
+  transferPunchCard(
+    punchCard: PunchCard,
+    newMemberId: string
+  ): Observable<any> {
+    const transferFromRef = this.db.doc(
+      `members/${punchCard.purchaseMemberId}/punch-cards/${punchCard.id}`
+    ).ref;
+    const transferToRef = this.db.doc(
+      `members/${newMemberId}/punch-cards/${punchCard.id}`
+    ).ref;
+    const batch = this.db.firestore.batch();
+    batch.delete(transferFromRef);
+    batch.set(transferToRef, punchCard);
+    return from(batch.commit());
   }
 }

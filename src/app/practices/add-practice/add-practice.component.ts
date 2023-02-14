@@ -5,7 +5,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Practice } from '@models/practice';
 import { DefaultsStore } from '@services/defaults.store';
 import { PracticeService } from '@services/practice.service';
-import { LoadingService } from '@shared/loading/loading.service';
 import * as firestore from 'firebase/firestore';
 import { catchError, tap, throwError } from 'rxjs';
 
@@ -22,14 +21,12 @@ export class AddPracticeComponent {
     miscExpense: [0.0, [Validators.required, Validators.min(0)]],
     miscRevenue: [0.0, [Validators.required, Validators.min(0)]],
   });
-  saveEnabled: boolean = true;
 
   constructor(
     private dialogRef: MatDialogRef<AddPracticeComponent>,
     private fb: FormBuilder,
     private practiceService: PracticeService,
     private defaults: DefaultsStore,
-    private loading: LoadingService,
     private snackBar: MatSnackBar
   ) {
     this.newPracticeForm.patchValue({

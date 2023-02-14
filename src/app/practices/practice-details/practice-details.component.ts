@@ -99,6 +99,7 @@ export class PracticeDetailsComponent implements OnInit {
                   'Close',
                   {
                     verticalPosition: 'top',
+                    duration: 5000,
                   }
                 );
                 this.loading.loadingOff();

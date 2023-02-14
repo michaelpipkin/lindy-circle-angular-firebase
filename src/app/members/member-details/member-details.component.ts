@@ -12,6 +12,7 @@ import { PunchCardService } from '@services/punch-card.service';
 import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { AddPunchCardComponent } from 'src/app/punch-cards/add-punch-card/add-punch-card.component';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
 
 @Component({
@@ -105,14 +106,10 @@ export class MemberDetailsComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.loading.loadingOn();
           this.memberService
             .deleteMember(member.id)
             .pipe(
-              tap(() => {
-                this.loading.loadingOff();
-                this.router.navigateByUrl('/members');
-              }),
+              tap(() => this.router.navigateByUrl('/members')),
               catchError((err: Error) => {
                 this.snackBar.open(
                   'Something went wrong - could not delete member.',
@@ -121,7 +118,6 @@ export class MemberDetailsComponent implements OnInit {
                     verticalPosition: 'top',
                   }
                 );
-                this.loading.loadingOff();
                 return throwError(() => new Error(err.message));
               })
             )
@@ -130,9 +126,41 @@ export class MemberDetailsComponent implements OnInit {
       });
   }
 
+  addPunchCard(): void {
+    const dialogConfig: MatDialogConfig = {};
+    dialogConfig.data = this.memberId;
+    this.dialog.open(AddPunchCardComponent, dialogConfig);
+  }
+
+  deletePunchCard(punchCard: PunchCard): void {
+    this.punchCardService
+      .deletePunchCard(this.memberId, punchCard)
+      .pipe(
+        tap(() =>
+          this.snackBar.open('Punch card deleted.', 'OK', {
+            verticalPosition: 'top',
+            duration: 5000,
+          })
+        ),
+        catchError((err: Error) => {
+          this.snackBar.open(
+            'Something went wrong - could not delete punch card.',
+            'Close',
+            {
+              verticalPosition: 'top',
+            }
+          );
+          return throwError(() => new Error(err.message));
+        })
+      )
+      .subscribe();
+  }
+
+  transferPunchCard(punchCard: PunchCard): void {
+    console.log(punchCard);
+  }
+
   onPracticeRowClick(practice: Practice) {
     this.router.navigate(['practices', practice.id]);
   }
-
-  onPunchCardRowClick(punchCard: PunchCard) {}
 }

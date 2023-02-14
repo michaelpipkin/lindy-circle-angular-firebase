@@ -4,7 +4,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Member } from '@models/member';
 import { MemberService } from '@services/member.service';
-import { LoadingService } from '@shared/loading/loading.service';
 import { catchError, tap, throwError } from 'rxjs';
 
 @Component({
@@ -21,8 +20,7 @@ export class AddMemberComponent {
   constructor(
     private dialogRef: MatDialogRef<AddMemberComponent>,
     private fb: FormBuilder,
-    private membersService: MemberService,
-    private loading: LoadingService,
+    private memberService: MemberService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -39,7 +37,7 @@ export class AddMemberComponent {
       punchesRemaining: 0,
       totalPaid: 0,
     };
-    this.membersService
+    this.memberService
       .addMember(newMember)
       .pipe(
         tap(() => {
@@ -53,7 +51,6 @@ export class AddMemberComponent {
               verticalPosition: 'top',
             }
           );
-          this.loading.loadingOff();
           this.newMemberForm.enable();
           return throwError(() => new Error(err.message));
         })

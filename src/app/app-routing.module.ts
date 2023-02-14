@@ -12,36 +12,36 @@ import {
   redirectUnauthorizedTo,
 } from '@angular/fire/compat/auth-guard';
 
-const redirectToLogin = () => redirectUnauthorizedTo(['login']);
-const loggedIn = () => redirectLoggedInTo(['members']);
-const adminOnly = () => hasCustomClaim('admin');
+const authGuard = () => redirectUnauthorizedTo(['login']);
+const loggedInGuard = () => redirectLoggedInTo(['members']);
+const adminGuard = () => hasCustomClaim('admin');
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/members' },
   {
     path: 'members',
     component: MembersComponent,
-    ...canActivate(redirectToLogin),
+    ...canActivate(authGuard),
   },
   {
     path: 'members/:id',
     component: MemberDetailsComponent,
-    ...canActivate(adminOnly),
+    ...canActivate(adminGuard),
   },
   {
     path: 'practices',
     component: PracticesComponent,
-    ...canActivate(redirectToLogin),
+    ...canActivate(authGuard),
   },
   {
     path: 'practices/:id',
     component: PracticeDetailsComponent,
-    ...canActivate(adminOnly),
+    ...canActivate(adminGuard),
   },
   {
     path: 'login',
     component: LoginComponent,
-    ...canActivate(loggedIn),
+    ...canActivate(loggedInGuard),
   },
   { path: '**', redirectTo: '/members' },
 ];

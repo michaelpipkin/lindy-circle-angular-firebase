@@ -82,7 +82,7 @@ export class PracticeService {
       )
       .get()
       .pipe(
-        concatMap(async (res) => {
+        concatMap((res) => {
           let practiceNumber = 1;
           if (res.docs.length > 0) {
             practiceNumber = res.docs[0].data()['practiceNumber'] + 1;
@@ -91,7 +91,7 @@ export class PracticeService {
             ...practice,
             practiceNumber: practiceNumber,
           };
-          return await this.db.collection('practices').add(newPractice);
+          return this.db.collection('practices').add(newPractice);
         })
       );
   }

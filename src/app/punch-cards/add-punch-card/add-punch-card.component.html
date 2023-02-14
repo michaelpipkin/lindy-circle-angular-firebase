@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>Add Punch Card</h1>
+<mat-dialog-content [formGroup]="newPunchCardForm">
+    <mat-form-field appearance="fill" color="primary" class="datepicker">
+        <mat-label>Purchase Date</mat-label>
+        <input matInput formControlName="purchaseDate" [matDatepicker]="purchaseDatePicker">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="purchaseDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #purchaseDatePicker></mat-datepicker>
+        <mat-error
+            *ngIf="newPunchCardForm.controls.purchaseDate.touched && newPunchCardForm.controls.purchaseDate.invalid">
+            Purchase date is required
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2">
+        <mat-label>Amount</mat-label>
+        <input matInput formControlName="purchaseAmount" type="number" class="number-right">
+        <span matTextPrefix="$&nbsp;"></span>
+        <mat-error
+            *ngIf="newPunchCardForm.controls.purchaseAmount.touched && newPunchCardForm.controls.purchaseAmount.invalid">
+            Practice cost is required
+        </mat-error>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="close()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="!newPunchCardForm.valid" (click)="onSubmit()">
+        Save
+    </button>
+</mat-dialog-actions>

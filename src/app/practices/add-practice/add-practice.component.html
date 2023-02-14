@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Add New Practice</h1>
 <mat-dialog-content [formGroup]="newPracticeForm">
     <mat-form-field appearance="fill" class="datepicker">
-        <mat-label>Practice date</mat-label>
+        <mat-label>Practice Date</mat-label>
         <input matInput formControlName="practiceDate" [matDatepicker]="practiceDatePicker">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="practiceDatePicker"></mat-datepicker-toggle>
@@ -48,7 +48,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-raised-button color="accent" (click)="close()">Cancel</button>
-    <button mat-raised-button color="primary" [disabled]="!newPracticeForm.valid || !saveEnabled" (click)="onSubmit()">
+    <button mat-raised-button color="primary" [disabled]="!newPracticeForm.valid" (click)="onSubmit()">
         Save
     </button>
 </mat-dialog-actions>

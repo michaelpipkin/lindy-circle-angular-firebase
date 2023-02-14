@@ -62,7 +62,7 @@ mat-dialog-actions,
   display: block;
 }
 
-.mat-mdc-row:hover {
+.clickable-table tbody .mat-mdc-row:hover {
   background-color: lightgray !important;
   cursor: pointer !important;
 }
@@ -138,4 +138,12 @@ input.number-right::-webkit-inner-spin-button {
 
 .table-clear-float {
   clear: both;
+}
+
+.small-icon-button {
+  transform: scale(0.8) !important;
+}
+
+.clickable {
+  cursor: pointer;
 }

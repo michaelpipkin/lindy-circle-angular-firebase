@@ -35,6 +35,7 @@ import {
 } from '@angular/fire/compat/functions';
 import { PracticeDetailsComponent } from './practices/practice-details/practice-details.component';
 import { EditPracticeComponent } from './practices/edit-practice/edit-practice.component';
+import { AddPunchCardComponent } from './punch-cards/add-punch-card/add-punch-card.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { EditPracticeComponent } from './practices/edit-practice/edit-practice.c
     AddPracticeComponent,
     PracticeDetailsComponent,
     EditPracticeComponent,
+    AddPunchCardComponent,
   ],
   imports: [
     BrowserModule,
