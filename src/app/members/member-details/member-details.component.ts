@@ -36,6 +36,7 @@ export class MemberDetailsComponent implements OnInit {
   ];
   punchCardColumnsToDisplay = [
     'purchaseDate',
+    'purchaseMemberName',
     'purchaseAmount',
     'punchesRemaining',
   ];
@@ -79,6 +80,14 @@ export class MemberDetailsComponent implements OnInit {
           this.turnLoaderOff();
         })
       );
+    this.punchCardService
+      .getUsablePunchCardForMember(this.memberId)
+      .pipe(
+        tap((punchCard: PunchCard) => {
+          console.log(punchCard);
+        })
+      )
+      .subscribe();
   }
 
   turnLoaderOff(): void {
@@ -127,15 +136,15 @@ export class MemberDetailsComponent implements OnInit {
       });
   }
 
-  addPunchCard(): void {
+  addPunchCard(member: Member): void {
     const dialogConfig: MatDialogConfig = {};
-    dialogConfig.data = this.memberId;
+    dialogConfig.data = member;
     this.dialog.open(AddPunchCardComponent, dialogConfig);
   }
 
-  deletePunchCard(punchCard: PunchCard): void {
+  deletePunchCard(member: Member, punchCard: PunchCard): void {
     this.punchCardService
-      .deletePunchCard(this.memberId, punchCard)
+      .deletePunchCard(member, punchCard)
       .pipe(
         tap(() =>
           this.snackBar.open('Punch card deleted.', 'OK', {

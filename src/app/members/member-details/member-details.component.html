@@ -78,7 +78,7 @@
     <div class="pb-5">
         <div class="header">
             <h5>Punch Cards</h5>
-            <button mat-mini-fab class="small-icon-button ms-2" color="accent" (click)="addPunchCard()">
+            <button mat-mini-fab class="small-icon-button ms-2" color="accent" (click)="addPunchCard(member)">
                 <mat-icon>add</mat-icon>
             </button>
         </div>
@@ -91,27 +91,36 @@
                 <ng-container matColumnDef="purchaseDate">
                     <th mat-header-cell *matHeaderCellDef>Purchase Date</th>
                     <td mat-cell *matCellDef="let punchCard">{{punchCard.purchaseDate.toDate() | date}}</td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+                <ng-container matColumnDef="purchaseMemberName">
+                    <th mat-header-cell *matHeaderCellDef>Purchased By</th>
+                    <td mat-cell *matCellDef="let punchCard">{{punchCard.purchaseMemberName}}</td>
                     <td mat-footer-cell *matFooterCellDef class="cell-right">Totals:</td>
                 </ng-container>
                 <ng-container matColumnDef="purchaseAmount">
                     <th mat-header-cell *matHeaderCellDef class="cell-right">Amount</th>
-                    <td mat-cell *matCellDef="let punchCard" class="cell-right">{{punchCard.purchaseAmount | currency}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{member.punchCardPurchaseTotal |
+                    <td mat-cell *matCellDef="let punchCard" class="cell-right">
+                        {{(punchCard.purchaseMemberId === member.id ? punchCard.purchaseAmount : 0) |
                         currency}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">
+                        {{member.punchCardPurchaseTotal | currency}}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="punchesRemaining">
                     <th mat-header-cell *matHeaderCellDef class="cell-right">Punches Left</th>
-                    <td mat-cell *matCellDef="let punchCard" class="cell-right"
-                        [matTooltip]="'Transferred from ' + punchCard.purchaseMemberName"
-                        [matTooltipDisabled]="punchCard.purchaseMemberName === ''">
+                    <td mat-cell *matCellDef="let punchCard" class="cell-right" [matTooltip]="punchCard.note"
+                        [matTooltipDisabled]="punchCard.note === ''">
                         <span *ngIf="punchCard.punchesRemaining === 5" class="material-icons clickable me-2"
-                            (click)="deletePunchCard(punchCard)">
+                            (click)="deletePunchCard(member, punchCard)">
                             delete
                         </span>
-                        <span *ngIf="punchCard.punchesRemaining > 0" class="material-icons clickable me-2"
-                            (click)="transferPunchCard(member, punchCard)">
+                        <span *ngIf="punchCard.punchesRemaining > 0 && member.id === punchCard.currentMemberId"
+                            class="material-icons clickable me-2" (click)="transferPunchCard(member, punchCard)">
+                            swap_horiz
+                        </span>
+                        <span *ngIf="member.id !== punchCard.currentMemberId" class="material-icons me-2">
                             swap_horiz
                         </span>
                         {{punchCard.punchesRemaining}}

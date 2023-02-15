@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Member } from '@models/member';
 import { PunchCard } from '@models/punch-card';
 import { DefaultsStore } from '@services/defaults.store';
 import { PunchCardService } from '@services/punch-card.service';
@@ -25,7 +26,7 @@ export class AddPunchCardComponent {
     private punchCardService: PunchCardService,
     private defaults: DefaultsStore,
     private snackBar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public purchaseMemberId: string
+    @Inject(MAT_DIALOG_DATA) public member: Member
   ) {
     this.newPunchCardForm.patchValue({
       purchaseAmount: this.defaults.getDefaultPunchCardCost(),
@@ -36,13 +37,16 @@ export class AddPunchCardComponent {
     this.newPunchCardForm.disable();
     const val = this.newPunchCardForm.value;
     const newPunchCard: Partial<PunchCard> = {
-      purchaseMemberId: this.purchaseMemberId,
+      purchaseMemberId: this.member.id,
+      purchaseMemberName: this.member.firstLastName,
+      currentMemberId: this.member.id,
+      currentMemberName: this.member.firstLastName,
       purchaseDate: firestore.Timestamp.fromDate(val.purchaseDate),
       purchaseAmount: val.purchaseAmount,
       punchesRemaining: 5,
     };
     this.punchCardService
-      .addPunchCard(newPunchCard)
+      .addPunchCard(newPunchCard, this.member)
       .pipe(
         tap(() => {
           this.dialogRef.close(true);

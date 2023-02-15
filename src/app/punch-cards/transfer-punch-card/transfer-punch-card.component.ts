@@ -17,7 +17,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 export class TransferPunchCardComponent implements OnInit {
   members$: Observable<Member[]>;
   transferForm = this.fb.group({
-    transferMemberId: ['', Validators.required],
+    transferMember: [{}, Validators.required],
   });
 
   constructor(
@@ -43,7 +43,8 @@ export class TransferPunchCardComponent implements OnInit {
     this.punchCardService
       .transferPunchCard(
         this.data.punchCard,
-        this.transferForm.value.transferMemberId
+        this.data.currentMember,
+        this.transferForm.value.transferMember
       )
       .pipe(
         tap(() => {

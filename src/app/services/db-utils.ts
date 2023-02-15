@@ -1,11 +1,10 @@
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { PunchCard } from '@models/punch-card';
 import { map, tap } from 'rxjs';
 import {
   MEMBERS,
   PRACTICES,
+  PUNCHCARDS,
   findAttendancesForPractice,
-  findPunchCardsForCurrentMember,
 } from 'src/seed-data';
 
 export async function importData(db: AngularFirestore): Promise<void> {
@@ -13,6 +12,14 @@ export async function importData(db: AngularFirestore): Promise<void> {
   let localPractices = [];
   let localPunchCards = [];
   let localAttendances = [];
+
+  // add defaults
+  const defaults = {
+    doorPrice: 5,
+    practiceCost: 25,
+    punchCardPrice: 25,
+  };
+  db.doc('defaults/defaults').set(defaults);
 
   // add members
   const membersCollection = db.collection('members');
@@ -23,34 +30,38 @@ export async function importData(db: AngularFirestore): Promise<void> {
       ...member,
       id: memberRef.id,
     });
-    const memberPunchCards = memberRef.collection('punch-cards');
-    const punchCards = findPunchCardsForCurrentMember(member['memberId']);
-    // add punch cards for member
-    for (const punchCard of punchCards) {
-      const newPunchCard = { ...punchCard };
-      delete newPunchCard.currentMemberId;
-      delete newPunchCard.purchaseDate;
-      newPunchCard.purchaseDate = parseDate(punchCard['purchaseDate']);
-      console.log(`Adding punch card ${punchCard['punchCardId']}`);
-      const punchCardRef = await memberPunchCards.add(newPunchCard);
-      localPunchCards.push({
-        ...newPunchCard,
-        id: punchCardRef.id,
-      });
-    }
   }
-  // update purchase member id on punch cards
+  const punchCardCollection = db.collection('punch-cards');
+  for (const punchCard of PUNCHCARDS) {
+    const newPunchCard = { ...punchCard };
+    delete newPunchCard.purchaseDate;
+    newPunchCard.purchaseDate = parseDate(punchCard['purchaseDate']);
+    console.log(`Adding punch card ${punchCard['punchCardId']}`);
+    const punchCardRef = await punchCardCollection.add(newPunchCard);
+    localPunchCards.push({
+      ...punchCard,
+      id: punchCardRef.id,
+    });
+  }
+  // update member ids on punch cards
   db.collectionGroup('punch-cards')
     .get()
     .subscribe((punchCards) => {
-      console.log('Updating purchase member id on punch cards...');
+      console.log('Updating member ids on punch cards...');
       punchCards.forEach(async (punchCardDoc) => {
         const punchCard = punchCardDoc.data();
         const purchaseMember = localMembers.find(
           (f) => f.memberId == punchCard['purchaseMemberId']
         );
+        const currentMember = localMembers.find(
+          (f) => f.memberId == punchCard['currentMemberId']
+        );
         const newPunchCard = {
+          punchCardId: punchCard['punchCardId'],
           purchaseMemberId: purchaseMember.id,
+          purchaseMemberName: punchCard['purchaseMemberName'],
+          currentMemberId: currentMember.id,
+          currentMemberName: punchCard['currentMemberName'],
           purchaseDate: punchCard['purchaseDate'],
           purchaseAmount: punchCard['purchaseAmount'],
           punchesRemaining: punchCard['punchesRemaining'],
@@ -60,7 +71,7 @@ export async function importData(db: AngularFirestore): Promise<void> {
     });
   // add practices
   const practicesCollection = db.collection('practices');
-  for (let practice of PRACTICES) {
+  for (const practice of PRACTICES) {
     const newPractice = { ...practice };
     delete newPractice.practiceId;
     delete newPractice.practiceDate;
@@ -130,6 +141,23 @@ export async function importData(db: AngularFirestore): Promise<void> {
       }),
       tap(() => {
         console.log('Finished removing memberId field!');
+      })
+    )
+    .subscribe();
+  // remove punchCardId field from punch cards
+  punchCardCollection
+    .get()
+    .pipe(
+      map((punchCards) => {
+        console.log('Remove punchCardId field from punch cards...');
+        punchCards.forEach((punchCardDoc) => {
+          let punchCard = punchCardDoc.data();
+          delete punchCard['punchCardId'];
+          db.doc(punchCardDoc.ref).set(punchCard);
+        });
+      }),
+      tap(() => {
+        console.log('Finished removing punchCardId field!');
       })
     )
     .subscribe();

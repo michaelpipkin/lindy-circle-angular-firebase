@@ -2,9 +2,8 @@
 <mat-dialog-content [formGroup]="transferForm">
     <mat-form-field appearance="fill">
         <mat-label>Transfer to</mat-label>
-        <mat-select formControlName="transferMemberId">
-            <mat-option *ngFor="let member of (members$ | async)"
-                [value]="member.id">{{member.firstLastName}}</mat-option>
+        <mat-select formControlName="transferMember">
+            <mat-option *ngFor="let member of (members$ | async)" [value]="member">{{member.firstLastName}}</mat-option>
         </mat-select>
     </mat-form-field>
 </mat-dialog-content>

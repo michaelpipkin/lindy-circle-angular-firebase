@@ -12,102 +12,116 @@ export class PunchCardService {
 
   getPunchCardsForMember(memberId: string): Observable<PunchCard[]> {
     return this.db
-      .collection('members')
-      .get()
+      .collection<PunchCard>(`punch-cards`, (ref) =>
+        ref.orderBy('purchaseDate')
+      )
+      .valueChanges({ idField: 'id' })
       .pipe(
-        concatMap((res) => {
-          const members: Member[] = res.docs.map((member) => {
-            return new Member({
-              id: member.id,
-              ...(<any>member.data()),
+        map((punchCards: PunchCard[]) => {
+          return <PunchCard[]>punchCards
+            .filter(
+              (f) =>
+                f.currentMemberId === memberId ||
+                f.purchaseMemberId === memberId
+            )
+            .map((punchCard) => {
+              return new PunchCard({
+                ...punchCard,
+              });
+            });
+        })
+      );
+  }
+
+  getPunchCardsHeldByMember(memberId: string): Observable<PunchCard[]> {
+    return this.db
+      .collection<PunchCard>('punch-cards', (ref) =>
+        ref.where('currentMemberId', '==', memberId).orderBy('purchaseDate')
+      )
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        map((punchCards: PunchCard[]) => {
+          return <PunchCard[]>punchCards.map((punchCard) => {
+            return new PunchCard({
+              ...punchCard,
             });
           });
-          return this.db
-            .collection<PunchCard>(`members/${memberId}/punch-cards`, (ref) =>
-              ref.orderBy('purchaseDate')
-            )
-            .valueChanges({ idField: 'id' })
-            .pipe(
-              map((punchCards: PunchCard[]) => {
-                return <PunchCard[]>punchCards.map((punchCard) => {
-                  return new PunchCard({
-                    ...punchCard,
-                    purchaseMemberName:
-                      punchCard.purchaseMemberId !== memberId
-                        ? members.find(
-                            (f) => f.id === punchCard.purchaseMemberId
-                          ).firstLastName
-                        : '',
-                  });
-                });
-              })
-            );
         })
       );
   }
 
-  addPunchCard(punchCard: Partial<PunchCard>): Observable<any> {
+  getUsablePunchCardForMember(memberId: string): Observable<PunchCard | null> {
+    return this.db
+      .collection<PunchCard>('punch-cards', (ref) =>
+        ref
+          .where('currentMemberId', '==', memberId)
+          .where('punchesRemaining', '>', 0)
+          .limit(1)
+      )
+      .get()
+      .pipe(
+        map((res) => {
+          if (res.docs.length > 0) {
+            const punchCard = res.docs[0];
+            return new PunchCard({
+              id: punchCard.id,
+              ...punchCard.data(),
+            });
+          } else {
+            return null;
+          }
+        })
+      );
+  }
+
+  addPunchCard(punchCard: Partial<PunchCard>, member: Member): Observable<any> {
     const batch = this.db.firestore.batch();
     punchCard.id = this.db.createId();
-    const punchCardRef = this.db.doc(
-      `members/${punchCard.purchaseMemberId}/punch-cards/${punchCard.id}`
-    ).ref;
-    const memberRef = this.db.doc(`members/${punchCard.purchaseMemberId}`).ref;
-    return this.db
-      .doc(`members/${punchCard.purchaseMemberId}`)
-      .get()
-      .pipe(
-        concatMap((res) => {
-          const member = res.data();
-          batch.set(punchCardRef, punchCard);
-          batch.update(memberRef, {
-            punchesRemaining: member['punchesRemaining'] + 5,
-            punchCardPurchaseTotal:
-              member['punchCardPurchaseTotal'] + punchCard.purchaseAmount,
-            totalPaid: member['totalPaid'] + punchCard.purchaseAmount,
-          });
-          return batch.commit();
-        })
-      );
+    const punchCardRef = this.db.doc(`/punch-cards/${punchCard.id}`).ref;
+    const memberRef = this.db.doc(`members/${member.id}`).ref;
+    batch.set(punchCardRef, punchCard);
+    batch.update(memberRef, {
+      punchesRemaining: member.punchesRemaining + 5,
+      punchCardPurchaseTotal:
+        member.punchCardPurchaseTotal + punchCard.purchaseAmount,
+      totalPaid: member.totalPaid + punchCard.purchaseAmount,
+    });
+    return from(batch.commit());
   }
 
-  deletePunchCard(memberId: string, punchCard: PunchCard): Observable<any> {
+  deletePunchCard(member: Member, punchCard: PunchCard): Observable<any> {
     const batch = this.db.firestore.batch();
-    const punchCardRef = this.db.doc(
-      `members/${memberId}/punch-cards/${punchCard.id}`
-    ).ref;
-    const memberRef = this.db.doc(`members/${memberId}`).ref;
-    return this.db
-      .doc(`members/${memberId}`)
-      .get()
-      .pipe(
-        concatMap((res) => {
-          const member = res.data();
-          batch.delete(punchCardRef);
-          batch.update(memberRef, {
-            punchesRemaining: member['punchesRemaining'] - 5,
-            punchCardPurchaseTotal:
-              member['punchCardPurchaseTotal'] - punchCard.purchaseAmount,
-            totalPaid: member['totalPaid'] - punchCard.purchaseAmount,
-          });
-          return batch.commit();
-        })
-      );
+    const punchCardRef = this.db.doc(`punch-cards/${punchCard.id}`).ref;
+    const memberRef = this.db.doc(`members/${member.id}`).ref;
+    batch.delete(punchCardRef);
+    batch.update(memberRef, {
+      punchesRemaining: member.punchesRemaining - 5,
+      punchCardPurchaseTotal:
+        member.punchCardPurchaseTotal - punchCard.purchaseAmount,
+      totalPaid: member.totalPaid - punchCard.purchaseAmount,
+    });
+    return from(batch.commit());
   }
 
   transferPunchCard(
     punchCard: PunchCard,
-    newMemberId: string
+    oldMember: Member,
+    newMember: Member
   ): Observable<any> {
-    const transferFromRef = this.db.doc(
-      `members/${punchCard.purchaseMemberId}/punch-cards/${punchCard.id}`
-    ).ref;
-    const transferToRef = this.db.doc(
-      `members/${newMemberId}/punch-cards/${punchCard.id}`
-    ).ref;
+    const punchCardRef = this.db.doc(`punch-cards/${punchCard.id}`).ref;
+    const fromMemberRef = this.db.doc(`members/${oldMember.id}`).ref;
+    const toMemberRef = this.db.doc(`members/${newMember.id}`).ref;
     const batch = this.db.firestore.batch();
-    batch.delete(transferFromRef);
-    batch.set(transferToRef, Object.assign({}, punchCard));
+    batch.update(punchCardRef, {
+      currentMemberId: newMember.id,
+      currentMemberName: newMember.firstLastName,
+    });
+    batch.update(fromMemberRef, {
+      punchesRemaining: oldMember.punchesRemaining - punchCard.punchesRemaining,
+    });
+    batch.update(toMemberRef, {
+      punchesRemaining: newMember.punchesRemaining + punchCard.punchesRemaining,
+    });
     return from(batch.commit());
   }
 }
