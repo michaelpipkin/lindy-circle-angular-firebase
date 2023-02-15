@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Transfer Punch Card From {{this.data.currentMember.firstLastName}}</h1>
+<mat-dialog-content [formGroup]="transferForm">
+    <mat-form-field appearance="fill">
+        <mat-label>Transfer to</mat-label>
+        <mat-select formControlName="transferMemberId">
+            <mat-option *ngFor="let member of (members$ | async)"
+                [value]="member.id">{{member.firstLastName}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="close()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="!transferForm.valid" (click)="onSubmit()">Save</button>
+</mat-dialog-actions>

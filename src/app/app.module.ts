@@ -36,6 +36,7 @@ import {
 import { PracticeDetailsComponent } from './practices/practice-details/practice-details.component';
 import { EditPracticeComponent } from './practices/edit-practice/edit-practice.component';
 import { AddPunchCardComponent } from './punch-cards/add-punch-card/add-punch-card.component';
+import { TransferPunchCardComponent } from './punch-cards/transfer-punch-card/transfer-punch-card.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { AddPunchCardComponent } from './punch-cards/add-punch-card/add-punch-ca
     PracticeDetailsComponent,
     EditPracticeComponent,
     AddPunchCardComponent,
+    TransferPunchCardComponent,
   ],
   imports: [
     BrowserModule,

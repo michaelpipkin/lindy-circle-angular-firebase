@@ -13,6 +13,7 @@ import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.co
 import { LoadingService } from '@shared/loading/loading.service';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AddPunchCardComponent } from 'src/app/punch-cards/add-punch-card/add-punch-card.component';
+import { TransferPunchCardComponent } from 'src/app/punch-cards/transfer-punch-card/transfer-punch-card.component';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
 
 @Component({
@@ -156,8 +157,13 @@ export class MemberDetailsComponent implements OnInit {
       .subscribe();
   }
 
-  transferPunchCard(punchCard: PunchCard): void {
-    console.log(punchCard);
+  transferPunchCard(currentMember: Member, punchCard: PunchCard): void {
+    this.dialog.open(TransferPunchCardComponent, {
+      data: {
+        currentMember: currentMember,
+        punchCard: punchCard,
+      },
+    });
   }
 
   onPracticeRowClick(practice: Practice) {

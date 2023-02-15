@@ -14,7 +14,6 @@ import { catchError, tap, throwError } from 'rxjs';
 })
 export class EditMemberComponent {
   editMemberForm: FormGroup;
-  member: Member;
 
   constructor(
     private dialogRef: MatDialogRef<EditMemberComponent>,
@@ -22,13 +21,12 @@ export class EditMemberComponent {
     private memberService: MemberService,
     private loading: LoadingService,
     private snackBar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) member: Member
+    @Inject(MAT_DIALOG_DATA) public member: Member
   ) {
-    this.member = member;
     this.editMemberForm = this.fb.group({
-      firstName: [member.firstName, Validators.required],
-      lastName: [member.lastName, Validators.required],
-      active: [member.active],
+      firstName: [this.member.firstName, Validators.required],
+      lastName: [this.member.lastName, Validators.required],
+      active: [this.member.active],
     });
   }
 

@@ -43,7 +43,9 @@
     </div>
     <div class="section-break mt-3"></div>
     <div class="pb-5 me-4">
-        <h5>Practice Attendances</h5>
+        <div class="header">
+            <h5>Practice Attendances</h5>
+        </div>
         <div class="scrollable-table">
             <table class="sub-table clickable-table" mat-table [dataSource]="practices$ | async">
                 <ng-container matColumnDef="id">
@@ -101,13 +103,15 @@
                 </ng-container>
                 <ng-container matColumnDef="punchesRemaining">
                     <th mat-header-cell *matHeaderCellDef class="cell-right">Punches Left</th>
-                    <td mat-cell *matCellDef="let punchCard" class="cell-right">
+                    <td mat-cell *matCellDef="let punchCard" class="cell-right"
+                        [matTooltip]="'Transferred from ' + punchCard.purchaseMemberName"
+                        [matTooltipDisabled]="punchCard.purchaseMemberName === ''">
                         <span *ngIf="punchCard.punchesRemaining === 5" class="material-icons clickable me-2"
                             (click)="deletePunchCard(punchCard)">
                             delete
                         </span>
                         <span *ngIf="punchCard.punchesRemaining > 0" class="material-icons clickable me-2"
-                            (click)="transferPunchCard(punchCard)">
+                            (click)="transferPunchCard(member, punchCard)">
                             swap_horiz
                         </span>
                         {{punchCard.punchesRemaining}}
@@ -115,8 +119,7 @@
                     <td mat-footer-cell *matFooterCellDef class="cell-right">{{member.punchesRemaining}}</td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="punchCardColumnsToDisplay; sticky: true"></tr>
-                <tr mat-row *matRowDef="let myRowData; columns: punchCardColumnsToDisplay">
-                </tr>
+                <tr mat-row *matRowDef="let myRowData; columns: punchCardColumnsToDisplay"></tr>
                 <tr mat-footer-row *matFooterRowDef="punchCardColumnsToDisplay"></tr>
                 <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell" [colSpan]="punchCardColumnsToDisplay.length">No punch cards found.

@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Add Punch Card</h1>
 <mat-dialog-content [formGroup]="newPunchCardForm">
-    <mat-form-field appearance="fill" color="primary" class="datepicker">
+    <mat-form-field appearance="fill" color="primary" class="datepicker mb-3">
         <mat-label>Purchase Date</mat-label>
         <input matInput formControlName="purchaseDate" [matDatepicker]="purchaseDatePicker">
         <mat-hint>MM/DD/YYYY</mat-hint>
@@ -11,13 +11,13 @@
             Purchase date is required
         </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2">
+    <mat-form-field appearance="fill" floatLabel="always" class="number-field">
         <mat-label>Amount</mat-label>
         <input matInput formControlName="purchaseAmount" type="number" class="number-right">
         <span matTextPrefix="$&nbsp;"></span>
         <mat-error
             *ngIf="newPunchCardForm.controls.purchaseAmount.touched && newPunchCardForm.controls.purchaseAmount.invalid">
-            Practice cost is required
+            Amount is required
         </mat-error>
     </mat-form-field>
 </mat-dialog-content>

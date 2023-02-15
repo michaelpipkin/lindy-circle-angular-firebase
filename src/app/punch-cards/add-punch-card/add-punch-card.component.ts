@@ -18,7 +18,6 @@ export class AddPunchCardComponent {
     purchaseDate: [new Date(), Validators.required],
     purchaseAmount: [0.0, Validators.required],
   });
-  purchaseMemberId: string;
 
   constructor(
     private dialogRef: MatDialogRef<AddPunchCardComponent>,
@@ -26,12 +25,11 @@ export class AddPunchCardComponent {
     private punchCardService: PunchCardService,
     private defaults: DefaultsStore,
     private snackBar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) purchaseMemberId: string
+    @Inject(MAT_DIALOG_DATA) public purchaseMemberId: string
   ) {
     this.newPunchCardForm.patchValue({
       purchaseAmount: this.defaults.getDefaultPunchCardCost(),
     });
-    this.purchaseMemberId = purchaseMemberId;
   }
 
   onSubmit(): void {

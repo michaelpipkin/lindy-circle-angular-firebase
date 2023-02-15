@@ -3,6 +3,7 @@ import { Timestamp } from 'firebase/firestore';
 export interface IPunchCard {
   id: string;
   purchaseMemberId: string;
+  purchaseMemberName: string;
   purchaseDate: Timestamp;
   purchaseAmount: number;
   punchesRemaining: number;
@@ -14,6 +15,7 @@ export class PunchCard implements IPunchCard {
   }
   id: string;
   purchaseMemberId: string;
+  purchaseMemberName: string;
   purchaseDate: Timestamp;
   purchaseAmount: number;
   punchesRemaining: number;

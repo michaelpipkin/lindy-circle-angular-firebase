@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Attendance } from '@models/attendance';
 import { Member } from '@models/member';
+import { FieldPath } from 'firebase/firestore';
 import { concatMap, from, map, Observable } from 'rxjs';
 
 @Injectable({
@@ -26,6 +27,25 @@ export class MemberService {
               ...member,
             });
           });
+        })
+      );
+  }
+
+  getMembersForTransfer(currentMemberId: string): Observable<Member[]> {
+    return this.db
+      .collection('members', (ref) =>
+        ref.where('active', '==', true).orderBy('lastName').orderBy('firstName')
+      )
+      .valueChanges({ idField: 'id' })
+      .pipe(
+        map((members: Member[]) => {
+          return <Member[]>members
+            .filter((f) => f.id !== currentMemberId)
+            .map((member: Member) => {
+              return new Member({
+                ...member,
+              });
+            });
         })
       );
   }

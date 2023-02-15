@@ -8,14 +8,10 @@ import { DialogOptions } from '@models/dialog-options';
   styleUrls: ['./generic-dialog.component.scss'],
 })
 export class GenericDialogComponent {
-  dialogOptions: DialogOptions;
-
   constructor(
     private dialogRef: MatDialogRef<GenericDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) options: DialogOptions
-  ) {
-    this.dialogOptions = options;
-  }
+    @Inject(MAT_DIALOG_DATA) public options: DialogOptions
+  ) {}
 
   onFalseClick(): void {
     this.dialogRef.close(false);

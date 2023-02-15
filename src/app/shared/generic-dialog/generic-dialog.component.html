@@ -1,12 +1,12 @@
-<h3 mat-dialog-title>{{dialogOptions.title}}</h3>
+<h3 mat-dialog-title>{{options.title}}</h3>
 <mat-dialog-content>
     <p>
-        {{dialogOptions.content}}
+        {{options.content}}
     </p>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-raised-button [color]="dialogOptions.falseButtonColor"
-        (click)="onFalseClick()">{{dialogOptions.falseButtonText}}</button>
-    <button mat-raised-button [color]="dialogOptions.trueButtonColor"
-        (click)="onTrueClick()">{{dialogOptions.trueButtonText}}</button>
+    <button mat-raised-button [color]="options.falseButtonColor"
+        (click)="onFalseClick()">{{options.falseButtonText}}</button>
+    <button mat-raised-button [color]="options.trueButtonColor"
+        (click)="onTrueClick()">{{options.trueButtonText}}</button>
 </mat-dialog-actions>

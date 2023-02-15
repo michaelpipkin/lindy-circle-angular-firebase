@@ -12,17 +12,36 @@ export class PunchCardService {
 
   getPunchCardsForMember(memberId: string): Observable<PunchCard[]> {
     return this.db
-      .collection<PunchCard>(`members/${memberId}/punch-cards`, (ref) =>
-        ref.orderBy('purchaseDate')
-      )
-      .valueChanges({ idField: 'id' })
+      .collection('members')
+      .get()
       .pipe(
-        map((punchCards: PunchCard[]) => {
-          return <PunchCard[]>punchCards.map((punchCard) => {
-            return new PunchCard({
-              ...punchCard,
+        concatMap((res) => {
+          const members: Member[] = res.docs.map((member) => {
+            return new Member({
+              id: member.id,
+              ...(<any>member.data()),
             });
           });
+          return this.db
+            .collection<PunchCard>(`members/${memberId}/punch-cards`, (ref) =>
+              ref.orderBy('purchaseDate')
+            )
+            .valueChanges({ idField: 'id' })
+            .pipe(
+              map((punchCards: PunchCard[]) => {
+                return <PunchCard[]>punchCards.map((punchCard) => {
+                  return new PunchCard({
+                    ...punchCard,
+                    purchaseMemberName:
+                      punchCard.purchaseMemberId !== memberId
+                        ? members.find(
+                            (f) => f.id === punchCard.purchaseMemberId
+                          ).firstLastName
+                        : '',
+                  });
+                });
+              })
+            );
         })
       );
   }
@@ -88,7 +107,7 @@ export class PunchCardService {
     ).ref;
     const batch = this.db.firestore.batch();
     batch.delete(transferFromRef);
-    batch.set(transferToRef, punchCard);
+    batch.set(transferToRef, Object.assign({}, punchCard));
     return from(batch.commit());
   }
 }
