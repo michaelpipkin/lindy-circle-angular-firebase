@@ -80,14 +80,6 @@ export class MemberDetailsComponent implements OnInit {
           this.turnLoaderOff();
         })
       );
-    this.punchCardService
-      .getUsablePunchCardForMember(this.memberId)
-      .pipe(
-        tap((punchCard: PunchCard) => {
-          console.log(punchCard);
-        })
-      )
-      .subscribe();
   }
 
   turnLoaderOff(): void {

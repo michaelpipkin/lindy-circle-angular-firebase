@@ -6,7 +6,6 @@ import { Member } from '@models/member';
 import { PunchCard } from '@models/punch-card';
 import { MemberService } from '@services/member.service';
 import { PunchCardService } from '@services/punch-card.service';
-import { LoadingService } from '@shared/loading/loading.service';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 
 @Component({
@@ -17,7 +16,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 export class TransferPunchCardComponent implements OnInit {
   members$: Observable<Member[]>;
   transferForm = this.fb.group({
-    transferMember: [{}, Validators.required],
+    transferMember: [null, Validators.required],
   });
 
   constructor(
@@ -25,17 +24,15 @@ export class TransferPunchCardComponent implements OnInit {
     private fb: FormBuilder,
     private punchCardService: PunchCardService,
     private memberService: MemberService,
-    private loading: LoadingService,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA)
     public data: { currentMember: Member; punchCard: PunchCard }
   ) {}
 
   ngOnInit(): void {
-    this.loading.loadingOn();
-    this.members$ = this.memberService
-      .getMembersForTransfer(this.data.currentMember.id)
-      .pipe(tap(() => this.loading.loadingOff()));
+    this.members$ = this.memberService.getMembersForTransfer(
+      this.data.currentMember.id
+    );
   }
 
   onSubmit(): void {
