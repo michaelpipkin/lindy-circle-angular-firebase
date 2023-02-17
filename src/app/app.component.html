@@ -6,18 +6,18 @@
         <span>Members</span>
       </a>
       <a mat-list-item routerLink="practices">
-        <mat-icon>accessibility_new</mat-icon>
+        <mat-icon>perm_contact_calendar</mat-icon>
         <span>Practices</span>
       </a>
       <ng-container *ngIf="(user.roles$ | async) let roles">
         <ng-container *ngIf="roles.admin">
           <a mat-list-item routerLink="/">
-            <mat-icon>loyalty</mat-icon>
-            <span>Punch Cards</span>
+            <mat-icon>attach_money</mat-icon>
+            <span>Finances</span>
           </a>
           <a mat-list-item routerLink="/">
-            <mat-icon>perm_contact_calendar</mat-icon>
-            <span>Attendance</span>
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
           </a>
         </ng-container>
       </ng-container>

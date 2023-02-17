@@ -46,7 +46,7 @@ export class AddPunchCardComponent {
       punchesRemaining: 5,
     };
     this.punchCardService
-      .addPunchCard(newPunchCard, this.member)
+      .addPunchCard(newPunchCard, this.member.id)
       .pipe(
         tap(() => {
           this.dialogRef.close(true);

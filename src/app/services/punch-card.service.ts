@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Member } from '@models/member';
 import { PunchCard } from '@models/punch-card';
-import { concatMap, from, map, Observable } from 'rxjs';
+import { increment } from 'firebase/firestore';
+import { from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -74,31 +75,36 @@ export class PunchCardService {
       );
   }
 
-  addPunchCard(punchCard: Partial<PunchCard>, member: Member): Observable<any> {
+  addPunchCard(
+    punchCard: Partial<PunchCard>,
+    memberId: string
+  ): Observable<any> {
     const batch = this.db.firestore.batch();
     punchCard.id = this.db.createId();
-    const punchCardRef = this.db.doc(`/punch-cards/${punchCard.id}`).ref;
-    const memberRef = this.db.doc(`members/${member.id}`).ref;
+    const punchCardRef = this.db.doc<PunchCard>(
+      `/punch-cards/${punchCard.id}`
+    ).ref;
+    const memberRef = this.db.doc<Member>(`members/${memberId}`).ref;
     batch.set(punchCardRef, punchCard);
     batch.update(memberRef, {
-      punchesRemaining: member.punchesRemaining + 5,
-      punchCardPurchaseTotal:
-        member.punchCardPurchaseTotal + punchCard.purchaseAmount,
-      totalPaid: member.totalPaid + punchCard.purchaseAmount,
+      punchesRemaining: increment(5),
+      punchCardPurchaseTotal: increment(punchCard.purchaseAmount),
+      totalPaid: increment(punchCard.purchaseAmount),
     });
     return from(batch.commit());
   }
 
-  deletePunchCard(member: Member, punchCard: PunchCard): Observable<any> {
+  deletePunchCard(memberId: string, punchCard: PunchCard): Observable<any> {
     const batch = this.db.firestore.batch();
-    const punchCardRef = this.db.doc(`punch-cards/${punchCard.id}`).ref;
-    const memberRef = this.db.doc(`members/${member.id}`).ref;
+    const punchCardRef = this.db.doc<PunchCard>(
+      `punch-cards/${punchCard.id}`
+    ).ref;
+    const memberRef = this.db.doc<Member>(`members/${memberId}`).ref;
     batch.delete(punchCardRef);
     batch.update(memberRef, {
-      punchesRemaining: member.punchesRemaining - 5,
-      punchCardPurchaseTotal:
-        member.punchCardPurchaseTotal - punchCard.purchaseAmount,
-      totalPaid: member.totalPaid - punchCard.purchaseAmount,
+      punchesRemaining: increment(-5),
+      punchCardPurchaseTotal: increment(-punchCard.purchaseAmount),
+      totalPaid: increment(-punchCard.purchaseAmount),
     });
     return from(batch.commit());
   }
@@ -117,10 +123,10 @@ export class PunchCardService {
       currentMemberName: newMember.firstLastName,
     });
     batch.update(fromMemberRef, {
-      punchesRemaining: oldMember.punchesRemaining - punchCard.punchesRemaining,
+      punchesRemaining: increment(-punchCard.punchesRemaining),
     });
     batch.update(toMemberRef, {
-      punchesRemaining: newMember.punchesRemaining + punchCard.punchesRemaining,
+      punchesRemaining: increment(punchCard.punchesRemaining),
     });
     return from(batch.commit());
   }

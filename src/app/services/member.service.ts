@@ -50,6 +50,38 @@ export class MemberService {
       );
   }
 
+  getMembersForAttendance(practiceId: string): Observable<Member[]> {
+    return this.db
+      .collection(`practices/${practiceId}/attendances`)
+      .get()
+      .pipe(
+        concatMap((res) => {
+          const attendances = <string[]>res.docs.map((snapshot) => {
+            return snapshot.data()['memberId'];
+          });
+          return this.db
+            .collection<Member>('members', (ref) =>
+              ref
+                .where('active', '==', true)
+                .orderBy('lastName')
+                .orderBy('firstName')
+            )
+            .valueChanges({ idField: 'id' })
+            .pipe(
+              map((members: Member[]) => {
+                return <Member[]>members
+                  .filter((f) => !attendances.includes(f.id))
+                  .map((member: Member) => {
+                    return new Member({
+                      ...member,
+                    });
+                  });
+              })
+            );
+        })
+      );
+  }
+
   // example of joining two collections
   getMembersWithAttendances(activeOnly: boolean = false): Observable<Member[]> {
     return this.db

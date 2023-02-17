@@ -23,7 +23,12 @@ export class PracticeDetailsComponent implements OnInit {
   attendances$: Observable<Attendance[]>;
   practiceLoaded: boolean = false;
   attendeesLoaded: boolean = false;
-  attendeeColumnsToDisplay = ['memberName', 'paymentTypeText', 'paymentAmount'];
+  attendeeColumnsToDisplay = [
+    'memberName',
+    'paymentTypeText',
+    'paymentAmount',
+    'delete',
+  ];
 
   constructor(
     private practiceService: PracticeService,
@@ -111,7 +116,33 @@ export class PracticeDetailsComponent implements OnInit {
       });
   }
 
-  onRowClick(attendance: Attendance) {
+  addAttendance(practice: Practice): void {}
+
+  deleteAttendance(attendance: Attendance, practice: Practice): void {
+    this.attendanceService
+      .deleteAttendance(attendance, practice.id)
+      .pipe(
+        tap(() =>
+          this.snackBar.open('Attendance deleted.', 'OK', {
+            verticalPosition: 'top',
+            duration: 5000,
+          })
+        ),
+        catchError((err: Error) => {
+          this.snackBar.open(
+            'Something went wrong - could not delete attendance.',
+            'Close',
+            {
+              verticalPosition: 'top',
+            }
+          );
+          return throwError(() => new Error(err.message));
+        })
+      )
+      .subscribe();
+  }
+
+  onRowClick(attendance: Attendance): void {
     this.router.navigate(['members', attendance.memberId]);
   }
 }

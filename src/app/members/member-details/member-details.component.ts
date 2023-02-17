@@ -136,7 +136,7 @@ export class MemberDetailsComponent implements OnInit {
 
   deletePunchCard(member: Member, punchCard: PunchCard): void {
     this.punchCardService
-      .deletePunchCard(member, punchCard)
+      .deletePunchCard(member.id, punchCard)
       .pipe(
         tap(() =>
           this.snackBar.open('Punch card deleted.', 'OK', {

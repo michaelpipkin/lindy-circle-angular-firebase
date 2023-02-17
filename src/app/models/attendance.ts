@@ -1,3 +1,5 @@
+import { Member } from './member';
+
 export enum paymentType {
   None = 0,
   Cash = 1,
@@ -8,6 +10,7 @@ export enum paymentType {
 export interface IAttendance {
   id: string;
   memberId: string;
+  member: Member;
   paymentType: paymentType;
   paymentTypeText: string;
   paymentAmount: number;
@@ -20,6 +23,7 @@ export class Attendance implements IAttendance {
   }
   id: string;
   memberId: string;
+  member: Member;
   paymentType: paymentType;
   public get paymentTypeText(): string {
     switch (this.paymentType) {
@@ -35,5 +39,4 @@ export class Attendance implements IAttendance {
   }
   paymentAmount: number;
   punchCardId?: string;
-  memberName: string;
 }
