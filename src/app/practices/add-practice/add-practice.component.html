@@ -2,13 +2,13 @@
 <mat-dialog-content [formGroup]="newPracticeForm">
     <mat-form-field appearance="fill" class="datepicker">
         <mat-label>Practice Date</mat-label>
-        <input matInput formControlName="practiceDate" [matDatepicker]="practiceDatePicker">
+        <input matInput [min]="minDate" formControlName="practiceDate" [matDatepicker]="practiceDatePicker">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="practiceDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #practiceDatePicker></mat-datepicker>
         <mat-error
             *ngIf="newPracticeForm.controls.practiceDate.touched && newPracticeForm.controls.practiceDate.invalid">
-            Practice date is required
+            *Required
         </mat-error>
     </mat-form-field>
     <br />

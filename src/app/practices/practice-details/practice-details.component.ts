@@ -7,9 +7,11 @@ import { DialogOptions } from '@models/dialog-options';
 import { Practice } from '@models/practice';
 import { AttendanceService } from '@services/attendance.service';
 import { PracticeService } from '@services/practice.service';
+import { SortingService } from '@services/sorting.service';
 import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { AddAttendanceComponent } from '../add-attendance/add-attendance.component';
 import { EditPracticeComponent } from '../edit-practice/edit-practice.component';
 
 @Component({
@@ -37,6 +39,7 @@ export class PracticeDetailsComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private loading: LoadingService,
+    private sorter: SortingService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -57,6 +60,23 @@ export class PracticeDetailsComponent implements OnInit {
     this.attendances$ = this.attendanceService
       .getAttendancesForPractice(this.practiceId)
       .pipe(
+        map((attendances: Attendance[]) => {
+          return attendances.sort((a, b) => {
+            if (
+              a.member.lastFirstName.toLowerCase() <
+              b.member.lastFirstName.toLowerCase()
+            ) {
+              return -1;
+            }
+            if (
+              a.member.lastFirstName.toLowerCase() >
+              b.member.lastFirstName.toLowerCase()
+            ) {
+              return 1;
+            }
+            return 0;
+          });
+        }),
         tap(() => {
           this.attendeesLoaded = true;
           this.turnLoaderOff();
@@ -73,6 +93,7 @@ export class PracticeDetailsComponent implements OnInit {
   editPractice(practice: Practice): void {
     const dialogConfig: MatDialogConfig = {};
     dialogConfig.data = practice;
+    dialogConfig.width = '500px';
     this.dialog.open(EditPracticeComponent, dialogConfig);
   }
 
@@ -116,7 +137,11 @@ export class PracticeDetailsComponent implements OnInit {
       });
   }
 
-  addAttendance(practice: Practice): void {}
+  addAttendance(practice: Practice): void {
+    const dialogConfig: MatDialogConfig = {};
+    dialogConfig.data = practice;
+    this.dialog.open(AddAttendanceComponent, dialogConfig);
+  }
 
   deleteAttendance(attendance: Attendance, practice: Practice): void {
     this.attendanceService

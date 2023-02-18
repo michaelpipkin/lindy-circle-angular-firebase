@@ -78,6 +78,7 @@ export class AttendanceService {
       batch.update(memberRef, {
         totalAttendance: increment(1),
         attendancePaymentTotal: increment(attendance.paymentAmount),
+        totalPaid: increment(attendance.paymentAmount),
       });
     }
     return from(batch.commit());
@@ -113,6 +114,7 @@ export class AttendanceService {
       batch.update(memberRef, {
         totalAttendance: increment(-1),
         attendancePaymentTotal: increment(-attendance.paymentAmount),
+        totalPaid: increment(-attendance.paymentAmount),
       });
     }
     return from(batch.commit());

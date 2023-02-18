@@ -19,6 +19,7 @@ export class AddPunchCardComponent {
     purchaseDate: [new Date(), Validators.required],
     purchaseAmount: [0.0, Validators.required],
   });
+  minDate: Date = new Date(1900, 0, 1);
 
   constructor(
     private dialogRef: MatDialogRef<AddPunchCardComponent>,

@@ -21,6 +21,7 @@ export class AddPracticeComponent {
     miscExpense: [0.0, [Validators.required, Validators.min(0)]],
     miscRevenue: [0.0, [Validators.required, Validators.min(0)]],
   });
+  minDate: Date = new Date(1900, 0, 1);
 
   constructor(
     private dialogRef: MatDialogRef<AddPracticeComponent>,

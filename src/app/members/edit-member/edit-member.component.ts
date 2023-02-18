@@ -26,7 +26,7 @@ export class EditMemberComponent {
     this.editMemberForm = this.fb.group({
       firstName: [this.member.firstName, Validators.required],
       lastName: [this.member.lastName, Validators.required],
-      active: [this.member.active],
+      active: this.member.active,
     });
   }
 
@@ -35,12 +35,12 @@ export class EditMemberComponent {
   }
 
   onSubmit(): void {
+    this.editMemberForm.disable();
     const changes = this.editMemberForm.value;
     this.memberService
       .updateMember(this.member.id, changes)
       .pipe(
         tap(() => {
-          this.loading.loadingOff();
           this.dialogRef.close(true);
         }),
         catchError((err: Error) => {
@@ -51,7 +51,7 @@ export class EditMemberComponent {
               verticalPosition: 'top',
             }
           );
-          this.loading.loadingOff();
+          this.editMemberForm.enable();
           return throwError(() => new Error(err.message));
         })
       )

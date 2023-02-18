@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Member } from '@models/member';
 import { PunchCard } from '@models/punch-card';
-import { increment } from 'firebase/firestore';
-import { from, map, Observable } from 'rxjs';
+import { DocumentReference, increment } from 'firebase/firestore';
+import { from, map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -51,28 +51,15 @@ export class PunchCardService {
       );
   }
 
-  getUsablePunchCardForMember(memberId: string): Observable<PunchCard | null> {
-    return this.db
+  getUsablePunchCardForMember(memberId: string) {
+    this.db
       .collection<PunchCard>('punch-cards', (ref) =>
-        ref
-          .where('currentMemberId', '==', memberId)
-          .where('punchesRemaining', '>', 0)
-          .limit(1)
+        ref.where('currentMemberId', '==', memberId).orderBy('purchaseDate')
       )
       .get()
-      .pipe(
-        map((res) => {
-          if (res.docs.length > 0) {
-            const punchCard = res.docs[0];
-            return new PunchCard({
-              id: punchCard.id,
-              ...punchCard.data(),
-            });
-          } else {
-            return null;
-          }
-        })
-      );
+      .subscribe((res) => {
+        return res.docs.find((f) => f.data().punchesRemaining > 0).ref;
+      });
   }
 
   addPunchCard(

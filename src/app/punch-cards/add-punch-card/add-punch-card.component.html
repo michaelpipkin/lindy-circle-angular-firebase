@@ -2,7 +2,7 @@
 <mat-dialog-content [formGroup]="newPunchCardForm">
     <mat-form-field appearance="fill" color="primary" class="datepicker mb-3">
         <mat-label>Purchase Date</mat-label>
-        <input matInput formControlName="purchaseDate" [matDatepicker]="purchaseDatePicker">
+        <input matInput [min]="minDate" formControlName="purchaseDate" [matDatepicker]="purchaseDatePicker">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="purchaseDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #purchaseDatePicker></mat-datepicker>
