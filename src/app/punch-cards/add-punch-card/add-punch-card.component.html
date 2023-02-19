@@ -8,16 +8,16 @@
         <mat-datepicker #purchaseDatePicker></mat-datepicker>
         <mat-error
             *ngIf="newPunchCardForm.controls.purchaseDate.touched && newPunchCardForm.controls.purchaseDate.invalid">
-            Purchase date is required
+            *Required
         </mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill" floatLabel="always" class="number-field">
         <mat-label>Amount</mat-label>
         <input matInput formControlName="purchaseAmount" type="number" class="number-right">
-        <span matTextPrefix="$&nbsp;"></span>
+        <span matTextPrefix>$</span>
         <mat-error
             *ngIf="newPunchCardForm.controls.purchaseAmount.touched && newPunchCardForm.controls.purchaseAmount.invalid">
-            Amount is required
+            *Required
         </mat-error>
     </mat-form-field>
 </mat-dialog-content>

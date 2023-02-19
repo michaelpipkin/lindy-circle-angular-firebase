@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Defaults } from '@models/defaults';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -32,4 +32,8 @@ export class DefaultsStore {
 
   getDefaultPunchCardCost = (): number =>
     this.defaultsSubject.getValue().punchCardPrice;
+
+  updateDefaults(changes: Partial<Defaults>): Observable<any> {
+    return from(this.db.doc('defaults/defaults').update(changes));
+  }
 }

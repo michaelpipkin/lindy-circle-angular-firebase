@@ -19,10 +19,10 @@
     <mat-form-field appearance="fill" floatLabel="always" class="number-field">
         <mat-label>Amount</mat-label>
         <input matInput formControlName="paymentAmount" type="number" class="number-right">
-        <span matTextPrefix="$&nbsp;"></span>
+        <span matTextPrefix>$</span>
         <mat-error
             *ngIf="newAttendanceForm.controls.paymentAmount.touched && newAttendanceForm.controls.paymentAmount.invalid">
-            Amount is required
+            *Required
         </mat-error>
     </mat-form-field>
 </mat-dialog-content>

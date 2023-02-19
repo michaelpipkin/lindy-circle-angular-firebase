@@ -11,17 +11,17 @@
       </a>
       <ng-container *ngIf="(user.roles$ | async) let roles">
         <ng-container *ngIf="roles.admin">
-          <a mat-list-item routerLink="/">
+          <!-- <a mat-list-item routerLink="/">
             <mat-icon>attach_money</mat-icon>
             <span>Finances</span>
-          </a>
-          <a mat-list-item routerLink="/">
+          </a> -->
+          <a mat-list-item routerLink="settings">
             <mat-icon>settings</mat-icon>
             <span>Settings</span>
           </a>
         </ng-container>
       </ng-container>
-      <a mat-list-item routerLink="/">
+      <a mat-list-item routerLink="profile">
         <mat-icon>account_circle</mat-icon>
         <span>Profile</span>
       </a>
@@ -46,7 +46,7 @@
       <button mat-icon-button (click)="start.open('mouse')">
         <mat-icon>menu</mat-icon>
       </button>
-      <span id="title">The Lindy Circle</span>
+      <a id="title" routerLink="members">The Lindy Circle</a>
     </div>
   </mat-toolbar>
   <loading></loading>

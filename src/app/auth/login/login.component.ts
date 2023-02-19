@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.ui.delete();
   }
 
-  onLoginSuccess(result) {
+  onLoginSuccess() {
     this.router.navigateByUrl('/members');
   }
 }

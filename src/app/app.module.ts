@@ -5,16 +5,25 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoadingService } from '@shared/loading/loading.service';
 import { environment } from 'src/environments/environment';
+import { DefaultsComponent } from './admin/defaults/defaults.component';
+import { AdminMainComponent } from './admin/main/admin-main.component';
+import { ManageUsersComponent } from './admin/manage-users/manage-users.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
+import { ProfileComponent } from './auth/profile/profile.component';
 import { MaterialModule } from './material.module';
 import { AddMemberComponent } from './members/add-member/add-member.component';
 import { EditMemberComponent } from './members/edit-member/edit-member.component';
 import { MemberDetailsComponent } from './members/member-details/member-details.component';
 import { MembersComponent } from './members/members/members.component';
+import { AddAttendanceComponent } from './practices/add-attendance/add-attendance.component';
 import { AddPracticeComponent } from './practices/add-practice/add-practice.component';
+import { EditPracticeComponent } from './practices/edit-practice/edit-practice.component';
+import { PracticeDetailsComponent } from './practices/practice-details/practice-details.component';
 import { PracticesComponent } from './practices/practices/practices.component';
+import { AddPunchCardComponent } from './punch-cards/add-punch-card/add-punch-card.component';
+import { TransferPunchCardComponent } from './punch-cards/transfer-punch-card/transfer-punch-card.component';
 import { GenericDialogComponent } from './shared/generic-dialog/generic-dialog.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import {
@@ -33,11 +42,6 @@ import {
   AngularFireFunctionsModule,
   USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
 } from '@angular/fire/compat/functions';
-import { PracticeDetailsComponent } from './practices/practice-details/practice-details.component';
-import { EditPracticeComponent } from './practices/edit-practice/edit-practice.component';
-import { AddPunchCardComponent } from './punch-cards/add-punch-card/add-punch-card.component';
-import { TransferPunchCardComponent } from './punch-cards/transfer-punch-card/transfer-punch-card.component';
-import { AddAttendanceComponent } from './practices/add-attendance/add-attendance.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +60,10 @@ import { AddAttendanceComponent } from './practices/add-attendance/add-attendanc
     AddPunchCardComponent,
     TransferPunchCardComponent,
     AddAttendanceComponent,
+    ProfileComponent,
+    AdminMainComponent,
+    DefaultsComponent,
+    ManageUsersComponent,
   ],
   imports: [
     BrowserModule,

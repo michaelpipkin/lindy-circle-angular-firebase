@@ -36,7 +36,6 @@ $theme: mat.define-light-theme(
 @include mat.all-component-themes($theme);
 
 /* You can add global styles to this file, and also import other style files */
-
 html,
 body {
   height: 100%;
@@ -52,6 +51,12 @@ mat-hint {
   font-size: 0.7rem;
 }
 
+.mat-error {
+  font-size: 0.7rem;
+  color: red;
+  margin-top: -20px;
+}
+
 mat-dialog-actions,
 .mat-mdc-dialog-actions {
   display: flex !important;
@@ -60,6 +65,15 @@ mat-dialog-actions,
 
 .mat-form-field {
   display: block;
+}
+
+.form-buttons {
+  width: 100%;
+  display: flex !important;
+  justify-content: flex-end !important;
+  button {
+    margin-right: 8px;
+  }
 }
 
 .clickable-table tbody .mat-mdc-row:hover {
@@ -76,7 +90,7 @@ mat-dialog-actions,
 }
 
 .number-field .mat-mdc-form-field-infix {
-  max-width: 110px;
+  max-width: 100px;
 }
 
 .practice-topic .mat-mdc-form-field-infix {

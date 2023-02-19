@@ -17,34 +17,34 @@
         <input matInput formControlName="practiceTopic">
         <mat-error
             *ngIf="editPracticeForm.controls.practiceTopic.touched && editPracticeForm.controls.practiceTopic.invalid">
-            Practice topic is required
+            *Required
         </mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2">
         <mat-label>Practice Cost</mat-label>
         <input matInput formControlName="practiceCost" type="number" class="number-right">
-        <span matTextPrefix="$&nbsp;"></span>
+        <span matTextPrefix>$</span>
         <mat-error
             *ngIf="editPracticeForm.controls.practiceCost.touched && editPracticeForm.controls.practiceCost.invalid">
-            Practice cost is required
+            *Required
         </mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2">
         <mat-label>Misc Expense</mat-label>
         <input matInput formControlName="miscExpense" type="number" class="number-right">
-        <span matTextPrefix="$&nbsp;"></span>
+        <span matTextPrefix>$</span>
         <mat-error
             *ngIf="editPracticeForm.controls.miscExpense.touched && editPracticeForm.controls.miscExpense.invalid">
-            Misc expense is required
+            *Required
         </mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill" floatLabel="always" class="number-field">
         <mat-label>Misc Revenue</mat-label>
         <input matInput formControlName="miscRevenue" type="number" class="number-right">
-        <span matTextPrefix="$&nbsp;"></span>
+        <span matTextPrefix>$</span>
         <mat-error
             *ngIf="editPracticeForm.controls.miscRevenue.touched && editPracticeForm.controls.miscRevenue.invalid">
-            Misc eevenue is required
+            *Required
         </mat-error>
     </mat-form-field>
 </mat-dialog-content>
