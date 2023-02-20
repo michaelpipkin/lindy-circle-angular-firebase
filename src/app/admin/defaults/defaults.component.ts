@@ -17,27 +17,23 @@ export class DefaultsComponent {
     private defaults: DefaultsStore,
     private snackBar: MatSnackBar
   ) {
-    this.editDefaultsForm = this.fb.group({
-      doorPrice: [
-        this.defaults.getDefaultDoorPrice(),
-        [Validators.required, Validators.min(0)],
-      ],
-      punchCardPrice: [
-        this.defaults.getDefaultPunchCardCost(),
-        [Validators.required, Validators.min(0)],
-      ],
-      practiceCost: [
-        this.defaults.getDefaultPracticeCost(),
-        [Validators.required, Validators.min(0)],
-      ],
+    this.defaults.defaults$.subscribe((defaults) => {
+      this.editDefaultsForm = this.fb.group({
+        doorPrice: [0, [Validators.required, Validators.min(0)]],
+        punchCardPrice: [0, [Validators.required, Validators.min(0)]],
+        practiceCost: [0, [Validators.required, Validators.min(0)]],
+      });
     });
+    this.resetForm();
   }
 
   resetForm(): void {
-    this.editDefaultsForm.setValue({
-      doorPrice: this.defaults.getDefaultDoorPrice(),
-      punchCardPrice: this.defaults.getDefaultPunchCardCost(),
-      practiceCost: this.defaults.getDefaultPracticeCost(),
+    this.defaults.defaults$.subscribe((defaults) => {
+      this.editDefaultsForm.setValue({
+        doorPrice: !!defaults ? defaults.doorPrice : 0,
+        punchCardPrice: !!defaults ? defaults.punchCardPrice : 0,
+        practiceCost: !!defaults ? defaults.practiceCost : 0,
+      });
     });
   }
 
