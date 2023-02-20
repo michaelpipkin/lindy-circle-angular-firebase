@@ -19,9 +19,9 @@ export class ProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private auth: AngularFireAuth
+    private afAuth: AngularFireAuth
   ) {
-    this.auth.currentUser.then((user) => {
+    this.afAuth.currentUser.then((user) => {
       this.currentUser = user;
       this.emailForm = this.fb.group({
         email: [user.email, Validators.email],
