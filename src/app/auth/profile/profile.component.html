@@ -1,16 +1,28 @@
 <div id="profileContainer">
-    <h2>Edit User Profile</h2>
-    <form class="mt-2" [formGroup]="profileForm">
+    <h3 class="mt-2">Update Email Address</h3>
+    <form class="mt-2" [formGroup]="emailForm">
         <mat-form-field>
             <mat-label>Email Address</mat-label>
             <input matInput type="email" formControlName="email">
-            <mat-error *ngIf="profileForm.controls.email.touched && profileForm.controls.email.invalid">
+            <mat-error *ngIf="emailForm.controls.email.touched && emailForm.controls.email.invalid">
                 A valid email address is requred.
             </mat-error>
         </mat-form-field>
+        <div class="form-buttons">
+            <button type="button" mat-raised-button color="accent" [disabled]="currentUser.emailVerified"
+                (click)="verifyEmail()">{{currentUser.emailVerified ? 'Email Verified' : 'Verify Email'}}
+            </button>
+            <button type="submit" mat-raised-button color="primary"
+                [disabled]="emailForm.invalid || emailForm.controls.email.value === currentUser.email"
+                (click)="onSubmitEmail()">Update Email</button>
+        </div>
+    </form>
+    <h3 class="mt-2">Change Your Password</h3>
+    <form class="mt-2" [formGroup]="passwordForm">
         <mat-form-field>
             <mat-label>New Password</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+            <input matInput [type]="hidePassword ? 'password' : 'text'" autocomplete="new-password"
+                formControlName="password">
             <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
                 [attr.aria-pressed]="hidePassword">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -18,19 +30,20 @@
         </mat-form-field>
         <mat-form-field>
             <mat-label>Confirm Password</mat-label>
-            <input matInput [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword">
+            <input matInput [type]="hideConfirm ? 'password' : 'text'" autocomplete="new-password"
+                formControlName="confirmPassword">
             <button mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm" [attr.aria-label]="'Hide password'"
                 [attr.aria-pressed]="hideConfirm">
                 <mat-icon>{{hideConfirm ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
         </mat-form-field>
-        <div class="mat-error mat-mdc-form-field-error mt-n2" *ngIf="profileForm.errors?.['mismatch']">
+        <div class="mat-error mat-mdc-form-field-error mt-n2" *ngIf="passwordForm.errors?.['mismatch']">
             Passwords do not match.
         </div>
         <div class="form-buttons">
-            <button type="button" mat-raised-button color="accent" (click)="resetForm()">Reset</button>
-            <button type="submit" mat-raised-button color="primary" [disabled]="profileForm.invalid"
-                (click)="onSubmit()">Save</button>
+            <button type="submit" mat-raised-button color="primary"
+                [disabled]="passwordForm.invalid || passwordForm.controls.confirmPassword.value === ''"
+                (click)="onSubmitPassword()">Change Password</button>
         </div>
     </form>
 </div>

@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.defaults.init();
-    this.user.init();
   }
 
   logout(): void {

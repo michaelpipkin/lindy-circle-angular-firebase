@@ -20,8 +20,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.auth.app.then((app) => {
       const uiConfig = {
         signInOptions: [
-          EmailAuthProvider.PROVIDER_ID,
-          GoogleAuthProvider.PROVIDER_ID,
+          {
+            provider: EmailAuthProvider.PROVIDER_ID,
+            requireDisplayName: false,
+          },
+          {
+            provider: GoogleAuthProvider.PROVIDER_ID,
+            requireDisplayName: false,
+          },
         ],
         callbacks: {
           signInSuccessWithAuthResult: this.onLoginSuccess.bind(this),

@@ -9,8 +9,6 @@ import { UserRoles } from './user-roles';
   providedIn: 'root',
 })
 export class UserService {
-  private userSubject = new BehaviorSubject<firebase.User>(null);
-  currentUser$: Observable<firebase.User> = this.userSubject.asObservable();
   isLoggedIn$: Observable<boolean>;
   roles$: Observable<UserRoles>;
 
@@ -21,21 +19,7 @@ export class UserService {
     );
   }
 
-  init() {
-    this.auth.authState
-      .pipe(
-        map((user: firebase.User) => {
-          this.userSubject.next(user);
-        })
-      )
-      .subscribe();
-  }
-
   logout() {
     this.auth.signOut().finally(() => this.router.navigateByUrl('/login'));
-  }
-
-  getCurrentUser(): firebase.User {
-    return this.userSubject.getValue();
   }
 }
