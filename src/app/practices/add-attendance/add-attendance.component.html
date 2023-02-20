@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Check In Member</h1>
+<mat-dialog-content [formGroup]="newAttendanceForm">
+    <mat-form-field appearance="fill" color="primary" class="mb-3">
+        <mat-label>Member</mat-label>
+        <mat-select formControlName="member" (selectionChange)="onMemberChange($event)">
+            <mat-option *ngFor="let member of (members$ | async)" [value]="member">{{member.firstLastName}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" color="primary" class="mb-3">
+        <mat-label>Payment Type</mat-label>
+        <mat-select formControlName="paymentType" (selectionChange)="onPaymentTypeChange($event)">
+            <mat-option [value]="1">Cash</mat-option>
+            <mat-option [value]="2" [disabled]="!hasPunchCardAvailable">Punch Card</mat-option>
+            <mat-option [value]="0">None</mat-option>
+            <mat-option [value]="3">Other</mat-option>
+        </mat-select>
+        <mat-hint>{{punchesHint}}</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always" class="number-field">
+        <mat-label>Amount</mat-label>
+        <input matInput formControlName="paymentAmount" type="number" class="number-right">
+        <span matTextPrefix>$</span>
+        <mat-error
+            *ngIf="newAttendanceForm.controls.paymentAmount.touched && newAttendanceForm.controls.paymentAmount.invalid">
+            *Required
+        </mat-error>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="close()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="!newAttendanceForm.valid" (click)="onSubmit()">Save</button>
+</mat-dialog-actions>

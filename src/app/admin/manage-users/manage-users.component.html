@@ -1,0 +1,15 @@
+<div id="adminDiv">
+    <h5>Manage Admin Users</h5>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>User Email</mat-label>
+            <mat-select [(value)]="selectedUser">
+                <mat-option *ngFor="let user of users" [value]="user">{{user.email}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-slide-toggle class="ms-3" (change)="onAdminChange($event)"
+            [(checked)]="!!selectedUser && selectedUser.hasOwnProperty('customClaims') && selectedUser['customClaims']['admin']"
+            [disabled]="!selectedUser">Admin
+        </mat-slide-toggle>
+    </div>
+</div>

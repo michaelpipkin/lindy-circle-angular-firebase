@@ -1,0 +1,33 @@
+<h5 class="mt-2">Change Default Prices/Costs</h5>
+<form id="defaultsForm" class="mt-2" [formGroup]="editDefaultsForm">
+    <mat-form-field floatLabel="always">
+        <mat-label>Door Price</mat-label>
+        <input matInput type="number" class="number-right" formControlName="doorPrice">
+        <span matTextPrefix>$</span>
+        <mat-error *ngIf="editDefaultsForm.controls.doorPrice.touched && editDefaultsForm.controls.doorPrice.invalid">
+            A non-negative number is requred.
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field floatLabel="always">
+        <mat-label>Punch Card Price</mat-label>
+        <input matInput type="number" class="number-right" formControlName="punchCardPrice">
+        <span matTextPrefix>$</span>
+        <mat-error
+            *ngIf="editDefaultsForm.controls.punchCardPrice.touched && editDefaultsForm.controls.punchCardPrice.invalid">
+            A non-negative number is requred.
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field floatLabel="always">
+        <mat-label>Practice Cost</mat-label>
+        <input matInput type="number" class="number-right" formControlName="practiceCost">
+        <span matTextPrefix>$</span>
+        <mat-error
+            *ngIf="editDefaultsForm.controls.practiceCost.touched && editDefaultsForm.controls.practiceCost.invalid">
+            A non-negative number is requred.
+        </mat-error>
+    </mat-form-field>
+    <div class="form-buttons">
+        <button type="button" mat-raised-button color="accent" (click)="resetForm()">Reset</button>
+        <button type="submit" mat-raised-button color="primary" (click)="onSubmit()">Save</button>
+    </div>
+</form>

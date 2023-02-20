@@ -1,0 +1,65 @@
+<div>
+    <div class="header mt-2">
+        <h2 class="title">Practices</h2>
+        <ng-container *ngIf="(user.roles$ | async) let roles">
+            <button mat-mini-fab *ngIf="roles.admin" color="accent" (click)="addPractice()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </ng-container>
+    </div>
+    <div class="header">
+        <mat-form-field appearance="fill" class="datepicker me-2">
+            <mat-label>Start date</mat-label>
+            <input matInput [(ngModel)]="startDate" [matDatepicker]="startDatepicker" (dateInput)="filterPractices()"
+                (dateChange)="filterPractices()">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="startDatepicker"></mat-datepicker-toggle>
+            <button *ngIf="startDate" matSuffix mat-icon-button aria-label="Clear" (click)="clearStartDate()">
+                <mat-icon>close</mat-icon>
+            </button>
+            <mat-datepicker #startDatepicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="datepicker">
+            <mat-label>End date</mat-label>
+            <input matInput [(ngModel)]="endDate" [matDatepicker]="endDatePicker" (dateInput)="filterPractices()"
+                (dateChange)="filterPractices()">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <div class="mat-elevation-z8 p-3">
+        <div class="scrollable-table">
+            <table class="clickable-table" mat-table matSort [dataSource]="filteredPractices$ | async"
+                (matSortChange)="sortPractices($event)" [matTooltip]="tableTooltip">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef>Id</th>
+                    <td mat-cell *matCellDef="let practice">{{practice.id}}</td>
+                </ng-container>
+                <ng-container matColumnDef="practiceNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                    <td mat-cell *matCellDef="let practice">{{practice.practiceNumber}}</td>
+                </ng-container>
+                <ng-container matColumnDef="practiceDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                    <td mat-cell *matCellDef="let practice">{{practice.practiceDate.toDate() | date}}</td>
+                </ng-container>
+                <ng-container matColumnDef="practiceTopic">
+                    <th mat-header-cell *matHeaderCellDef>Topic</th>
+                    <td class="topic" mat-cell *matCellDef="let practice">{{practice.practiceTopic}}</td>
+                </ng-container>
+                <ng-container matColumnDef="attendanceCount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Attendees</th>
+                    <td mat-cell *matCellDef="let practice">{{practice.attendanceCount}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+                <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="onRowClick(myRowData)">
+                </tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [colSpan]="columnsToDisplay.length">No practices found for the selected dates.
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

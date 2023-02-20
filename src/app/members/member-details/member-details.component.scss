@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.infoLabel {
+  display: inline-block;
+  width: 110px;
+}
+
+.topic {
+  max-width: 300px;
+}
+
+.scrollable-table {
+  overflow-y: auto;
+  height: 600px;
+}
