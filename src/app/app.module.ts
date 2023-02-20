@@ -1,9 +1,10 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthInterceptor } from '@services/auth.interceptor';
 import { LoadingService } from '@shared/loading/loading.service';
 import { environment } from 'src/environments/environment';
 import { DefaultsComponent } from './admin/defaults/defaults.component';
@@ -101,6 +102,11 @@ import {
     {
       provide: USE_FUNCTIONS_EMULATOR,
       useValue: environment.useEmulators ? ['localhost', 5001] : undefined,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
     },
     LoadingService,
   ],

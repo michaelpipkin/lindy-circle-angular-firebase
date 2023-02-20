@@ -1,6 +1,7 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AuthTokenService } from '@services/auth-token.service';
 import { importData } from '@services/db-utils';
 import { DefaultsStore } from '@services/defaults.store';
 import { UserService } from '@services/user.service';
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
   constructor(
     private db: AngularFirestore,
     public user: UserService,
+    private token: AuthTokenService,
     private defaults: DefaultsStore
   ) {}
 

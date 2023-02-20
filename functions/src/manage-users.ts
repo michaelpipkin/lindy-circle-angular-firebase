@@ -1,6 +1,5 @@
+import { getUserCredentialsMiddleware } from './auth.middleware';
 import { auth } from './init';
-//import * as firebase from 'firebase/auth';
-//import * as functions from 'firebase-functions';
 import express = require('express');
 import bodyParser = require('body-parser');
 import cors = require('cors');
@@ -8,12 +7,17 @@ import cors = require('cors');
 export const manageUsersApp = express();
 manageUsersApp.use(bodyParser.json());
 manageUsersApp.use(cors({ origin: true }));
+manageUsersApp.use(getUserCredentialsMiddleware);
 
 manageUsersApp.get('/', async (req, res) => {
-  let users: any = [];
+  let users = [];
   try {
-    await auth.listUsers().then((userRecords: any) => {
-      userRecords.users.forEach((user: any) => {
+    if (!(req['uid'] && req['admin'])) {
+      res.status(403).json('Access denied');
+      return;
+    }
+    await auth.listUsers().then((userRecords) => {
+      userRecords.users.forEach((user) => {
         users.push(user);
       });
     });
@@ -25,6 +29,10 @@ manageUsersApp.get('/', async (req, res) => {
 
 manageUsersApp.post('/:uid', async (req, res) => {
   try {
+    if (!req['admin']) {
+      res.status(403).json('Access denied');
+      return;
+    }
     const admin = req.body.admin;
     await auth.setCustomUserClaims(req.params.uid, { admin: admin });
     res.status(200).json({ message: 'User role updated.' });

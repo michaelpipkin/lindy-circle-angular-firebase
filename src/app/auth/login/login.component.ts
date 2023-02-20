@@ -14,10 +14,10 @@ import GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
 export class LoginComponent implements OnInit, OnDestroy {
   ui: firebaseui.auth.AuthUI;
 
-  constructor(private auth: AngularFireAuth, private router: Router) {}
+  constructor(private afAuth: AngularFireAuth, private router: Router) {}
 
   ngOnInit(): void {
-    this.auth.app.then((app) => {
+    this.afAuth.app.then((app) => {
       const uiConfig = {
         signInOptions: [
           {
