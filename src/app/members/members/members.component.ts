@@ -17,7 +17,6 @@ import { AddMemberComponent } from '../add-member/add-member.component';
 export class MembersComponent implements OnInit {
   members$: Observable<Member[]>;
   filteredMembers$: Observable<Member[]>;
-  tableTooltip: string = '';
   activeOnly: boolean = true;
   nameFilter: string = '';
   sortField: string = 'lastName';
@@ -26,7 +25,6 @@ export class MembersComponent implements OnInit {
     'firstName',
     'lastName',
     'activeText',
-    'totalAttendance',
     'punchesRemaining',
   ];
 
@@ -67,9 +65,6 @@ export class MembersComponent implements OnInit {
             this.sortAsc
           );
         }
-        this.tableTooltip = `${filteredMembers.length} ${
-          this.activeOnly ? ' active' : ''
-        } members`;
         return filteredMembers;
       })
     );
