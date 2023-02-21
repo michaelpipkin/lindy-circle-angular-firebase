@@ -9,7 +9,7 @@
         </mat-form-field>
         <mat-slide-toggle class="ms-3" (change)="onAdminChange($event)"
             [(checked)]="!!selectedUser && selectedUser.hasOwnProperty('customClaims') && selectedUser['customClaims']['admin']"
-            [disabled]="!selectedUser">Admin
+            [disabled]="!selectedUser || (selectedUser['uid'] === currentUser['uid'])">Admin
         </mat-slide-toggle>
     </div>
 </div>
