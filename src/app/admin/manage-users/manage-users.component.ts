@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as firebase from 'firebase/auth';
-import { catchError, map, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -14,7 +15,12 @@ import { environment } from 'src/environments/environment';
 export class ManageUsersComponent implements OnInit {
   users: firebase.User[];
   selectedUser: firebase.User;
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
+  currentUser: firebase.User;
+  constructor(
+    private http: HttpClient,
+    private snackBar: MatSnackBar,
+    private afAuth: AngularFireAuth
+  ) {}
 
   ngOnInit(): void {
     this.http
@@ -30,6 +36,9 @@ export class ManageUsersComponent implements OnInit {
       .subscribe((users: firebase.User[]) => {
         this.users = users;
       });
+    this.afAuth.currentUser.then((user) => {
+      this.currentUser = user;
+    });
   }
 
   onAdminChange(e: MatSlideToggleChange) {
