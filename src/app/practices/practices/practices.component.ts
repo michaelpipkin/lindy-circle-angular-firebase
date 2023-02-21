@@ -17,7 +17,6 @@ import { AddPracticeComponent } from '../add-practice/add-practice.component';
 export class PracticesComponent implements OnInit {
   practices$: Observable<Practice[]>;
   filteredPractices$: Observable<Practice[]>;
-  tableTooltip: string = '';
   startDate: Date | null;
   endDate: Date | null;
   sortField: string = 'practiceNumber';
@@ -61,7 +60,6 @@ export class PracticesComponent implements OnInit {
             this.sortAsc
           );
         }
-        this.tableTooltip = `${filteredPractices.length} practices`;
         return filteredPractices;
       })
     );

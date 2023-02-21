@@ -11,23 +11,12 @@ service cloud.firestore {
       request.auth.token.admin;
     }
 
-    function isNonEmptyString(fieldName) {
-      return request.resource.data[fieldName] is string &&
-        request.resource.data[fieldName].size() > 0;
-    }
-
-    function isValidMember() {
-      return isNonEmptyString('firstName')
-        && isNonEmptyString('lastName');
+    match /{document=**} {
+      allow read: if isAuthenticated();
     }
 
     match /{document=**} {
-      allow read, write: if isAuthenticated();
-    }
-
-    match /members/{memberId} {
-      allow create, update: if isAdmin() && isValidMember();
-      allow delete: if isAdmin();
+      allow write: if isAdmin();
     }
   }
 }
