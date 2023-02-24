@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 import { DefaultsStore } from '@services/defaults.store';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, map, merge, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-defaults',
@@ -15,7 +16,8 @@ export class DefaultsComponent {
   constructor(
     private fb: FormBuilder,
     private defaults: DefaultsStore,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute
   ) {
     this.defaults.defaults$.subscribe((defaults) => {
       this.editDefaultsForm = this.fb.group({
@@ -28,11 +30,19 @@ export class DefaultsComponent {
   }
 
   resetForm(): void {
-    this.defaults.defaults$.subscribe((defaults) => {
+    const pathFromAdmin = this.route.pathFromRoot;
+    let defaultsSub$ = pathFromAdmin[1].data.pipe(
+      map((res) => {
+        return res.defaultValues$;
+      })
+    );
+    console.log(defaultsSub$);
+    defaultsSub$.subscribe((defaults) => {
+      console.log(defaults);
       this.editDefaultsForm.setValue({
-        doorPrice: !!defaults ? defaults.doorPrice : 0,
-        punchCardPrice: !!defaults ? defaults.punchCardPrice : 0,
-        practiceCost: !!defaults ? defaults.practiceCost : 0,
+        doorPrice: defaults['doorPrice'],
+        punchCardPrice: defaults['punchCardPrice'],
+        practiceCost: defaults['practiceCost'],
       });
     });
   }

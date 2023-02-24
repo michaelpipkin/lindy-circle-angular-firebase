@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DefaultsResolver } from '@services/defaults.resolver';
 import { AdminMainComponent } from './admin/main/admin-main.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ProfileComponent } from './auth/profile/profile.component';
@@ -54,6 +55,9 @@ const routes: Routes = [
     path: 'settings',
     component: AdminMainComponent,
     ...canActivate(adminGuard),
+    resolve: {
+      defaultValues$: DefaultsResolver,
+    },
   },
   { path: '**', redirectTo: '/members' },
 ];

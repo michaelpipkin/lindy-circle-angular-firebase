@@ -75,6 +75,14 @@ export class PracticeService {
       );
   }
 
+  isPracticeNumberValid(practiceNumber: number): boolean {
+    return (
+      this.db.collection('practices', (ref) =>
+        ref.where('practiceNumber', '==', practiceNumber)
+      ).doc === null
+    );
+  }
+
   addPractice(practice: Partial<Practice>): Observable<any> {
     return this.db
       .collection('practices', (ref) =>
