@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Practice } from '@models/practice';
 import { PracticeService } from '@services/practice.service';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import {
   AbstractControl,
+  AsyncValidatorFn,
   FormBuilder,
   FormGroup,
   ValidationErrors,
@@ -32,7 +33,8 @@ export class EditPracticeComponent {
     this.editPracticeForm = this.fb.group({
       practiceNumber: [
         this.practice.practiceNumber,
-        [Validators.required, this.practiceNumberValidator()],
+        Validators.required,
+        this.practiceNumberValidator$(),
       ],
       practiceDate: [this.practice.practiceDate.toDate(), Validators.required],
       practiceTopic: [this.practice.practiceTopic, Validators.required],
@@ -55,17 +57,20 @@ export class EditPracticeComponent {
     return this.editPracticeForm.controls;
   }
 
-  practiceNumberValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value;
+  practiceNumberValidator$(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      const value = +control.value;
       if (!value) {
-        return null;
+        return of(null);
       }
       if (value == this.practice.practiceNumber) {
-        return null;
+        return of(null);
       }
-      const valid = this.practiceService.isPracticeNumberValid(value);
-      return valid ? null : { invalidNumber: true };
+      return this.practiceService.isPracticeNumberValid(value).pipe(
+        map((res) => {
+          return res ? null : { invalidNumber: true };
+        })
+      );
     };
   }
 
