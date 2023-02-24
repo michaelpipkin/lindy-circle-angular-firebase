@@ -75,12 +75,17 @@ export class PracticeService {
       );
   }
 
-  isPracticeNumberValid(practiceNumber: number): boolean {
-    return (
-      this.db.collection('practices', (ref) =>
+  isPracticeNumberValid(practiceNumber: number): Observable<boolean> {
+    return this.db
+      .collection<Practice>('practices', (ref) =>
         ref.where('practiceNumber', '==', practiceNumber)
-      ).doc === null
-    );
+      )
+      .get()
+      .pipe(
+        map((res) => {
+          return res.empty;
+        })
+      );
   }
 
   addPractice(practice: Partial<Practice>): Observable<any> {
