@@ -1,10 +1,17 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Practice } from '@models/practice';
 import { PracticeService } from '@services/practice.service';
 import { catchError, tap, throwError } from 'rxjs';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-edit-practice',
@@ -23,6 +30,10 @@ export class EditPracticeComponent {
     @Inject(MAT_DIALOG_DATA) public practice: Practice
   ) {
     this.editPracticeForm = this.fb.group({
+      practiceNumber: [
+        this.practice.practiceNumber,
+        [Validators.required, this.practiceNumberValidator()],
+      ],
       practiceDate: [this.practice.practiceDate.toDate(), Validators.required],
       practiceTopic: [this.practice.practiceTopic, Validators.required],
       practiceCost: [
@@ -38,6 +49,24 @@ export class EditPracticeComponent {
         [Validators.required, Validators.min(0)],
       ],
     });
+  }
+
+  get f() {
+    return this.editPracticeForm.controls;
+  }
+
+  practiceNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (!value) {
+        return null;
+      }
+      if (value == this.practice.practiceNumber) {
+        return null;
+      }
+      const valid = this.practiceService.isPracticeNumberValid(value);
+      return valid ? null : { invalidNumber: true };
+    };
   }
 
   close(): void {

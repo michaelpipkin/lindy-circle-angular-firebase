@@ -1,13 +1,23 @@
 <h1 mat-dialog-title>Edit Practice</h1>
 <mat-dialog-content [formGroup]="editPracticeForm">
+    <mat-form-field appearance="fill" class="me-2">
+        <mat-label>Practice Number</mat-label>
+        <input matInput formControlName="practiceNumber">
+        <mat-error *ngIf="f.practiceNumber.touched && !!f.practiceNumber.errors && f.practiceNumber.errors['required']">
+            *Required
+        </mat-error>
+        <mat-error
+            *ngIf="f.practiceNumber.touched && !!f.practiceNumber.errors && f.practiceNumber.errors['invalidNumber']">
+            Practice num already used
+        </mat-error>
+    </mat-form-field>
     <mat-form-field appearance="fill" class="datepicker">
         <mat-label>Practice Date</mat-label>
         <input matInput [min]="minDate" formControlName="practiceDate" [matDatepicker]="practiceDatePicker">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="practiceDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #practiceDatePicker></mat-datepicker>
-        <mat-error
-            *ngIf="editPracticeForm.controls.practiceDate.touched && editPracticeForm.controls.practiceDate.invalid">
+        <mat-error *ngIf="f.practiceDate.touched && f.practiceDate.invalid">
             *Required
         </mat-error>
     </mat-form-field>
@@ -15,8 +25,7 @@
     <mat-form-field appearance="fill" class="practice-topic">
         <mat-label>Practice Topic</mat-label>
         <input matInput formControlName="practiceTopic">
-        <mat-error
-            *ngIf="editPracticeForm.controls.practiceTopic.touched && editPracticeForm.controls.practiceTopic.invalid">
+        <mat-error *ngIf="f.practiceTopic.touched && f.practiceTopic.invalid">
             *Required
         </mat-error>
     </mat-form-field>
@@ -24,8 +33,7 @@
         <mat-label>Practice Cost</mat-label>
         <input matInput formControlName="practiceCost" type="number" class="number-right">
         <span matTextPrefix>$</span>
-        <mat-error
-            *ngIf="editPracticeForm.controls.practiceCost.touched && editPracticeForm.controls.practiceCost.invalid">
+        <mat-error *ngIf="f.practiceCost.touched && f.practiceCost.invalid">
             *Required
         </mat-error>
     </mat-form-field>
@@ -33,8 +41,7 @@
         <mat-label>Misc Expense</mat-label>
         <input matInput formControlName="miscExpense" type="number" class="number-right">
         <span matTextPrefix>$</span>
-        <mat-error
-            *ngIf="editPracticeForm.controls.miscExpense.touched && editPracticeForm.controls.miscExpense.invalid">
+        <mat-error *ngIf="f.miscExpense.touched && f.miscExpense.invalid">
             *Required
         </mat-error>
     </mat-form-field>
@@ -42,8 +49,7 @@
         <mat-label>Misc Revenue</mat-label>
         <input matInput formControlName="miscRevenue" type="number" class="number-right">
         <span matTextPrefix>$</span>
-        <mat-error
-            *ngIf="editPracticeForm.controls.miscRevenue.touched && editPracticeForm.controls.miscRevenue.invalid">
+        <mat-error *ngIf="f.miscRevenue.touched && f.miscRevenue.invalid">
             *Required
         </mat-error>
     </mat-form-field>
