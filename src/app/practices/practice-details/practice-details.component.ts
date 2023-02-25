@@ -93,7 +93,7 @@ export class PracticeDetailsComponent implements OnInit {
   editPractice(practice: Practice): void {
     const dialogConfig: MatDialogConfig = {};
     dialogConfig.data = practice;
-    dialogConfig.width = '500px';
+    dialogConfig.width = '520px';
     this.dialog.open(EditPracticeComponent, dialogConfig);
   }
 

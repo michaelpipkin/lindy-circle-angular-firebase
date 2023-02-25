@@ -17,7 +17,7 @@ import { catchError, tap, throwError } from 'rxjs';
 export class AddPunchCardComponent {
   newPunchCardForm = this.fb.group({
     purchaseDate: [new Date(), Validators.required],
-    purchaseAmount: [0.0, Validators.required],
+    purchaseAmount: [0.0, [Validators.required, Validators.min(0)]],
   });
   minDate: Date = new Date(1900, 0, 1);
 
@@ -32,6 +32,10 @@ export class AddPunchCardComponent {
     this.newPunchCardForm.patchValue({
       purchaseAmount: this.defaults.getDefaultPunchCardCost(),
     });
+  }
+
+  get f() {
+    return this.newPunchCardForm.controls;
   }
 
   onSubmit(): void {

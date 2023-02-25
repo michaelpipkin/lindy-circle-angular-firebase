@@ -48,6 +48,10 @@ export class AddAttendanceComponent implements OnInit {
     this.defaultAttendanceCost = this.defaults.getDefaultDoorPrice();
   }
 
+  public get f() {
+    return this.newAttendanceForm.controls;
+  }
+
   onMemberChange(e: MatSelectChange) {
     const punchesRemaining = e.value['punchesRemaining'];
     if (punchesRemaining > 0) {

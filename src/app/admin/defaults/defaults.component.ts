@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultsStore } from '@services/defaults.store';
 import { catchError, map, merge, tap, throwError } from 'rxjs';
 
@@ -17,32 +17,47 @@ export class DefaultsComponent {
     private fb: FormBuilder,
     private defaults: DefaultsStore,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
-    this.defaults.defaults$.subscribe((defaults) => {
-      this.editDefaultsForm = this.fb.group({
-        doorPrice: [0, [Validators.required, Validators.min(0)]],
-        punchCardPrice: [0, [Validators.required, Validators.min(0)]],
-        practiceCost: [0, [Validators.required, Validators.min(0)]],
-      });
+    this.editDefaultsForm = this.fb.group({
+      doorPrice: [0, [Validators.required, Validators.min(0)]],
+      punchCardPrice: [0, [Validators.required, Validators.min(0)]],
+      practiceCost: [0, [Validators.required, Validators.min(0)]],
     });
-    this.resetForm();
-  }
-
-  resetForm(): void {
-    const pathFromAdmin = this.route.pathFromRoot;
-    let defaultsSub$ = pathFromAdmin[1].data.pipe(
+    const pathFromAdmin = this.route.pathFromRoot[1];
+    let defaultsSub$ = pathFromAdmin.data.pipe(
       map((res) => {
         return res.defaultValues$;
       })
     );
-    console.log(defaultsSub$);
-    defaultsSub$.subscribe((defaults) => {
-      console.log(defaults);
+    defaultsSub$
+      .pipe(
+        map((defaultValues) => {
+          if (!defaultValues) {
+            this.resetForm();
+          } else {
+            this.editDefaultsForm.setValue({
+              doorPrice: defaultValues['doorPrice'],
+              punchCardPrice: defaultValues['punchCardPrice'],
+              practiceCost: defaultValues['practiceCost'],
+            });
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  public get f() {
+    return this.editDefaultsForm.controls;
+  }
+
+  resetForm(): void {
+    this.defaults.defaults$.subscribe((defaultValues) => {
       this.editDefaultsForm.setValue({
-        doorPrice: defaults['doorPrice'],
-        punchCardPrice: defaults['punchCardPrice'],
-        practiceCost: defaults['practiceCost'],
+        doorPrice: defaultValues['doorPrice'],
+        punchCardPrice: defaultValues['punchCardPrice'],
+        practiceCost: defaultValues['practiceCost'],
       });
     });
   }

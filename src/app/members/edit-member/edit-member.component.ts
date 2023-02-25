@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Member } from '@models/member';
 import { MemberService } from '@services/member.service';
-import { LoadingService } from '@shared/loading/loading.service';
 import { catchError, tap, throwError } from 'rxjs';
 
 @Component({
@@ -19,7 +18,6 @@ export class EditMemberComponent {
     private dialogRef: MatDialogRef<EditMemberComponent>,
     private fb: FormBuilder,
     private memberService: MemberService,
-    private loading: LoadingService,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public member: Member
   ) {
@@ -28,6 +26,10 @@ export class EditMemberComponent {
       lastName: [this.member.lastName, Validators.required],
       active: this.member.active,
     });
+  }
+
+  public get f() {
+    return this.editMemberForm.controls;
   }
 
   close(): void {

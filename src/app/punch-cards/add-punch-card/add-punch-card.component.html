@@ -6,8 +6,7 @@
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="purchaseDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #purchaseDatePicker></mat-datepicker>
-        <mat-error
-            *ngIf="newPunchCardForm.controls.purchaseDate.touched && newPunchCardForm.controls.purchaseDate.invalid">
+        <mat-error *ngIf="f.purchaseDate.errors?.['required']">
             *Required
         </mat-error>
     </mat-form-field>
@@ -15,9 +14,11 @@
         <mat-label>Amount</mat-label>
         <input matInput formControlName="purchaseAmount" type="number" class="number-right">
         <span matTextPrefix>$</span>
-        <mat-error
-            *ngIf="newPunchCardForm.controls.purchaseAmount.touched && newPunchCardForm.controls.purchaseAmount.invalid">
+        <mat-error *ngIf="f.purchaseAmount.errors?.['required']">
             *Required
+        </mat-error>
+        <mat-error *ngIf="f.purchaseAmount.errors?.['min']">
+            Amount cannot be negative
         </mat-error>
     </mat-form-field>
 </mat-dialog-content>

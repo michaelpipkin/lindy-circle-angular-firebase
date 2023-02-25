@@ -35,6 +35,10 @@ export class AddPracticeComponent {
     });
   }
 
+  public get f() {
+    return this.newPracticeForm.controls;
+  }
+
   onSubmit(): void {
     this.newPracticeForm.disable();
     const val = this.newPracticeForm.value;
