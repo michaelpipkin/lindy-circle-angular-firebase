@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Member } from '@models/member';
 import { PunchCard } from '@models/punch-card';
-import { DocumentReference, increment } from 'firebase/firestore';
-import { from, map, Observable, tap } from 'rxjs';
+import { increment } from 'firebase/firestore';
+import { from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
