@@ -4,8 +4,8 @@
         <mat-form-field>
             <mat-label>Email Address</mat-label>
             <input matInput type="email" formControlName="email">
-            <mat-error *ngIf="emailForm.controls.email.touched && emailForm.controls.email.invalid">
-                A valid email address is requred.
+            <mat-error *ngIf="fEmail.email.errors?.['email']">
+                Invalid email address
             </mat-error>
         </mat-form-field>
         <div class="form-buttons">
@@ -13,7 +13,7 @@
                 (click)="verifyEmail()">{{currentUser.emailVerified ? 'Email Verified' : 'Verify Email'}}
             </button>
             <button type="submit" mat-raised-button color="primary"
-                [disabled]="emailForm.invalid || emailForm.controls.email.value === currentUser.email"
+                [disabled]="emailForm.invalid || fEmail.email.value === currentUser.email || fEmail.email.value === ''"
                 (click)="onSubmitEmail()">Update Email</button>
         </div>
     </form>

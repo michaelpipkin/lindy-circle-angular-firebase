@@ -5,6 +5,9 @@
         <mat-select formControlName="member" (selectionChange)="onMemberChange($event)">
             <mat-option *ngFor="let member of (members$ | async)" [value]="member">{{member.firstLastName}}</mat-option>
         </mat-select>
+        <mat-error *ngIf="f.member.errors?.['required']">
+            *Required
+        </mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill" color="primary" class="mb-3">
         <mat-label>Payment Type</mat-label>
@@ -20,9 +23,11 @@
         <mat-label>Amount</mat-label>
         <input matInput formControlName="paymentAmount" type="number" class="number-right">
         <span matTextPrefix>$</span>
-        <mat-error
-            *ngIf="newAttendanceForm.controls.paymentAmount.touched && newAttendanceForm.controls.paymentAmount.invalid">
+        <mat-error *ngIf="f.paymentAmount.errors?.['required']">
             *Required
+        </mat-error>
+        <mat-error *ngIf="f.paymentAmount.errors?.['min']">
+            Payment amount cannot be negative
         </mat-error>
     </mat-form-field>
 </mat-dialog-content>

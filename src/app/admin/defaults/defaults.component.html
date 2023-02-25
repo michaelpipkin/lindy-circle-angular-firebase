@@ -4,26 +4,33 @@
         <mat-label>Door Price</mat-label>
         <input matInput type="number" class="number-right" formControlName="doorPrice">
         <span matTextPrefix>$</span>
-        <mat-error *ngIf="editDefaultsForm.controls.doorPrice.touched && editDefaultsForm.controls.doorPrice.invalid">
-            A non-negative number is requred.
+        <mat-error *ngIf="f.doorPrice.errors?.['required']">
+            *Required
+        </mat-error>
+        <mat-error *ngIf="f.doorPrice.errors?.['min']">
+            Door price cannot be negative
         </mat-error>
     </mat-form-field>
     <mat-form-field floatLabel="always">
         <mat-label>Punch Card Price</mat-label>
         <input matInput type="number" class="number-right" formControlName="punchCardPrice">
         <span matTextPrefix>$</span>
-        <mat-error
-            *ngIf="editDefaultsForm.controls.punchCardPrice.touched && editDefaultsForm.controls.punchCardPrice.invalid">
-            A non-negative number is requred.
+        <mat-error *ngIf="f.punchCardPrice.errors?.['required']">
+            *Required
+        </mat-error>
+        <mat-error *ngIf="f.punchCardPrice.errors?.['min']">
+            Punch card price cannot be negative
         </mat-error>
     </mat-form-field>
     <mat-form-field floatLabel="always">
         <mat-label>Practice Cost</mat-label>
         <input matInput type="number" class="number-right" formControlName="practiceCost">
         <span matTextPrefix>$</span>
-        <mat-error
-            *ngIf="editDefaultsForm.controls.practiceCost.touched && editDefaultsForm.controls.practiceCost.invalid">
-            A non-negative number is requred.
+        <mat-error *ngIf="f.practiceCost.errors?.['required']">
+            *Required
+        </mat-error>
+        <mat-error *ngIf="f.practiceCost.errors?.['min']">
+            Practice cost cannot be negative
         </mat-error>
     </mat-form-field>
     <div class="form-buttons">

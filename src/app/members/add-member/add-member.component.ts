@@ -24,6 +24,10 @@ export class AddMemberComponent {
     private snackBar: MatSnackBar
   ) {}
 
+  public get f() {
+    return this.newMemberForm.controls;
+  }
+
   onSubmit(): void {
     this.newMemberForm.disable();
     const val = this.newMemberForm.value;

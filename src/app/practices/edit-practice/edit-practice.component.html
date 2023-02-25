@@ -3,11 +3,10 @@
     <mat-form-field appearance="fill" class="me-2">
         <mat-label>Practice Number</mat-label>
         <input matInput formControlName="practiceNumber">
-        <mat-error *ngIf="f.practiceNumber.touched && !!f.practiceNumber.errors && f.practiceNumber.errors['required']">
+        <mat-error *ngIf="f.practiceNumber.errors?.['required']">
             *Required
         </mat-error>
-        <mat-error
-            *ngIf="f.practiceNumber.touched && !!f.practiceNumber.errors && f.practiceNumber.errors['invalidNumber']">
+        <mat-error *ngIf="f.practiceNumber.errors?.['invalidNumber']">
             Practice num already used
         </mat-error>
     </mat-form-field>
@@ -17,7 +16,7 @@
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="practiceDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #practiceDatePicker></mat-datepicker>
-        <mat-error *ngIf="f.practiceDate.touched && f.practiceDate.invalid">
+        <mat-error *ngIf="f.practiceDate.errors?.['required']">
             *Required
         </mat-error>
     </mat-form-field>
@@ -25,32 +24,41 @@
     <mat-form-field appearance="fill" class="practice-topic">
         <mat-label>Practice Topic</mat-label>
         <input matInput formControlName="practiceTopic">
-        <mat-error *ngIf="f.practiceTopic.touched && f.practiceTopic.invalid">
+        <mat-error *ngIf="f.practiceTopic.errors?.['required']">
             *Required
         </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2">
+    <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2 mb-3">
         <mat-label>Practice Cost</mat-label>
         <input matInput formControlName="practiceCost" type="number" class="number-right">
         <span matTextPrefix>$</span>
-        <mat-error *ngIf="f.practiceCost.touched && f.practiceCost.invalid">
+        <mat-error *ngIf="f.practiceCost.errors?.['required']">
             *Required
         </mat-error>
+        <mat-error *ngIf="f.practiceCost.errors?.['min']">
+            Practice cost cannot be negative
+        </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2">
+    <mat-form-field appearance="fill" floatLabel="always" class="number-field me-2 mb-3">
         <mat-label>Misc Expense</mat-label>
         <input matInput formControlName="miscExpense" type="number" class="number-right">
         <span matTextPrefix>$</span>
-        <mat-error *ngIf="f.miscExpense.touched && f.miscExpense.invalid">
+        <mat-error *ngIf="f.miscExpense.errors?.['required']">
             *Required
         </mat-error>
+        <mat-error *ngIf="f.miscExpense.errors?.['min']">
+            Misc expense cannot be negative
+        </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="fill" floatLabel="always" class="number-field">
+    <mat-form-field appearance="fill" floatLabel="always" class="number-field mb-3">
         <mat-label>Misc Revenue</mat-label>
         <input matInput formControlName="miscRevenue" type="number" class="number-right">
         <span matTextPrefix>$</span>
-        <mat-error *ngIf="f.miscRevenue.touched && f.miscRevenue.invalid">
+        <mat-error *ngIf="f.miscRevenue.errors?.['required']">
             *Required
+        </mat-error>
+        <mat-error *ngIf="f.miscRevenue.errors?.['min']">
+            Misc revenue cannot be negative
         </mat-error>
     </mat-form-field>
 </mat-dialog-content>

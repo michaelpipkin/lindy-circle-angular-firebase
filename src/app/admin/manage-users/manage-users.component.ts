@@ -42,7 +42,6 @@ export class ManageUsersComponent implements OnInit {
   }
 
   onAdminChange(e: MatSlideToggleChange) {
-    console.log(e, this.selectedUser);
     this.http
       .post(`${environment.api.manageUsers}/${this.selectedUser.uid}`, {
         admin: e.checked,

@@ -36,6 +36,14 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  get fEmail() {
+    return this.emailForm.controls;
+  }
+
+  get fPass() {
+    return this.passwordForm.controls;
+  }
+
   passwordMatchValidator(g: FormGroup) {
     return g.get('password').value === g.get('confirmPassword').value
       ? null

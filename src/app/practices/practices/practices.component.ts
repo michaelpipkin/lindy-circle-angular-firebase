@@ -95,7 +95,7 @@ export class PracticesComponent implements OnInit {
 
   addPractice(): void {
     this.dialog.open(AddPracticeComponent, {
-      width: '500px',
+      width: '520px',
     });
   }
 }

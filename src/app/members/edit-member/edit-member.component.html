@@ -3,14 +3,14 @@
     <mat-form-field>
         <mat-label>First Name</mat-label>
         <input matInput formControlName="firstName">
-        <mat-error *ngIf="editMemberForm.controls.firstName.touched && editMemberForm.controls.firstName.invalid">
+        <mat-error *ngIf="f.firstName.errors?.['required']">
             *Required
         </mat-error>
     </mat-form-field>
     <mat-form-field>
         <mat-label>Last Name</mat-label>
         <input matInput formControlName="lastName">
-        <mat-error *ngIf="editMemberForm.controls.lastName.touched && editMemberForm.controls.lastName.invalid">
+        <mat-error *ngIf="f.lastName.errors?.['required']">
             *Required
         </mat-error>
     </mat-form-field>
