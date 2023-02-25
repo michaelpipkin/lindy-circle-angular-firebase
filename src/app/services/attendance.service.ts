@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Attendance, paymentType } from '@models/attendance';
 import { Member } from '@models/member';
-import { Practice } from '@models/practice';
-import { PunchCard } from '@models/punch-card';
 import { increment } from 'firebase/firestore';
 import { concatMap, from, map, Observable } from 'rxjs';
 
