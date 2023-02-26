@@ -34,7 +34,6 @@ const routes: Routes = [
   {
     path: 'members',
     component: MembersComponent,
-    ...canActivate(authGuard),
   },
   {
     path: 'members/:id',
@@ -44,7 +43,6 @@ const routes: Routes = [
   {
     path: 'practices',
     component: PracticesComponent,
-    ...canActivate(authGuard),
   },
   {
     path: 'practices/:id',

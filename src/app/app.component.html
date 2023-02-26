@@ -1,6 +1,6 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav #start (click)="start.close()">
-    <mat-nav-list *ngIf="user.isLoggedIn$ | async">
+    <mat-nav-list>
       <a mat-list-item routerLink="members">
         <mat-icon>groups</mat-icon>
         <span>Members</span>
@@ -21,21 +21,17 @@
           </a>
         </ng-container>
       </ng-container>
-      <a mat-list-item routerLink="profile">
-        <mat-icon>account_circle</mat-icon>
-        <span>Profile</span>
-      </a>
-      <a mat-list-item (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        <span>Log Out</span>
-      </a>
-    </mat-nav-list>
-    <mat-nav-list *ngIf="!(user.isLoggedIn$ | async)">
-      <a mat-list-item routerLink="/">
-        <mat-icon>account_circle</mat-icon>
-        <span>Register</span>
-      </a>
-      <a mat-list-item routerLink="login">
+      <ng-container *ngIf="user.isLoggedIn$ | async">
+        <a mat-list-item routerLink="profile">
+          <mat-icon>account_circle</mat-icon>
+          <span>Profile</span>
+        </a>
+        <a mat-list-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Log Out</span>
+        </a>
+      </ng-container>
+      <a *ngIf="!(user.isLoggedIn$ | async)" mat-list-item routerLink="login">
         <mat-icon>login</mat-icon>
         <span>Log In</span>
       </a>
