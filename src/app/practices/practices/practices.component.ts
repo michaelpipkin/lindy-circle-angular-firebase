@@ -48,11 +48,19 @@ export class PracticesComponent implements OnInit {
   filterPractices(): void {
     this.filteredPractices$ = this.practices$.pipe(
       map((practices: Practice[]) => {
-        let filteredPractices: Practice[] = practices.filter(
-          (practice: Practice) =>
-            practice.practiceDate.toDate() >= (this.startDate ?? 0) &&
-            practice.practiceDate.toDate() <= (this.endDate ?? new Date())
-        );
+        let filteredPractices: Practice[] = practices;
+        if (this.startDate !== undefined && this.startDate !== null) {
+          filteredPractices = filteredPractices.filter(
+            (practice: Practice) =>
+              practice.practiceDate.toDate() >= this.startDate
+          );
+        }
+        if (this.endDate !== undefined && this.endDate !== null) {
+          filteredPractices = filteredPractices.filter(
+            (practice: Practice) =>
+              practice.practiceDate.toDate() <= this.endDate
+          );
+        }
         if (filteredPractices.length > 0) {
           filteredPractices = this.sorter.sort(
             filteredPractices,
