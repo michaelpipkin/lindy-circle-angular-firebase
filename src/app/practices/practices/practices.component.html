@@ -25,6 +25,9 @@
                 (dateChange)="filterPractices()">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <button *ngIf="endDate" matSuffix mat-icon-button aria-label="Clear" (click)="clearEndDate()">
+                <mat-icon>close</mat-icon>
+            </button>
             <mat-datepicker #endDatePicker></mat-datepicker>
         </mat-form-field>
     </div>
