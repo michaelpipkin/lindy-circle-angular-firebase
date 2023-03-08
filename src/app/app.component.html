@@ -11,10 +11,10 @@
       </a>
       <ng-container *ngIf="(user.roles$ | async) let roles">
         <ng-container *ngIf="roles.admin">
-          <!-- <a mat-list-item routerLink="/">
+          <a mat-list-item routerLink="finances">
             <mat-icon>attach_money</mat-icon>
             <span>Finances</span>
-          </a> -->
+          </a>
           <a mat-list-item routerLink="settings">
             <mat-icon>settings</mat-icon>
             <span>Settings</span>

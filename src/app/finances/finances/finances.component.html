@@ -1,0 +1,62 @@
+<div>
+    <div class="header mt-2">
+        <h2 class="title">Finances</h2>
+    </div>
+    <div class="mat-elevation-z8 p-3">
+        <div class="scrollable-table">
+            <table mat-table [dataSource]="finances$ | async">
+                <ng-container matColumnDef="financeDate">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let finance">{{finance.financeDate.toDate() | date}}</td>
+                    <td mat-footer-cell *matFooterCellDef>Grand Totals:</td>
+                </ng-container>
+                <ng-container matColumnDef="practiceCost">
+                    <th mat-header-cell *matHeaderCellDef class="cell-right">Practice<br />Cost</th>
+                    <td mat-cell *matCellDef="let finance" class="cell-right">{{finance.practiceCost | currency}}</td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{financeTotal?.practiceCost | currency}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="admissionRevenue">
+                    <th mat-header-cell *matHeaderCellDef class="cell-right">Admission<br />Revenue</th>
+                    <td mat-cell *matCellDef="let finance" class="cell-right">{{finance.admissionRevenue | currency}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{financeTotal?.admissionRevenue |
+                        currency}}</td>
+                </ng-container>
+                <ng-container matColumnDef="miscExpense">
+                    <th mat-header-cell *matHeaderCellDef class="cell-right">Misc<br />Expense</th>
+                    <td mat-cell *matCellDef="let finance" class="cell-right">{{finance.miscExpense | currency}}</td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{financeTotal?.miscExpense | currency}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="miscRevenue">
+                    <th mat-header-cell *matHeaderCellDef class="cell-right">Misc<br />Revenue</th>
+                    <td mat-cell *matCellDef="let finance" class="cell-right">{{finance.miscRevenue | currency}}</td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{financeTotal?.miscRevenue | currency}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="punchCardsSold">
+                    <th mat-header-cell *matHeaderCellDef class="cell-right">Punch<br />Cards<br />Sold</th>
+                    <td mat-cell *matCellDef="let finance" class="cell-right">{{finance.punchCardsSold | number}}</td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{financeTotal?.punchCardsSold | number}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="punchCardRevenue">
+                    <th mat-header-cell *matHeaderCellDef class="cell-right">Punch Card<br />Revenue</th>
+                    <td mat-cell *matCellDef="let finance" class="cell-right">{{finance.punchCardRevenue | currency}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{financeTotal?.punchCardRevenue |
+                        currency}}</td>
+                </ng-container>
+                <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef class="cell-right">Line<br />Total</th>
+                    <td mat-cell *matCellDef="let finance" class="cell-right">{{finance.total | currency}}</td>
+                    <td mat-footer-cell *matFooterCellDef class="cell-right">{{financeTotal?.total | currency}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+                <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay">
+                <tr mat-footer-row *matFooterRowDef="columnsToDisplay; sticky: true"></tr>
+            </table>
+        </div>
+    </div>
+</div>

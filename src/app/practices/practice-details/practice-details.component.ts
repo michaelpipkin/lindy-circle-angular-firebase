@@ -7,7 +7,6 @@ import { DialogOptions } from '@models/dialog-options';
 import { Practice } from '@models/practice';
 import { AttendanceService } from '@services/attendance.service';
 import { PracticeService } from '@services/practice.service';
-import { SortingService } from '@services/sorting.service';
 import { GenericDialogComponent } from '@shared/generic-dialog/generic-dialog.component';
 import { LoadingService } from '@shared/loading/loading.service';
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
@@ -39,7 +38,6 @@ export class PracticeDetailsComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private loading: LoadingService,
-    private sorter: SortingService,
     private snackBar: MatSnackBar
   ) {}
 

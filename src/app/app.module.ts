@@ -44,6 +44,7 @@ import {
   AngularFireFunctionsModule,
   USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
 } from '@angular/fire/compat/functions';
+import { FinancesComponent } from './finances/finances/finances.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import {
     AdminMainComponent,
     DefaultsComponent,
     ManageUsersComponent,
+    FinancesComponent,
   ],
   imports: [
     BrowserModule,
