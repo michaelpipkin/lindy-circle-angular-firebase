@@ -4,6 +4,7 @@ import { DefaultsResolver } from '@services/defaults.resolver';
 import { AdminMainComponent } from './admin/main/admin-main.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ProfileComponent } from './auth/profile/profile.component';
+import { FinancesComponent } from './finances/finances/finances.component';
 import { MemberDetailsComponent } from './members/member-details/member-details.component';
 import { MembersComponent } from './members/members/members.component';
 import { PracticeDetailsComponent } from './practices/practice-details/practice-details.component';
@@ -47,6 +48,11 @@ const routes: Routes = [
   {
     path: 'practices/:id',
     component: PracticeDetailsComponent,
+    ...canActivate(adminGuard),
+  },
+  {
+    path: 'finances',
+    component: FinancesComponent,
     ...canActivate(adminGuard),
   },
   {

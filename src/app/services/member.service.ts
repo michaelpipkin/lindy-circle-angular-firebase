@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Attendance } from '@models/attendance';
 import { Member } from '@models/member';
-import { FieldPath } from 'firebase/firestore';
 import { concatMap, from, map, Observable } from 'rxjs';
 
 @Injectable({

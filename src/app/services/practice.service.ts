@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Practice } from '@models/practice';
-import { catchError, concatMap, from, map, Observable } from 'rxjs';
+import { concatMap, from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
