@@ -62,8 +62,8 @@ export class MemberService {
             .collection<Member>('members', (ref) =>
               ref
                 .where('active', '==', true)
-                .orderBy('lastName')
                 .orderBy('firstName')
+                .orderBy('lastName')
             )
             .valueChanges({ idField: 'id' })
             .pipe(
