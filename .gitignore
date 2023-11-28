@@ -50,3 +50,5 @@ seed-data
 seed-data.ts
 functions/scripts/lindy-circle-a312e1ef8d7f.json
 .firebase/hosting.*
+*.sqlite
+*.vsidx
