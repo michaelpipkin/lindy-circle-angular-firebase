@@ -33,8 +33,8 @@
     "zone.js": "*"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "*",
-    "@angular/cli": "*",
+    "@angular-devkit/build-angular": "17.2.2",
+    "@angular/cli": "17.2.2",
     "@angular/compiler-cli": "*",
     "@types/jasmine": "*",
     "jasmine-core": "*",
