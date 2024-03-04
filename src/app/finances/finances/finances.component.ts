@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Finance } from '@models/finance';
 import { FinanceService } from '@services/finance.service';
 import { LoadingService } from '@shared/loading/loading.service';
-import { Observable, reduce, switchMap, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-finances',
